@@ -1,6 +1,7 @@
 #include "bsp_display.h"
 #include "bsp.h"
 
+DISP_T disp_t;
 
 /*************************************************************
  * 
@@ -16,10 +17,10 @@ void Display_Temperature_Humidity_Value(void)
 		
 		panel_led_fun();
 
-	    m = (pro_t.dispTime_hours/10) ;
-		n=	(pro_t.gTime_hours%10); 
-		p = (pro_t.dispTime_minutes/10);
-		q=  (pro_t.dispTime_minutes%10);
+	    m = (disp_t.disp_hours_time/10) ;
+		n=	(disp_t.disp_hours_time%10); 
+		p = (disp_t.disp_minutes_time/10);
+		q=  (disp_t.disp_minutes_time%10);
 
         //hours
 		 lcd_t.number5_high = m;
@@ -72,54 +73,6 @@ static void Timing_Handler(void)
      break;
 		
     }
-}
-/*********************************************************************************
- * 
- * Function Name:static void Beijing_Time_Dispaly(void)
- * 
- * 
- * 
-**********************************************************************************/
-static void Beijing_Time_Display(void)
-{
-
-       #if 0
-		run_t.Timer_mode_flag = 0;
-	    if(run_t.gTimer_minute_Counter >59){ //minute
-
-			run_t.gTimer_minute_Counter=0;
-            run_t.dispTime_minutes ++;
-           
-            
-			if(run_t.dispTime_minutes > 59){
-				run_t.dispTime_minutes=0;
-				run_t.dispTime_hours ++;
-			    run_t.works_counter_time_value++; //works two hours ,after stop 10 minutes, than works 
-				if(run_t.dispTime_hours >24){
-					run_t.dispTime_hours=0;
-
-					}
-
-			}
-	    	}
-            
-            if(run_t.gPower_On == RUN_POWER_ON) {
-				Setup_Timer_Times_Donot_Display();
-				lcd_t.number5_low=(run_t.dispTime_hours ) /10;
-				lcd_t.number5_high =(run_t.dispTime_hours) /10;
-
-				lcd_t.number6_low = (run_t.dispTime_hours ) %10;;
-				lcd_t.number6_high = (run_t.dispTime_hours ) %10;
-
-				lcd_t.number7_low = (run_t.dispTime_minutes )/10;
-				lcd_t.number7_high = (run_t.dispTime_minutes )/10;
-
-				lcd_t.number8_low = (run_t.dispTime_minutes )%10;
-				lcd_t.number8_high = (run_t.dispTime_minutes )%10;
-			}
-
-		#endif 
-
 }
 
 /*************************************************************************

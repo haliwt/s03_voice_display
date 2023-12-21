@@ -11,6 +11,8 @@ uint8_t (*power_state)(void);
 
 static uint8_t power_default_fun(void);
 
+uint8_t key_set_timer_flag;
+
 void Key_Init(void)
 {
    Power_Handler(power_default_fun);
@@ -155,7 +157,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
    //static uint16_t key_power_counter,add_key_counter,dec_key_counter;
  
-    uint16_t P1;
+    uint16_t K1,K2;
 	switch(GPIO_Pin){
 
 	case KEY_POWER_Pin:
@@ -164,22 +166,22 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 			pro_t.gKey_value = power_on;
 			//pro_t.gPower_On=1;
-			P1=0;
+			K1=0;
 		}
 		else if(POWER_KEY_VALUE() == KEY_DOWN){
 
 		    while(POWER_KEY_VALUE() == KEY_DOWN){
 
-               P1++;
-			   if(P1 > 60000){
-                  P1= 0;
+               K1++;
+			   if(K1 > 60000){
+                  K1= 0;
 				 // ctl_t.gWifi_flag =1;
 				  pro_t.gKey_value = wifi_fun_on;
                   return ;
               
 			   }
 			}
-			P1=0;
+			K1=0;
 			//pro_t.gPower_On=0;
 			pro_t.gKey_value = power_off;
 
@@ -193,7 +195,18 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 	if(MODE_KEY_VALUE() ==KEY_DOWN && pro_t.gPower_On==1 ){
 
-        while(ADD_KEY_VALUE() ==KEY_DOWN);
+        while(ADD_KEY_VALUE() ==KEY_DOWN){
+            K2++;
+		
+			if(K2 > 60000){
+                  K2= 0;
+				 // ctl_t.gWifi_flag =1;
+				 pro_t.key_set_timer_flag =1;
+                 return ;
+              
+			}
+		}
+       
 		//pro_t.gKey_command_tag = ADD_KEY_ITEM;
 		if(pro_t.gMode_flag == mode_ai){
 		     pro_t.gKey_value = mode_no_ai;
@@ -356,9 +369,9 @@ static uint8_t power_default_fun(void)
 }
 
 
-void Power_Handler(uint8_t(*ipower_handler)(void))
+void Key_Set_Timer_Handler(uint8_t(*key_timer_handler)(void))
 {
-   power_state = ipower_handler;
+   key_t.key_set_timer_flag ==1
 
 }
 

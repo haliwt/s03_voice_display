@@ -178,38 +178,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(tm1>9){ //100ms 
        tm1=0;
        lcd_t.gTimer_colon_ms++ ;
-	   pro_t.gTimer_numbers_one_two_blink++;
-	   pro_t.gTimer_digital5678_ms++;
-       pro_t.gTimer_ptc_fan_blink_warning++ ;
+	   lcd_t.gTimer_numbers_one_two_blink++;
+	   lcd_t.gTimer_digital5678_ms++;
+       lcd_t.gTimer_ptc_fan_blink_warning++ ;
+	   
     }
 
     if(tm0>99){ //100 *10ms = 1000ms = 1s
 		tm0=0;
 		
 		
-		pro_t.fan_off_60s++;
-        pro_t.gTimer_wifi_connect_counter++;
-		pro_t.dispTime_seconds++;
-		pro_t.gTimer_temp_delay++ ;
-		pro_t.gTimer_connect_wifi ++;
-        pro_t.gTimer_set_temp_times++;
-        pro_t.gTimer_key_timing++;
-		pro_t.gTimer_minute_Counter ++;
-		pro_t.gTimer_ptc_fan_warning++;
+		pro_t.gTimer_pro_temp ++;
+	    pro_t.gTimer_pro_temp_delay ++ ;
+		lcd_t.gTimer_ptc_fan_warning ++;
+		
 
-		pro_t.gTimer_usart_error++;
-	    pro_t.gTimer_detected_power_key++;
-    
-          pro_t.gTimer_timing++;
-	    pro_t.gTimer_wifi_led_blink++;
-   
-        pro_t.gTimer_first_power_on_counter++;
-      
-        pro_t.gTimer_detected_ptc_temp_value++;
-
-	    if(pro_t.dispTime_seconds >59){//60s ->1 minute 
-	      pro_t.dispTime_seconds=0;
-		  pro_t.gTimer_work_break_times++;
+	    if(disp_t.gTimer_disp_seconds_time >59){//60s ->1 minute 
+	      disp_t.gTimer_disp_seconds_time=0;
+		  disp_t.gTimer_disp_minutes_time++;
 		 
 		 }
 

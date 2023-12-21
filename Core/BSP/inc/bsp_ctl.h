@@ -3,6 +3,36 @@
 #include "main.h"
 
 
+typedef enum{
+
+	 DRY_ON = 0x40,
+	 DRY_OFF = 0x41,
+
+	 DRY_ON_NO_BUZZER = 0x90,
+	 DRY_OFF_NO_BUZZER = 0x91,
+
+	 PLASMA_ON = 0x20,
+	 PLASMA_OFF = 0x21,
+
+	 FAN_ON =0x10,
+	 FAN_OFF = 0x11,
+
+	 MODE_AI = 0x04,
+	 MODE_TIMER = 0x14,
+	 MODE_AI_NO_BUZZER= 0x44,
+
+	 WIFI_CONNECT_FAIL=0x55,
+
+	 WIFI_CONNECT_SUCCESS= 0xAA
+	 
+
+
+
+}works_t;
+
+
+
+
 typedef enum {
    
     WIFI_POWER_ON = 0x80,
@@ -37,8 +67,10 @@ typedef struct {
    uint8_t gWifi_flag;
    uint8_t gAi_flag;
    uint8_t gPlasma_flag;
-   uint8_t gFan_speed_value;
    uint8_t gBug_flag;
+
+   uint8_t gFan_speed_value;
+  
    uint8_t gReal_humidity_value;
    uint8_t gReal_tem_value;
 

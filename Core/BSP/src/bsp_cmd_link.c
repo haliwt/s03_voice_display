@@ -236,7 +236,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
             case WIFI_WIND_SPEED:
                  //pro_t.wifi_set_wind_speed=inputBuf[0];
-				 //pro_t.disp_wind_speed_grade=inputBuf[0];
+				 //fan_speed_state()=inputBuf[0];
 				 ctl_t.gFan_speed_value = inputBuf[0];
                  state=0;
                   pro_t.decodeFlag=1;

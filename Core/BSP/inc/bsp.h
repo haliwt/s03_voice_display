@@ -40,6 +40,7 @@ typedef enum{
    power_off,
    power_on,
    wifi_fun_on,
+   set_timer_fun_on,
    mode_ai,
    mode_no_ai,
    add_key,
@@ -47,6 +48,15 @@ typedef enum{
    
 
 }key_state;
+
+typedef enum{
+
+    run_update_data =0x01,
+	
+
+
+
+}process_state;
 
 typedef struct{
 
@@ -61,8 +71,23 @@ typedef struct{
    uint8_t gKey_command_tag;
 
    uint8_t decodeFlag;
+   //time
+   uint8_t set_timer_flag;
+   uint8_t Timer_mode_flag;
+   uint8_t key_set_timer_flag;
+
+   //temperature 
+   uint8_t temperature_set_flag;
+   uint8_t setup_temperature_value;
+   //warning
+    uint8_t ptc_warning;
+    uint8_t fan_warning;
+	//wifi
+	uint8_t wifi_led_fast_blink_flag;
 
     uint8_t gTimer_pro_feed_dog;
+	uint8_t gTimer_pro_temp ;
+	uint8_t gTimer_pro_temp_delay ;
 
 
 

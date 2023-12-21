@@ -112,7 +112,12 @@ typedef  struct  _state_
 void Key_Init(void);
 
 
-extern uint8_t (*power_state)(void);
+extern uint8_t (*key_set_timer_state)(void);
+
+
+
+
+
 void SplitDispose_Key(uint8_t value);
 uint8_t KEY_Scan(void);
 
@@ -124,7 +129,7 @@ void Wifi_Detected_KeyScan(void);
 
 void Key_TheSecond_Scan(void);
 
-void Power_Handler(uint8_t(*ipower_handler)(void));
+void Key_Set_Timer_Handler(uint8_t(*key_timer_handler)(void));
 
 
 #endif 
