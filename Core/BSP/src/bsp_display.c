@@ -87,35 +87,35 @@ static void Setup_Timer_Times(void)
 {
 
 
-      if(run_t.gTimer_timing > 59){ //
+      if(pro_t.gTimer_timing > 59){ //
         
-        run_t.gTimer_timing =0;
-		 run_t.timer_time_minutes --;
-	    if(run_t.timer_time_minutes < 0){
-		     run_t.timer_time_hours -- ;
-			 run_t.timer_time_minutes =59;
+        pro_t.gTimer_timing =0;
+		 disp_t.disp_timer_time_minutes --;
+	    if(disp_t.disp_timer_time_minutes < 0){
+		     disp_t.disp_timer_time_hours -- ;
+			 disp_t.disp_timer_time_minutes =59;
            
-			if(run_t.timer_time_hours < 0 ){
+			if(disp_t.disp_timer_time_hours < 0 ){
 
-	           if(run_t.timer_timing_define_flag == timing_success){
-			    run_t.timer_time_hours=0;
-				run_t.timer_time_minutes=0;
-				run_t.wifi_send_buzzer_sound=0xff;
+	           if(disp_t.timer_timing_define_flag == timing_success){
+			    disp_t.disp_timer_time_hours=0;
+				disp_t.disp_timer_time_minutes=0;
+				//run_t.wifi_send_buzzer_sound=0xff;
 				Power_Off_Fun();
 			
 
-			    run_t.gFan_RunContinue=1;
-				run_t.fan_off_60s = 0;
+			    //run_t.gFan_RunContinue=1;
+				//run_t.fan_off_60s = 0;
 	           
 	          
                 
                 }
-                 else{
+                else{
      
-                     run_t.timer_time_hours =0;
-                     run_t.timer_time_minutes =0;
-				     run_t.display_set_timer_timing=beijing_time;
-                     run_t.gModel=1;
+                     disp_t.disp_timer_time_hours =0;
+                     disp_t.disp_timer_time_minutes =0;
+				     disp_t.display_set_timer_timing=beijing_time;
+                     ctl_t.gAi_flag =1 ;//run_t.gModel=1;
 					 SendData_Set_Command(MODE_AI_NO_BUZZER);
                  }
                             
@@ -128,17 +128,17 @@ static void Setup_Timer_Times(void)
 	     
      
    
-			lcd_t.number5_low=(run_t.timer_time_hours ) /10;
-			lcd_t.number5_high =(run_t.timer_time_hours) /10;
+			lcd_t.number5_low=(disp_t.disp_timer_time_hours ) /10;
+			lcd_t.number5_high =(disp_t.disp_timer_time_hours) /10;
 
-			lcd_t.number6_low = (run_t.timer_time_hours ) %10;;
-			lcd_t.number6_high = (run_t.timer_time_hours ) %10;
+			lcd_t.number6_low = (disp_t.disp_timer_time_hours ) %10;;
+			lcd_t.number6_high = (disp_t.disp_timer_time_hours ) %10;
 
-			lcd_t.number7_low = (run_t.timer_time_minutes )/10;
-			lcd_t.number7_high = (run_t.timer_time_minutes)/10;
+			lcd_t.number7_low = (disp_t.disp_timer_time_minutes )/10;
+			lcd_t.number7_high = (disp_t.disp_timer_time_minutes)/10;
 
-			lcd_t.number8_low = (run_t.timer_time_minutes)%10;
-			lcd_t.number8_high = (run_t.timer_time_minutes )%10;
+			lcd_t.number8_low = (disp_t.disp_timer_time_minutes)%10;
+			lcd_t.number8_high = (disp_t.disp_timer_time_minutes )%10;
 }
 /*************************************************************************
 	*
@@ -150,34 +150,34 @@ static void Setup_Timer_Times(void)
 *************************************************************************/       
 void Setup_Timer_Times_Donot_Display(void)
 {
-   if(run_t.gTimer_timing > 59){ //
+   if(pro_t.gTimer_timing > 59){ //
         
-        run_t.gTimer_timing =0;
-		 run_t.timer_time_minutes --;
-	    if(run_t.timer_time_minutes < 0){
-		     run_t.timer_time_hours -- ;
-			 run_t.timer_time_minutes =59;
+        pro_t.gTimer_timing =0;
+		disp_t.disp_timer_time_minutes --;
+	    if(disp_t.disp_timer_time_minutes < 0){
+		     disp_t.disp_timer_time_hours -- ;
+			 disp_t.disp_timer_time_minutes =59;
            
-			if(run_t.timer_time_hours < 0 ){
+			if(disp_t.disp_timer_time_hours < 0 ){
 
-	           if(run_t.timer_timing_define_flag == timing_success){
-			    run_t.timer_time_hours=0;
-				run_t.timer_time_minutes=0;
-				run_t.wifi_send_buzzer_sound=0xff;
+	           if(disp_t.timer_timing_define_flag == timing_success){
+			    disp_t.disp_timer_time_hours=0;
+				disp_t.disp_timer_time_minutes=0;
+				//pro_t.wifi_send_buzzer_sound=0xff;
 				Power_Off_Fun();
 
 			
-				run_t.gPower_On =0 ;
-			    run_t.gFan_RunContinue=1;
-				run_t.fan_off_60s = 0;
+				pro_t.gPower_On =0 ;
+			    pro_t.gFan_RunContinue=1;
+				pro_t.fan_off_60s = 0;
 	           
 	          
                 
                 }
                  else{
      
-                     run_t.timer_time_hours =0;
-                     run_t.timer_time_minutes =0;
+                     disp_t.disp_timer_time_hours =0;
+                     disp_t.disp_timer_time_minutes =0;
                  
                  }
                             
@@ -201,19 +201,19 @@ void Setup_Timer_Times_Donot_Display(void)
  **************************************************************/
 static void Works_Counter_Time(void)
 {
-  if(run_t.timer_timing_define_flag == timing_success){
-	  if(run_t.gTimer_minute_Counter >59){ //minute
+  if(disp_t.timer_timing_define_flag == timing_success){ //设置定时模式 is enable
+	  if(disp_t.gTimer_minute_Counter >59){ //minute
 		
-		run_t.gTimer_minute_Counter=0;
-        run_t.dispTime_minutes ++;
+		disp_t.gTimer_minute_Counter=0;
+        disp_t.disp_minutes_time ++;
        
           
-		if(run_t.dispTime_minutes > 59){
-			run_t.dispTime_minutes=0;
-			run_t.dispTime_hours ++;
-		    run_t.works_counter_time_value++;
-		if(run_t.dispTime_hours >24){
-			run_t.dispTime_hours=0;
+		if( disp_t.disp_minutes_time > 59){
+			  disp_t.disp_minutes_time=0;
+			disp_t.disp_hours_time ++;
+		  
+		if(disp_t.disp_hours_time >24){
+			disp_t.disp_hours_time=0;
 
 		}
 

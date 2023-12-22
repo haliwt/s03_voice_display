@@ -353,11 +353,11 @@ void DisplayPanel_Ref_Handler(void)
 		  if(pro_t.gTimer_key_timing > 3){ //4
 
 		         pro_t.Timer_mode_flag = 0;
-				pro_t.timer_time_minutes = 0;
+				disp_t.disp_timer_time_minutes = 0;
 				
 				pro_t.gTimer_timing=0;
-			if(pro_t.timer_time_hours !=0){	 
-			      pro_t.timer_timing_define_flag = timing_success;
+			if(disp_t.disp_timer_time_hours !=0){	 
+			      disp_t.timer_timing_define_flag = timing_success;
 				  pro_t.setup_timer_flag = 1;
 			}
 			  pro_t.setup_timer_timing_item=0;

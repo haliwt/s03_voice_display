@@ -75,6 +75,8 @@ typedef struct{
    uint8_t set_timer_flag;
    uint8_t Timer_mode_flag;
    uint8_t key_set_timer_flag;
+   uint8_t setup_timer_timing_item;
+ 
 
    //temperature 
    uint8_t temperature_set_flag;
@@ -88,6 +90,9 @@ typedef struct{
     uint8_t gTimer_pro_feed_dog;
 	uint8_t gTimer_pro_temp ;
 	uint8_t gTimer_pro_temp_delay ;
+	uint8_t gTimer_wifi_connect_counter;
+	uint8_t gTimer_key_timing;
+	uint8_t gTimer_timing;
 
 
 

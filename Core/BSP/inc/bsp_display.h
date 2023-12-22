@@ -7,10 +7,14 @@
 
 typedef struct{
 
+   uint8_t disp_timer_time_hours ;
+   uint8_t disp_timer_time_minutes;
+
    uint8_t disp_hours_time;
    uint8_t disp_minutes_time;
    uint8_t disp_seconds_times;
    uint8_t display_beijing_time_flag ;
+   uint8_t timer_timing_define_flag;
 
    uint8_t gTimer_disp_seconds_time;
    uint8_t gTimer_disp_hours_time;

@@ -346,11 +346,11 @@ static void Power_On_Fun(void)
 	 run_t.gTimer_minute_Counter=0;
      run_t.gTimer_timing=0;
 
-	 run_t.timer_time_hours =0;
-	 run_t.timer_time_minutes =0;
-	 run_t.setup_timer_timing_item=0;
+	 disp_t.disp_timer_time_hours =0;
+	 disp_t.disp_timer_time_minutes =0;
+	 pro_t.setup_timer_timing_item=0;
 
-	 run_t.timer_timing_define_flag = timing_not_definition;
+	 disp_t.timer_timing_define_flag = timing_not_definition;
 
 	 
     //display work time is begin form "0"
@@ -415,9 +415,9 @@ static void Power_Off_Fun(void)
 			pro_t.works_counter_time_value=0;
 			pro_t.panel_key_setup_timer_flag=0;
             pro_t.setup_temperature_value=0;
-		    pro_t.timer_time_hours =0;
-			pro_t.timer_time_minutes =0;
-			pro_t.timer_timing_define_flag = timing_not_definition;
+		    disp_t.disp_timer_time_hours =0;
+			disp_t.disp_timer_time_minutes =0;
+			disp_t.timer_timing_define_flag = timing_not_definition;
 
 			pro_t.ptc_warning = 0;
 		
@@ -520,8 +520,8 @@ static void Mode_Ai_Fun(void)
 }
 /************************************************************************
 	*
-	*Function Name: static void Power_On_Fun(void)
-	*Function : power on
+	*Function Name: static void Mode_Long_Key_Fun(void) 
+	*Function : set timer timing is enable 
 	*Input Ref:NO
 	*Return Ref:No
 	*
@@ -532,12 +532,12 @@ static void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_
 	   if(pro_t.fan_warning ==0 && pro_t.ptc_warning ==0){
 	  	
 		  
-			ai_state()=2;
+		   ctl_t.gAi_flag =0;
 		   pro_t.setup_timer_timing_item=1;//ai_state() =2;
 		   pro_t.display_set_timer_timing  =timer_time;
-		   pro_t.gTimer_key_timing=0;
+		   pro_t.gTimer_key_timing=0; //按键退出的限制，4秒以内
 		
-           display_model =1;
+           
 		   pro_t.Timer_mode_flag=1;
 		   
 		   
@@ -607,19 +607,19 @@ static void ADD_Key_Fun(void)
 				    display_model++;
 					pro_t.gTimer_key_timing =0;
                  
-					pro_t.timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
-				    if(pro_t.timer_time_hours > 24){ //if(pro_t.dispTime_minutes > 59){
+					disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
+				    if(disp_t.disp_timer_time_hours > 24){ //if(pro_t.dispTime_minutes > 59){
 
-		                 pro_t.timer_time_hours=0;//pro_t.dispTime_hours =0;
+		                 disp_t.disp_timer_time_hours=0;//pro_t.dispTime_hours =0;
 		                
 
 					}
 				
                   
-					temp_bit_2_hours = pro_t.timer_time_hours /10 ;
-					temp_bit_1_hours = pro_t.timer_time_hours %10;
-                    HAL_Delay(20);
-					pro_t.timer_time_minutes  =0;
+					temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
+					temp_bit_1_hours = disp_t.disp_timer_time_hours %10;
+                 
+					disp_t.disp_timer_time_minutes  =0;
 
 					temp_bit_2_minute =0;
 					temp_bit_1_minute =0;
@@ -645,7 +645,7 @@ static void ADD_Key_Fun(void)
          
 
 		 pro_t.gKey_command_tag = KEY_NULL;
-          pro_t.key_add_dec_spec_flag=0;
+          
 
 
 }
@@ -698,20 +698,19 @@ static void DEC_Key_Fun(void)
 			    display_model++;
 				pro_t.gTimer_key_timing =0;
            
-				pro_t.timer_time_hours -- ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes - 1;
-				if(pro_t.timer_time_hours < 0){//if(pro_t.dispTime_minutes < 0){
+				disp_t.disp_timer_time_hours -- ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes - 1;
+				if(disp_t.disp_timer_time_hours < 0){//if(pro_t.dispTime_minutes < 0){
 
-				    pro_t.timer_time_hours =24;//pro_t.dispTime_hours --;
+				    disp_t.disp_timer_time_hours =24;//pro_t.dispTime_hours --;
 					
 					
 				}
-				   // temp_bit_2_minute = pro_t.timer_time_hours /10 ;
-					//temp_bit_1_minute = pro_t.timer_time_hours %10;
+				   
                
-					temp_bit_2_hours = pro_t.timer_time_hours /10 ;
-					temp_bit_1_hours = pro_t.timer_time_hours  %10;
-                    HAL_Delay(20);
-					pro_t.timer_time_minutes  =0;
+					temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
+					temp_bit_1_hours = disp_t.disp_timer_time_hours  %10;
+                    
+					disp_t.disp_timer_time_minutes  =0;
 
 					temp_bit_2_minute=0;
 					temp_bit_1_minute=0;

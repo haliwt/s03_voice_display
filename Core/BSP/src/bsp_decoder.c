@@ -90,7 +90,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
        case WIFI_BEIJING_TIME: //7//run_t.wifi_connect_success_flag
          if(power_state() ==1){
-           if(run_t.timer_timing_define_flag==timing_not_definition ){
+           if(disp_t.timer_timing_define_flag==timing_not_definition ){
 		   	
 			 lcd_t.number5_low=beijing_hours_time()/10;
 	         lcd_t.number5_high =beijing_hours_time() /10;

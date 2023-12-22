@@ -186,11 +186,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
     if(tm0>99){ //100 *10ms = 1000ms = 1s
 		tm0=0;
-		
-		
+
+	    pro_t.gTimer_key_timing++;
+		pro_t.gTimer_wifi_connect_counter++;
 		pro_t.gTimer_pro_temp ++;
 	    pro_t.gTimer_pro_temp_delay ++ ;
 		lcd_t.gTimer_ptc_fan_warning ++;
+		pro_t.gTimer_timing++;
 		
 
 	    if(disp_t.gTimer_disp_seconds_time >59){//60s ->1 minute 
