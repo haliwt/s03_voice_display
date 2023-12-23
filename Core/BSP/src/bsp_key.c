@@ -7,7 +7,7 @@ key_types key_t;
 uint8_t power_key_detected;
 uint16_t key_mode_counter;
 
-uint8_t (*power_state)(void);
+uint8_t (*power_on_off_state)(void);
 
 static uint8_t power_default_fun(void);
 
@@ -208,7 +208,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 		}
        
 		//pro_t.gKey_command_tag = ADD_KEY_ITEM;
-		if(pro_t.gMode_flag == mode_ai){
+		if(ctl_t.gAi_flag == mode_ai){
 		     pro_t.gKey_value = mode_no_ai;
 		}
 	    else{
@@ -226,7 +226,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 	    while(DEC_KEY_VALUE() == KEY_DOWN);
 
 		//pro_t.gKey_command_tag = DEC_KEY_ITEM;
-		prot_t.gKey_value = dec_key;
+		pro_t.gKey_value = dec_key;
 	
 	}
 
@@ -262,6 +262,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
     *Return Ref: 
     * 
 ***********************************************************/
+#if 0
 uint8_t ReadKey(void)
 {
 
@@ -352,7 +353,7 @@ uint8_t ReadKey(void)
 	
    return 0;
 }
-
+#endif 
 /***********************************************************
  *  *
     *Function Name: static uint8_t power_default_fun(void);
@@ -368,12 +369,6 @@ static uint8_t power_default_fun(void)
 
 }
 
-
-void Key_Set_Timer_Handler(uint8_t(*key_timer_handler)(void))
-{
-   key_t.key_set_timer_flag ==1
-
-}
 
 
 

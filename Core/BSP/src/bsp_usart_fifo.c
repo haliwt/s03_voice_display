@@ -24,6 +24,7 @@
 */
 
 #include "bsp.h"
+#include <stdio.h>
 
 /* 串口1的GPIO     PB6-TX1, PB7  communication mainboard */
 #define USART1_CLK_ENABLE()              __HAL_RCC_USART1_CLK_ENABLE()
@@ -70,7 +71,7 @@
 		
 static void UartVarInit(void);
 
-static void InitHardUart(void);
+//static void InitHardUart(void);
 static void UartSend(UART_T *_pUart, uint8_t *_ucaBuf, uint16_t _usLen);
 static uint8_t UartGetChar(UART_T *_pUart, uint8_t *_pByte);
 static void UartIRQ(UART_T *_pUart);
@@ -121,11 +122,7 @@ UART_T *ComToUart(COM_PORT_E _ucPort)
 			return 0;
 		#endif
 	}
-	else
-	{
-		Error_Handler(__FILE__, __LINE__);
-		return 0;
-	}
+	
 }
 
 /*
@@ -330,7 +327,7 @@ void RS485_InitTXE(void)
 */
 void RS485_SetBaud(uint32_t _baud)
 {
-	comSetBaud(COM3, _baud);
+	comSetBaud(COM2, _baud);
 }
 
 /*
@@ -372,7 +369,7 @@ void RS485_SendOver(void)
 */
 void RS485_SendBuf(uint8_t *_ucaBuf, uint16_t _usLen)
 {
-	comSendBuf(COM3, _ucaBuf, _usLen);
+	comSendBuf(COM2, _ucaBuf, _usLen);
 }
 
 /*
@@ -487,10 +484,7 @@ void bsp_SetUartParam(USART_TypeDef *Instance,  uint32_t BaudRate, uint32_t Pari
 	UartHandle.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
 	UartHandle.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
     
-	if (HAL_UART_Init(&UartHandle) != HAL_OK)
-	{
-		Error_Handler(__FILE__, __LINE__);
-	}
+	
 }
 
 /*
@@ -501,6 +495,7 @@ void bsp_SetUartParam(USART_TypeDef *Instance,  uint32_t BaudRate, uint32_t Pari
 *	返 回 值: 无
 *********************************************************************************************************
 */
+#if 0
 static void InitHardUart(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStruct;
@@ -584,7 +579,7 @@ static void InitHardUart(void)
 
 
 }
-
+#endif 
 /*
 *********************************************************************************************************
 *	函 数 名: UartSend
@@ -614,9 +609,9 @@ static void UartSend(UART_T *_pUart, uint8_t *_ucaBuf, uint16_t _usLen)
 			}
 			else if(usCount == _pUart->usTxBufSize)/* 数据已填满缓冲区 */
 			{
-				if((_pUart->uart->CR1 & USART_CR1_TXEIE) == 0)
+				if((_pUart->uart->CR1 & USART_CR1_TXEIE_TXFNFIE ) == 0) //USART_CR1_TXEIE
 				{
-					SET_BIT(_pUart->uart->CR1, USART_CR1_TXEIE);
+					SET_BIT(_pUart->uart->CR1, USART_CR1_TXEIE_TXFNFIE );
 				}  
 			}
 		}
@@ -633,7 +628,7 @@ static void UartSend(UART_T *_pUart, uint8_t *_ucaBuf, uint16_t _usLen)
 		ENABLE_INT();
 	}
 
-	SET_BIT(_pUart->uart->CR1, USART_CR1_TXEIE);	/* 使能发送中断（缓冲区空） */
+	SET_BIT(_pUart->uart->CR1, USART_CR1_TXEIE_TXFNFIE );	/* 使能发送中断（缓冲区空） */
 }
 
 /*
@@ -747,14 +742,14 @@ static void UartIRQ(UART_T *_pUart)
 	}
 
 	/* 处理发送缓冲区空中断 */
-	if ( ((isrflags & USART_ISR_TXE_TXFNF) != RESET) && (cr1its & USART_CR1_TXEIE) != RESET)
+	if ( ((isrflags & USART_ISR_TXE_TXFNF) != RESET) && (cr1its & USART_CR1_TXEIE_TXFNFIE ) != RESET)
 	{
 		//if (_pUart->usTxRead == _pUart->usTxWrite)
 		if (_pUart->usTxCount == 0)
 		{
 			/* 发送缓冲区的数据已取完时， 禁止发送缓冲区空中断 （注意：此时最后1个数据还未真正发送完毕）*/
 			//USART_ITConfig(_pUart->uart, USART_IT_TXE, DISABLE);
-			CLEAR_BIT(_pUart->uart->CR1, USART_CR1_TXEIE);
+			CLEAR_BIT(_pUart->uart->CR1, USART_CR1_TXEIE_TXFNFIE );
 
 			/* 使能数据发送完毕中断 */
 			//USART_ITConfig(_pUart->uart, USART_IT_TC, ENABLE);

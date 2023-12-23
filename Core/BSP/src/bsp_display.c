@@ -4,21 +4,23 @@
 DISP_T disp_t;
 
 
-uint8_t (*display_works_hours_value)(void);
-uint8_t (*display_works_minutes_value)(void);
+int8_t (*display_works_hours_value)(void);
+int8_t (*display_works_minutes_value)(void);
 
 int8_t (*display_timer_hours_value)(void);
-uint8_t (*display_timer_minutes_value)(void);
+int8_t (*display_timer_minutes_value)(void);
 
-static uint8_t display_works_hours_default_fun(void);
-static uint8_t display_works_minutes_default_fun(void);
+static int8_t display_works_hours_default_fun(void);
+static int8_t display_works_minutes_default_fun(void);
 
 
 static int8_t display_timer_hours_default_fun(void);
-static uint8_t display_timer_minutes_default_fun(void);
+static int8_t display_timer_minutes_default_fun(void);
 
 static void Display_Works_Time_Handler(void);
 static void Display_Timer_Time_Handler(void);
+static void Setup_Timer_Times_Donot_Display(void);
+
 
 /*************************************************************
  * 
@@ -74,7 +76,6 @@ static void Display_Works_Time_Handler(void)
 
 	lcd_t.number8_low = (disp_t.disp_minutes_time )%10;
 	lcd_t.number8_high = (disp_t.disp_minutes_time )%10;
-    }
 }
 /*************************************************************
  * 
@@ -94,13 +95,24 @@ static void Display_Timer_Time_Handler(void)
            
 			if( disp_t.disp_timer_time_hours < 0 ){
 
-	           
+
+			  if(disp_t.timer_timing_define_flag == timing_success){
 			    disp_t.disp_timer_time_minutes=0;
 				disp_t.disp_timer_time_minutes=0;
 				//run_t.wifi_send_buzzer_sound=0xff;
+				pro_t.gKey_value = power_off;
 				Power_Off_Fun();
 			}
-           
+			else{ //don't set timer timing to be changed "works time modes"
+     
+                  disp_t.disp_timer_time_hours =0;
+                 disp_t.disp_timer_time_minutes =0;
+			     //run_t.display_set_timer_timing=beijing_time;
+			     disp_t.timer_timing_define_flag = works_time;
+                 ctl_t.gAi_flag = 1;//run_t.gModel=1;
+				 SendData_Set_Command(MODE_AI_NO_BUZZER);
+            }
+	      }
                             
                 
         }
@@ -185,6 +197,16 @@ void Timing_Handler(void)
 	
      
      break;
+
+	case timer_time:
+		
+
+
+	break;
+
+	default:
+
+	break;
 		
     }
     DisplayPanel_Ref_Handler();
@@ -200,9 +222,9 @@ void Timing_Handler(void)
 *************************************************************************/
 void Setup_Timer_Times(void)
 {
-	if(disp_t.gTiimer_disp_timer_timing> 59){ //
+	if(disp_t.gTimer_disp_timer_timing> 59){ //
         
-        disp_t.gTiimer_disp_timer_timing=0;
+        disp_t.gTimer_disp_timer_timing=0;
 		 disp_t.disp_timer_time_minutes --;
 	    if(disp_t.disp_timer_time_minutes < 0){
 		     disp_t.disp_timer_time_hours -- ;
@@ -220,7 +242,7 @@ void Setup_Timer_Times(void)
      
                      disp_t.disp_timer_time_hours =0;
                      disp_t.disp_timer_time_minutes =0;
-				     disp_t.display_set_timer_timing=beijing_time;
+					 disp_t.timer_timing_define_flag = works_time;
                      ctl_t.gAi_flag =1 ;//run_t.gModel=1;
 					 SendData_Set_Command(MODE_AI_NO_BUZZER);
                 }
@@ -250,12 +272,9 @@ void Setup_Timer_Times(void)
 	*
 	*
 *************************************************************************/       
-void Setup_Timer_Times_Donot_Display(void)
+static void Setup_Timer_Times_Donot_Display(void)
 {
-
-
-   
-   if(disp_t.gTimer_disp_timer_timing  > 59){ //
+	if(disp_t.gTimer_disp_timer_timing  > 59){ //
         
   		 disp_t.gTimer_disp_timer_timing  =0;
 		 disp_t.disp_timer_time_minutes--;
@@ -272,14 +291,9 @@ void Setup_Timer_Times_Donot_Display(void)
 				Power_Off_Fun();
 			}
            
-                            
-                
         }
     }
-
-
 }
-
 /***************************************************************
 	 * 
 	 * Function Name:
@@ -288,6 +302,7 @@ void Setup_Timer_Times_Donot_Display(void)
 	 * Return Ref:
 	 * 
  **************************************************************/
+#if 0
 static void Works_Counter_Time(void)
 {
   if(disp_t.timer_timing_define_flag == timing_success){ //设置定时模式 is enable
@@ -312,7 +327,7 @@ static void Works_Counter_Time(void)
 	  }
   }
 }
-
+#endif 
 /***************************************************************
 	 * 
 	 * Function Name:static uint8_t display_works_hours_default_fun(void)
@@ -321,12 +336,12 @@ static void Works_Counter_Time(void)
 	 * Return Ref: works of hours 
 	 * 
  **************************************************************/
-static uint8_t display_works_hours_default_fun(void)
+static int8_t display_works_hours_default_fun(void)
 {
      static uint8_t disp_hours;
 
 	if(disp_t.gTimer_disp_minutes_time > 59){
-        disp_t.gTimer_disp_minutes_time 0;
+        disp_t.gTimer_disp_minutes_time= 0;
 		disp_hours ++ ;
 
 	}
@@ -348,7 +363,7 @@ static uint8_t display_works_hours_default_fun(void)
 	 * Return Ref:
 	 * 
  **************************************************************/
-static uint8_t display_works_minutes_default_fun(void)
+static int8_t display_works_minutes_default_fun(void)
 {
      return disp_t.gTimer_disp_minutes_time;
 
@@ -374,7 +389,7 @@ static int8_t display_timer_hours_default_fun(void)
 	 * Return Ref:
 	 * 
  **************************************************************/
-static uint8_t display_timer_minutes_default_fun(void)
+static int8_t display_timer_minutes_default_fun(void)
 {
 
     if(disp_t.gTimer_disp_timer_timing > 59){
@@ -420,21 +435,21 @@ static uint8_t display_timer_minutes_default_fun(void)
 	 * 
  **************************************************************/
 
-void Display_Works_Hours_Handler(uint8(*disp_hours_handler)(void))
+void Display_Works_Hours_Handler(int8_t(*disp_hours_handler)(void))
 {
    display_works_hours_value = disp_hours_handler;
 }
-void Display_Works_Minutes_Handler(uint8(*disp_minutes_handler)(void))
+void Display_Works_Minutes_Handler(int8_t(*disp_minutes_handler)(void))
 {
   display_works_minutes_value = disp_minutes_handler;
 }
 
-void Display_Timer_Hours_Handler(uint8(*disp_timer_hours_handler)(void))
+void Display_Timer_Hours_Handler(int8_t(*disp_timer_hours_handler)(void))
 {
    display_timer_hours_value = disp_timer_hours_handler;
 
 }
-void Display_Timer_Minutes_Handler(uint8(*disp_timer_minutes_handler)(void))
+void Display_Timer_Minutes_Handler(int8_t(*disp_timer_minutes_handler)(void))
 {
   display_timer_minutes_value = disp_timer_minutes_handler;
 }

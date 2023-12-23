@@ -133,29 +133,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   #endif 
  }
 
-
-/**
-  * Function Name: void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-  * Function: Tim3 interrupt call back function
-  * Tim3 timer :timing time 10ms
-  * 
-  */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-
-    static uint8_t tm0;
-    if(htim->Instance==TIM3){
-		
-	   tm0 ++ ;
-      
-	 if(tm0 > 99){//100ms *10 = 1000ms =1s
-        tm0 =0;
-	
-       
-	  }
- 	}
- }
-
 /*******************************************************************************
 	*
 	*Function Name:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -195,19 +172,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		disp_t.gTimer_disp_timer_timing++;
 		disp_t.gTimer_disp_minutes_time++;
 		pro_t.gTimer_pro_disp++;
+		pro_t.gTimer_pro_fan++;
+		pro_t.gTimer_usart_error++;
 
 	    if(disp_t.gTimer_disp_seconds_time >59){//60s ->1 minute 
 	      disp_t.gTimer_disp_seconds_time=0;
-		  
-		 
-		 }
+		}
 
-		
-		
-	   
-     
-
-   }
+	}
 	
    }
 

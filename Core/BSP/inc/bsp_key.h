@@ -77,11 +77,6 @@ typedef enum{
 
 
 
-typedef enum
-{
-  KEY_UP   = 0,
-  KEY_DOWN = 1,
-}KEYState_TypeDef;
 
 typedef enum _key_value{
 
@@ -114,11 +109,12 @@ void Key_Init(void);
 
 extern uint8_t (*key_set_timer_state)(void);
 
-
+extern uint8_t (*power_on_off_state)(void);
 
 
 
 void SplitDispose_Key(uint8_t value);
+
 uint8_t KEY_Scan(void);
 
 
@@ -130,6 +126,8 @@ void Wifi_Detected_KeyScan(void);
 void Key_TheSecond_Scan(void);
 
 void Key_Set_Timer_Handler(uint8_t(*key_timer_handler)(void));
+
+void Power_Handler(uint8_t(*power_on_handler)(void));
 
 
 #endif 

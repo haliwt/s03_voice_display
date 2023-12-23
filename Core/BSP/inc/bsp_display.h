@@ -3,7 +3,13 @@
 
 #include "main.h"
 
+typedef enum TIMING_T{
 
+   works_time,
+   timing_success ,
+   timer_time
+   
+}timing_t;
 
 
 
@@ -22,13 +28,13 @@ typedef struct{
    uint8_t disp_hours_time;
    uint8_t disp_minutes_time;
    uint8_t disp_seconds_times;
-   uint8_t display_beijing_time_flag ;
    uint8_t timer_timing_define_flag;
 
    uint8_t gTimer_disp_seconds_time;
    uint8_t gTimer_disp_hours_time;
    uint8_t gTimer_disp_minutes_time;
    uint8_t gTimer_disp_timer_timing;
+   
 
 
 
@@ -37,11 +43,11 @@ typedef struct{
 extern DISP_T disp_t;
 
 
-extern uint8_t (*display_works_hours_value)(void);
-extern uint8_t (*display_works_minutes_value)(void);
+extern int8_t (*display_works_hours_value)(void);
+extern int8_t (*display_works_minutes_value)(void);
 
 extern int8_t (*display_timer_hours_value)(void);
-extern uint8_t (*display_timer_minutes_value)(void);
+extern int8_t (*display_timer_minutes_value)(void);
 
 
 void Display_Temperature_Humidity_Value_Handler(void);
@@ -50,11 +56,11 @@ void Timing_Handler(void);
 
 
 
-void Display_Works_Hours_Handler(uint8_t(*disp_hours_handler)(void));
-void Display_Works_Minutes_Handler(uint8_t (*disp_hours_handler)(void));
+void Display_Works_Hours_Handler(int8_t(*disp_hours_handler)(void));
+void Display_Works_Minutes_Handler(int8_t (*disp_minutes_handler)(void));
 
 void Display_Timer_Hours_Handler(int8_t(*disp_timer_hours_handler)(void));
-void Display_Timer_Minutes_Handler(uint8_t(*disp_timer_minutes_handler)(void));
+void Display_Timer_Minutes_Handler(int8_t(*disp_timer_minutes_handler)(void));
 
 
 

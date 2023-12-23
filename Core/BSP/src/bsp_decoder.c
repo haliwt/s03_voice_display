@@ -17,7 +17,7 @@ static void Receive_MainBoard_Data_Handler(uint8_t cmd);
 void Decode_Function(void)
 {
    
-   Receive_MainBoard_Data_Handler(pro_t.single_data);
+   Receive_MainBoard_Data_Handler(decoder_t.single_data);
     
 }
 
@@ -92,23 +92,23 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
          if(power_state() ==1){
            if(disp_t.timer_timing_define_flag==works_time ){
 		   	
-			 lcd_t.number5_low=beijing_hours_time()/10;
-	         lcd_t.number5_high =beijing_hours_time() /10;
+			 lcd_t.number5_low=disp_t.disp_hours_time/10;
+	         lcd_t.number5_high =disp_t.disp_hours_time /10;
         
-			 lcd_t.number6_low = beijing_hours_time() %10;
-			 lcd_t.number6_high = beijing_hours_time() %10;
+			 lcd_t.number6_low = disp_t.disp_hours_time %10;
+			 lcd_t.number6_high = disp_t.disp_hours_time %10;
 	        
 
 
-			lcd_t.number7_low = beijing_minutes_time()/10;
-			lcd_t.number7_high = beijing_minutes_time()/10;
+			lcd_t.number7_low = disp_t.disp_minutes_time/10;
+			lcd_t.number7_high = disp_t.disp_minutes_time/10;
             
-			lcd_t.number8_low = beijing_minutes_time()%10;
-			lcd_t.number8_high = beijing_minutes_time()%10;
+			lcd_t.number8_low = disp_t.disp_minutes_time%10;
+			lcd_t.number8_high = disp_t.disp_minutes_time%10;
             
 	        DisplayPanel_Ref_Handler();
 
-			lcd_t.display_beijing_time_flag = 1;
+		
 	      }
          }
 		    
@@ -117,51 +117,41 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
       break;
 
       case WIFI_SET_TIMING://10
+
         
-        if(run_t.dispTime_hours !=0){
-           
-             lcd_t.number5_low=(run_t.dispTime_hours ) /10;
-	         lcd_t.number5_high =(run_t.dispTime_hours) /10;
-         
-			 lcd_t.number6_low = (run_t.dispTime_hours ) %10;;
-			 lcd_t.number6_high = (run_t.dispTime_hours ) %10;
-	    
+		lcd_t.number5_low=(disp_t.disp_timer_time_hours ) /10;
+		lcd_t.number5_high =(disp_t.disp_timer_time_hours ) /10;
+
+		lcd_t.number6_low = (disp_t.disp_timer_time_hours  ) %10;;
+		lcd_t.number6_high = (disp_t.disp_timer_time_hours ) %10;
 
 
-			lcd_t.number7_low = run_t.dispTime_minutes ;
-			lcd_t.number7_high = run_t.dispTime_minutes ;
 
-			lcd_t.number8_low = run_t.dispTime_minutes ;
-			lcd_t.number8_high = run_t.dispTime_minutes;
+		lcd_t.number7_low = disp_t.disp_timer_time_minutes /10 ;
+		lcd_t.number7_high = disp_t.disp_timer_time_minutes /10 ;
+
+		lcd_t.number8_low = disp_t.disp_timer_time_minutes % 10;
+		lcd_t.number8_high = disp_t.disp_timer_time_minutes %10;
             
-        }
-
-      break;
+       break;
 
 	  case WIFI_SET_TEMPERATURE://11
 
-	  		if(power_state() ==1){
+		if(power_state() ==1){
 
-			run_t.panel_key_setup_timer_flag=1;
+			temperature_decade= disp_t.disp_set_temp_value /10 ;
+			temperature_unit =  disp_t.disp_set_temp_value %10;
+			// HAL_Delay(5);
+			lcd_t.number1_high = temperature_decade;
+			lcd_t.number1_low = temperature_decade;
 
-		  
-			  run_t.wifi_set_temperature_value_flag =1;
 
-			  run_t.disp_set_temp_value = run_t.wifi_set_oneself_temperature;
-
-		      temperature_decade=  run_t.disp_set_temp_value /10 ;
-			  temperature_unit =  run_t.disp_set_temp_value %10;
-		      // HAL_Delay(5);
-	         lcd_t.number1_high = temperature_decade;
-			 lcd_t.number1_low = temperature_decade;
-
-			 
-		    lcd_t.number2_high =  temperature_unit;
+			lcd_t.number2_high =  temperature_unit;
 			lcd_t.number2_low = temperature_unit;
 
-			
-			run_t.gTimer_numbers_one_two_blink=0;
-	      }
+
+			lcd_t.gTimer_numbers_one_two_blink=0; //temperature of digital is blink.is "1,2"
+		}
 
 
 	  break;
@@ -184,6 +174,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 *Return Ref: NO
 *
 **********************************************************************/
+#if 0
 void Receive_Wifi_Cmd(uint8_t cmd)
 {
 	switch(cmd){
@@ -330,28 +321,4 @@ void Receive_Wifi_Cmd(uint8_t cmd)
    
 }
 
-/****************************************************************
- * 
- * Function Name:
- * Function :function of pointer 
- * 
- * 
-****************************************************************/
-void Single_Add_RunCmd(void(*addHandler)(void))
-{
-    single_add_fun = addHandler;   
-
-}
-
-void Single_SendBuzzer_RunCmd(void(*buzzerHandler)(void))
-{
-	single_buzzer_fun = buzzerHandler;
-
-}
-void Single_SendAi_Usart_RunCmd(void(*sendaiHandler)(uint8_t seddat))
-{
-    sendAi_usart_fun = sendaiHandler;
-
-}
-
-
+#endif 

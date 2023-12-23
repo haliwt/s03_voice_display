@@ -11,6 +11,12 @@ static void Process_Key_Handler(uint8_t keylabel);
 static void DispPocess_Command_Handler(void);
 static void Power_On_Fun(void);
 static void Power_Off_Fun(void);
+static void power_off_fan_run(void);
+
+static void Ptc_Temperature_Compare_Value(void);
+
+
+
 static void Wifi_Link_Fun(void);
 static void Mode_Ai_Fun(void);
 
@@ -24,6 +30,9 @@ static void Mode_Long_Key_Fun(void);
 uint8_t relay_id_led ;
 uint8_t fun_key_counter,display_keep_temp_value;
 uint8_t  disp_keep_temp_value ;
+uint8_t fan_runContinue;
+uint8_t wifi_link_flag;
+
 /*
 *********************************************************************************************************
 *	函 数 名: bsp_Idle
@@ -68,9 +77,11 @@ void Key_Handler(uint8_t key_value)
        switch(key_value){
 
 	   case power_off: //power off
-	       pro_t.gKey_command_tag = power_off;
+	    
            SendData_PowerOnOff(0);
            Power_Off_Fun();
+	       Key_Sound();
+		   pro_t.gKey_command_tag = power_off_fan_pro;
        key_value =0xff;
 	   break;
 
@@ -79,38 +90,43 @@ void Key_Handler(uint8_t key_value)
             pro_t.gKey_command_tag = run_update_data;
 			SendData_PowerOnOff(1);
 		    Power_On_Fun();
+			 Key_Sound();
             key_value =0xff;     
         break;
 
        case wifi_fun_on:
         SendData_Set_Wifi(0x01);
-		HAL_Delay(10);
-	    run_t.gTimer_set_temp_times=0; //conflict with send temperatur value 
-        run_t.wifi_connect_flag =0;
-        run_t.gTimer_wifi_connect_counter=0;
-        run_t.gTimer_wifi_led_blink=0;
-        run_t.wifi_receive_led_fast_led_flag=0; //adjust if mainboard receive of connect wifi of signal
+
+	    Key_Sound();
+//	    run_t.gTimer_set_temp_times=0; //conflict with send temperatur value 
+//        run_t.wifi_connect_flag =0;
+//        run_t.gTimer_wifi_connect_counter=0;
+//        run_t.gTimer_wifi_led_blink=0;
+//        run_t.wifi_receive_led_fast_led_flag=0; //adjust if mainboard receive of connect wifi of signal
         pro_t.wifi_led_fast_blink_flag=1;
       
-	   	if(wifi_state() ==1 ){
-		
-		   SendData_Set_Command(WIFI_CONNECT_SUCCESS);
-		    key_value =0xff;
-        }
-		else{
-			
-		   SendData_Set_Wifi(0x01);
-
-		}
-		
+//	   	if(wifi_state() ==1){
+//		
+//		   SendData_Set_Command(WIFI_CONNECT_SUCCESS);
+//		   key_value =0xff;
+//        }
+//		else{
+//			
+//		   SendData_Set_Wifi(0x01);
+//
+//		}
+       wifi_link_flag =1;
+	   key_value =0xff;
        break;
 
 
 
 		case mode_ai:
+		  
 		  pro_t.gKey_command_tag = mode_ai;
 		  ctl_t.gAi_flag = 1;
 		  SendData_Set_Wifi(MODE_AI);
+		   Key_Sound();
 		  key_value =0xff;
 		break;
 
@@ -118,16 +134,21 @@ void Key_Handler(uint8_t key_value)
 		  pro_t.gKey_command_tag = mode_no_ai;
 		  ctl_t.gAi_flag =0;
 		  SendData_Set_Wifi(MODE_TIMER);
+		  Key_Sound();
 		  key_value =0xff;
 		break;
 
 		case add_key:
+		 Key_Sound();
 		 ADD_Key_Fun();
+		
 		 key_value =0xff;
         break;
 
 		case dec_key:
+		 Key_Sound();
 		 DEC_Key_Fun();
+		  
          key_value =0xff;
 		break;
 
@@ -177,7 +198,7 @@ static void DispPocess_Command_Handler(void)
 
    static uint8_t temp1,temp2;
   
-   static uint8_t run_process_step,
+   static uint8_t run_process_step;
    static uint16_t counter;
 
    switch(pro_t.gKey_command_tag){
@@ -226,9 +247,11 @@ static void DispPocess_Command_Handler(void)
 		    Timing_Handler();
 
 		  }
-	      
-         
-	  run_process_step=2;
+	      if(wifi_link_flag ==1){
+			  run_process_step=5;
+          }
+		  else
+            run_process_step=2;
 
 	 break;
 
@@ -250,10 +273,8 @@ static void DispPocess_Command_Handler(void)
 	  case 3: //to pancel of key set tempeature value 
 	    //Enable digital "1,2" -> blink LED
        //Enable digital "1,2" -> blink LED
-	   if(pro_t.panel_key_setup_timer_flag==1){
-           pro_t.panel_key_setup_timer_flag=0;
-		   key_set_temp_flag =1;
-		   pro_t.setup_temperature_value=1;
+	   if(disp_t.timer_timing_define_flag==1){
+            pro_t.setup_temperature_value=1;
 		   lcd_t.gTimer_numbers_one_two_blink=0;
 	     	  
 	   }
@@ -294,42 +315,37 @@ static void DispPocess_Command_Handler(void)
 		  run_process_step=1;
      break;
 
-	 case RUN_POWER_OFF:
-         pro_t.step_run_power_on_tag=0;
-	     pro_t.step_run_power_on_tag =0;
-         pro_t.wifi_receive_power_on_flag=0;
+	 case 5:
+	   if(wifi_state() ==1){
+		
+		  SendData_Set_Command(WIFI_CONNECT_SUCCESS);
+		  wifi_link_flag =0;
+        }
+		else if(pro_t.ack_wifi_led ==0){
+			
+		   SendData_Set_Wifi(0x01);
 
-	    if(pro_t.wifi_receive_power_off_flag==0){
-           
-  
-            SendData_PowerOnOff(0);
-    		HAL_Delay(10);
+		}
+		else{
+			wifi_link_flag =0;
 
-         }
+        }
 
-   	     Breath_Led();
-         beijing_time_fun();
-         if(pro_t.gFan_RunContinue == 1){
-           if(pro_t.fan_off_60s < 61){
-		      LED_MODEL_OFF();
-			  POWER_ON_LED();
-		      LCD_Display_Wind_Icon_Handler();
-           	}
-		   else {
-               
-               
-               pro_t.gFan_RunContinue =0;
-			   Lcd_PowerOff_Fun();
+	 run_process_step=2;
 
-		   }
+	 break;
+    }
 
-         }
-        
+	case power_off_fan_pro:
+		power_off_fan_run();
 
+	break;
+
+    default:
     break;
    	}
-	}
 }
+
 /************************************************************************
 	*
 	*Function Name: static void Power_On_Fun(void)
@@ -341,12 +357,13 @@ static void DispPocess_Command_Handler(void)
 static void Power_On_Fun(void)
 {
    
-
+   pro_t.gPower_On = power_on;
    ctl_t.gPtc_flag = 1;
    ctl_t.gWifi_flag = 1;
    ctl_t.gAi_flag = 1;
    ctl_t.gPlasma_flag = 1;
    ctl_t.gBug_flag =1;
+   fan_runContinue= 2;
 	
 	ctl_t.gSet_temperature_value =0; //run_t.temperature_set_flag = 0; //WT.EDIT 2023.01.31
     ctl_t.gSet_timer_value = 0; //run_t.setup_temperature_value=0; // //WT.EDIT 2023.01.31
@@ -363,8 +380,7 @@ static void Power_On_Fun(void)
 
 	 
     //display work time is begin form "0"
-	 if(disp_t.display_beijing_time_flag == 0 ){
-
+	
 	 disp_t.disp_hours_time =0;
 	 disp_t.disp_minutes_time=0;
     
@@ -382,48 +398,66 @@ static void Power_On_Fun(void)
 	 lcd_t.number8_high = (disp_t.disp_minutes_time )%10;
 
 
-	
-  
-	 }
-     
 }
+     
+
 
 static void Power_Off_Fun(void)
 {
-	  pro_t.wifi_receive_power_on_flag =0;
-           Power_Off_Fun();
-            if(pro_t.first_power_on_flag !=5){
-               
-            
-            if(power_off_thefirst==0){
-               power_off_thefirst++;
-               
-               pro_t.gFan_RunContinue = 0;
-               
-            }
-            else if(pro_t.wifi_send_buzzer_sound != WIFI_POWER_OFF_ITEM){
-       
-                SendData_PowerOnOff(0);
-      
-               
-            }
+	 		 
+    pro_t.gPower_On = power_off;     
+	SendData_PowerOnOff(0);
 
-            pro_t.temperature_set_flag = 0;
-      
+	pro_t.temperature_set_flag = 0;
 
-            pro_t.wifi_led_fast_blink_flag=0;
-            pro_t.Timer_mode_flag = 0;
-		
-            pro_t.setup_temperature_value=0;
-		    disp_t.disp_timer_time_hours =0;
-			disp_t.disp_timer_time_minutes =0;
-			disp_t.timer_timing_define_flag = works_time;
 
-			ctl_t.ptc_warning = 0;
-		    ctl_t.fan_warning=0;
-            pro_t.gKey_command_tag = KEY_NULL;
+	pro_t.wifi_led_fast_blink_flag=0;
+	pro_t.Timer_mode_flag = 0;
+
+	pro_t.setup_temperature_value=0;
+	disp_t.disp_timer_time_hours =0;
+	disp_t.disp_timer_time_minutes =0;
+	disp_t.timer_timing_define_flag = works_time;
+
+	ctl_t.ptc_warning = 0;
+	ctl_t.fan_warning=0;
+
+	if(fan_runContinue==2){
+		fan_runContinue=1;
+		pro_t.gTimer_pro_fan =0;
+
+	}
+	
+	
+	
           
-            }
+          
+}
+void power_off_fan_run(void)
+{
+	
+
+	if(pro_t.ack_power_off_sig ==0){
+        SendData_PowerOnOff(0);
+	
+
+	}
+
+	Breath_Led();
+	
+	if(fan_runContinue == 1){
+	if(pro_t.gTimer_pro_fan < 61){
+		LED_MODEL_OFF();
+		POWER_ON_LED();
+		LCD_Display_Wind_Icon_Handler();
+	}
+	else {
+	    fan_runContinue  =0;
+		Lcd_PowerOff_Fun();
+
+	}
+
+	}
 
 }
 /************************************************************************
@@ -436,6 +470,7 @@ static void Power_Off_Fun(void)
 ************************************************************************/
 static void Wifi_Link_Fun(void)
 {
+	#if 0
 	if(pro_t.gPower_On ==1){
             send_times++;
            if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
@@ -472,7 +507,7 @@ static void Wifi_Link_Fun(void)
             pro_t.gKey_command_tag = KEY_NULL;
             pro_t.key_add_dec_spec_flag=0;
            }
-
+#endif 
 }
 /************************************************************************
 	*
@@ -489,30 +524,31 @@ static void Mode_Ai_Fun(void)
 		 //SendData_Buzzer();
 			 
 	   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
-			   if(pro_t.display_set_timer_timing == beijing_time){
+			   if(disp_t.timer_timing_define_flag == works_time){
 			
 				   //timer time + don't has ai item
-				   pro_t.display_set_timer_timing = timer_time;
-				   ai_state()=2; //Timer time Model
+				 //  disp_t.timer_timing_define_flag = ;
+				  // ai_state()=2; //Timer time Model
+				  ctl_t.gAi_flag = 0;
+				  disp_t.timer_timing_define_flag = timer_time;
 				  SendData_Set_Wifi(MODE_TIMER);
-				  HAL_Delay(10);
+				 // HAL_Delay(10);
 				   
 				}
-				else if(pro_t.display_set_timer_timing == timer_time){
+				else if(disp_t.timer_timing_define_flag == timer_time){
 					//beijing time + ai item
-					pro_t.display_set_timer_timing = beijing_time;
+					disp_t.timer_timing_define_flag  = works_time;
 				 
-				   ai_state()=1; //AI model
+				  ctl_t.gAi_flag =0; //AI model
 				  SendData_Set_Wifi(MODE_AI);
-				  HAL_Delay(10);
+				 
 					
 				}
 				
 				
 			  } 	
 			 }
-		  pro_t.gKey_command_tag = KEY_NULL;
-		  pro_t.key_add_dec_spec_flag=0;
+		 
 }
 /************************************************************************
 	*
@@ -634,7 +670,7 @@ static void ADD_Key_Fun(void)
             }
          DisplayPanel_Ref_Handler();
 
-		 pro_t.gKey_command_tag = KEY_NULL;
+
           
 
 
@@ -651,6 +687,7 @@ static void DEC_Key_Fun(void)
 {
 
     uint8_t  decade_temp,unit_temp,temp_bit_1_hours,temp_bit_2_hours;
+	uint8_t temp_bit_2_minute=0,temp_bit_1_minute=0;
 	if(pro_t.gPower_On ==1){
 	   	if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
 	   	
@@ -754,7 +791,7 @@ static void Ptc_Temperature_Compare_Value(void)
             }
 			else if((smartphone_set_temp_value() -3) > temperature_value()||  temperature_value() <38){
 	  
-		         ctl_t.gPtc_flag = 1//run_t.gDry = 1;
+		         ctl_t.gPtc_flag = 1;//run_t.gDry = 1;
 			     SendData_Set_Command(DRY_ON_NO_BUZZER);
                     
 		         }

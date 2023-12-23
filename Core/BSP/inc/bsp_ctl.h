@@ -49,11 +49,7 @@ typedef enum {
 
 }wifi_state_t;
 
-typedef enum TIMING_T{
 
-   works_time,
-   timing_success 
-}timing_t;
 
 
 typedef struct {

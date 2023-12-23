@@ -358,9 +358,9 @@ void DisplayPanel_Ref_Handler(void)
 				disp_t.gTimer_disp_timer_timing=0;
 			if(disp_t.disp_timer_time_hours !=0){	 
 			      disp_t.timer_timing_define_flag = timing_success;
-				 // pro_t.setup_timer_flag = 1;
+				 
 			}
-			  pro_t.setup_timer_timing_item=0; //be changed to set_temperature_value;
+			pro_t.setup_timer_timing_item=0; //be changed to normal "works time" mode
 
 
 		  }
@@ -370,10 +370,10 @@ void DisplayPanel_Ref_Handler(void)
      }
      else{
 	 	if( ctl_t.ptc_warning ==0){
-     	    TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber4_Low[lcd_t.number4_low]+lcdNumber5_High[lcd_t.number5_high]) & 0xff);//display digital '4,5'
+     	    TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber4_Low[lcd_t.number4_low]+lcdNumber5_High[lcd_t.number5_high]) & 0xff);//display digital register '4,5'
 	 	 }
 		else{
-			 TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber4_Low[lcd_t.number4_low]+lcdNumber5_High_E[0]));//display digital '4,5'
+			 TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber4_Low[lcd_t.number4_low]+lcdNumber5_High_E[0]));//display digital register '4,5'
 
 		 }
      }
@@ -1176,7 +1176,7 @@ static void LCD_DisplayNumber_OneTwo_Icon_Handler(void)
 		 
 		 
 	 	 }//don't Display numbers
-		 else if(pro_t.gTimer_numbers_one_two_blink > 5  && pro_t.gTimer_numbers_one_two_blink <11){ //don't display 
+		 else if(lcd_t.gTimer_numbers_one_two_blink > 5  && lcd_t.gTimer_numbers_one_two_blink <11){ //don't display 
             //display address 0xC2 -> 
 	          if(ctl_t.gPtc_flag ==1 && ctl_t.gPlasma_flag ==1  && ctl_t.gBug_flag==1)
 			 	TM1723_Write_Display_Data(0xC2,((0X01+DRY_Symbol+KILL_Symbol+BUG_Symbol)+lcdNumber1_High[lcd_t.number1_high]) & 0x0f);//display digital "temp
@@ -1210,14 +1210,14 @@ static void LCD_DisplayNumber_OneTwo_Icon_Handler(void)
 				TM1723_Write_Display_Data(0xC4,(0x01+lcdNumber2_Low[lcd_t.number2_low]+lcdNumber3_High[lcd_t.number3_high])&0xF1);//display "t,c"
         }
 		else {
-             pro_t.gTimer_numbers_one_two_blink =0;
+             lcd_t.gTimer_numbers_one_two_blink =0;
 			 number_blink_times++;
 		     if(number_blink_times > 3){
                  number_blink_times =0;
 				 pro_t.setup_temperature_value =0;
-			     pro_t.panel_key_setup_timer_flag=0;
+			     disp_t.timer_timing_define_flag=0;//pro_t.panel_key_setup_timer_flag=0;
 				 pro_t.temperature_set_flag = 1;
-				 pro_t.gTimer_temp_delay =67;
+				 
 				
 				 
 			 }

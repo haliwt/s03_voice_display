@@ -218,7 +218,7 @@ void Ai_Handler(uint8_t(*ai_handler)(void))
 }
 void Fan_Handler(uint8_t(*fan_handler)(void))
 {
-	fan_speed_state = fan_handler
+	fan_speed_state = fan_handler;
 }
 void Plasma_Handler(uint8_t(*plasma_handler)(void))
 {

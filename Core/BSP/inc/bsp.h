@@ -3,6 +3,7 @@
 #include "main.h"
 
 #include "iwdg.h"
+#include "tim.h"
 
 #include "bsp_cmd_link.h"
 #include "usart.h"
@@ -19,10 +20,7 @@
 #include "bsp_decoder.h"
 
 
-/* ???????????? */
-#if !defined (stm32G30_v1.0)
-	#error "Please define the board model : V4.2"
-#endif
+
 
 /* ?? BSP ??? */
 #define __STM32G030_BSP_VERSION		"1.0"
@@ -54,11 +52,12 @@ typedef enum{
    dec_key
    
 
-}key_state;
+}key_input_state;
 
 typedef enum{
 
     run_update_data =0x01,
+	power_off_fan_pro
 	
 
 }process_state;
@@ -95,6 +94,8 @@ typedef struct{
 	uint8_t gTimer_wifi_connect_counter;
 	uint8_t gTimer_key_timing;
 	uint8_t gTimer_pro_disp;
+	uint8_t gTimer_pro_fan;
+	uint8_t gTimer_usart_error;
 
 }PRO_T;
 

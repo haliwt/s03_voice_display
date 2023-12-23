@@ -108,6 +108,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	bsp_Idle();
+	Key_Handler(pro_t.gKey_value);
 	Display_Process_Handler();
   }
   /* USER CODE END 3 */

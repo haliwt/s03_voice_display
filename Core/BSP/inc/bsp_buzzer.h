@@ -3,6 +3,9 @@
 #include "main.h"
 
 
+void Key_Sound(void);
+
+
 
 
 
