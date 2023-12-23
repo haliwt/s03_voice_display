@@ -97,6 +97,7 @@ int main(void)
   delay_init(24);
   bsp_ctlint();
   Key_Init();
+  Disp_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */

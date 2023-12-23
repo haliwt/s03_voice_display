@@ -21,12 +21,6 @@ static void Mode_Long_Key_Fun(void);
 
 
 
-
-
-
-
-
-
 uint8_t relay_id_led ;
 uint8_t fun_key_counter,display_keep_temp_value;
 uint8_t  disp_keep_temp_value ;
@@ -128,11 +122,12 @@ void Key_Handler(uint8_t key_value)
 		break;
 
 		case add_key:
-			
+		 ADD_Key_Fun();
 		 key_value =0xff;
         break;
 
 		case dec_key:
+		 DEC_Key_Fun();
          key_value =0xff;
 		break;
 
@@ -198,6 +193,9 @@ static void DispPocess_Command_Handler(void)
 
 			pro_t.ack_power_on_sig=0;
 			Lcd_PowerOn_Fun();
+		    Display_Temperature_Humidity_Value();
+		    Timing_Handler();
+	       
             run_process_step=1;
 
 		}
@@ -205,6 +203,8 @@ static void DispPocess_Command_Handler(void)
 		  counter++ ;
 		  Lcd_PowerOn_Fun();
           SendData_PowerOnOff(1);
+		  Display_Temperature_Humidity_Value_Handler();
+		  Timing_Handler();
 
 		}
         if(counter >10000){
@@ -215,21 +215,31 @@ static void DispPocess_Command_Handler(void)
 
 	 break;
 
-	 case 1:  //display works time 
-	 	
-	 	   Timing_Handler();
-	       DisplayPanel_Ref_Handler();
+	 case 1:  //display works time + "temperature value " + "humidity value"
+	      if(pro_t.gTimer_pro_disp > 7 && pro_t.gTimer_pro_disp < 9){
+	 	     Display_Temperature_Humidity_Value_Handler();
+
+	      }
+
+		  if(pro_t.gTimer_pro_disp > 12){
+		  	pro_t.gTimer_pro_disp =0;
+		    Timing_Handler();
+
+		  }
+	      
          
 	  run_process_step=2;
 
 	 break;
 
-	 case 2:
+	 case 2: //set timer times pro
+
+	 
 
 	  if(pro_t.set_timer_flag==1){ //
 		  pro_t.set_timer_flag++;
              
-	      SendData_Time_Data(disp_t.disp_hours_time);
+	      SendData_Time_Data(disp_t.disp_set_timer_timing);
 		  
       }
 
@@ -237,7 +247,7 @@ static void DispPocess_Command_Handler(void)
 	  run_process_step=3;
       break;
 
-	  case 3:
+	  case 3: //to pancel of key set tempeature value 
 	    //Enable digital "1,2" -> blink LED
        //Enable digital "1,2" -> blink LED
 	   if(pro_t.panel_key_setup_timer_flag==1){
@@ -318,8 +328,8 @@ static void DispPocess_Command_Handler(void)
 
     break;
    	}
+	}
 }
-
 /************************************************************************
 	*
 	*Function Name: static void Power_On_Fun(void)
@@ -343,14 +353,13 @@ static void Power_On_Fun(void)
     ctl_t.gFan_speed_value =100; //run_t.disp_wind_speed_grade =100;
 	
 
-	 run_t.gTimer_minute_Counter=0;
-     run_t.gTimer_timing=0;
+     pro_t.temperature_set_flag = 0;
 
 	 disp_t.disp_timer_time_hours =0;
 	 disp_t.disp_timer_time_minutes =0;
 	 pro_t.setup_timer_timing_item=0;
 
-	 disp_t.timer_timing_define_flag = timing_not_definition;
+	 disp_t.timer_timing_define_flag = works_time;
 
 	 
     //display work time is begin form "0"
@@ -398,35 +407,22 @@ static void Power_Off_Fun(void)
       
                
             }
-            if(power_off!=0){
-                pro_t.gFan_RunContinue=1;
-                pro_t.gTimer_first_power_on_counter=0;
 
-             }
-            pro_t.power_key_interrupt_counter=0;//WT.EDIT 2023.07.25
-			pro_t.gPower_On = RUN_POWER_OFF;
-          
-			pro_t.temperature_set_flag = 0;
+            pro_t.temperature_set_flag = 0;
       
-			pro_t.wifi_set_temperature_value_flag=0;
-		    pro_t.gTimer_set_temp_times=0; //conflict with send temperatur value 
+
             pro_t.wifi_led_fast_blink_flag=0;
             pro_t.Timer_mode_flag = 0;
-			pro_t.works_counter_time_value=0;
-			pro_t.panel_key_setup_timer_flag=0;
+		
             pro_t.setup_temperature_value=0;
 		    disp_t.disp_timer_time_hours =0;
 			disp_t.disp_timer_time_minutes =0;
-			disp_t.timer_timing_define_flag = timing_not_definition;
+			disp_t.timer_timing_define_flag = works_time;
 
-			pro_t.ptc_warning = 0;
-		
-      
-       
-			
-			pro_t.fan_warning=0;
+			ctl_t.ptc_warning = 0;
+		    ctl_t.fan_warning=0;
             pro_t.gKey_command_tag = KEY_NULL;
-            pro_t.key_add_dec_spec_flag=0;
+          
             }
 
 }
@@ -442,7 +438,7 @@ static void Wifi_Link_Fun(void)
 {
 	if(pro_t.gPower_On ==1){
             send_times++;
-           if(pro_t.fan_warning ==0 && pro_t.ptc_warning ==0){
+           if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
             if(wifi_long_key!=send_times){
                 wifi_long_key=send_times;
                 
@@ -492,7 +488,7 @@ static void Mode_Ai_Fun(void)
 	if(pro_t.gPower_On ==1){
 		 //SendData_Buzzer();
 			 
-	   if(pro_t.ptc_warning ==0 && pro_t.fan_warning ==0){
+	   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
 			   if(pro_t.display_set_timer_timing == beijing_time){
 			
 				   //timer time + don't has ai item
@@ -529,16 +525,16 @@ static void Mode_Ai_Fun(void)
 static void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_key:
 {
 	  if(pro_t.gPower_On ==1){
-	   if(pro_t.fan_warning ==0 && pro_t.ptc_warning ==0){
+	   if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
 	  	
 		  
 		   ctl_t.gAi_flag =0;
-		   pro_t.setup_timer_timing_item=1;//ai_state() =2;
-		   pro_t.display_set_timer_timing  =timer_time;
+		   pro_t.setup_timer_timing_item=timer_time;
+		 
 		   pro_t.gTimer_key_timing=0; //按键退出的限制，4秒以内
 		
            
-		   pro_t.Timer_mode_flag=1;
+		   pro_t.Timer_mode_flag=1; //set timer timing enable,
 		   
 		   
 		   SendData_Set_Wifi(MODE_TIMER);
@@ -546,7 +542,7 @@ static void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_
 		   
 	  	 }
         }
-		pro_t.gKey_command_tag = KEY_NULL;
+		//pro_t.gKey_command_tag = KEY_NULL;
 
 
 }
@@ -560,9 +556,12 @@ static void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_
 ************************************************************************/
 static void ADD_Key_Fun(void)
 {
+ 
+    uint8_t  decade_temp,unit_temp,temp_bit_1_hours,temp_bit_2_hours,temp_bit_2_minute,temp_bit_1_minute;
+
 	 if(pro_t.gPower_On ==1){
 
-		   if(pro_t.ptc_warning ==0 && pro_t.fan_warning ==0){
+		   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
 		
 			 SendData_Buzzer();
              HAL_Delay(20);
@@ -570,25 +569,20 @@ static void ADD_Key_Fun(void)
 
 		    switch(pro_t.setup_timer_timing_item){
 
-			case 0: //set temperature value add number
+			case set_temperature: //set temperature value add number
       
-				pro_t.wifi_set_temperature_value_flag =0;
-				pro_t.wifi_set_temperature ++;
-	            if(pro_t.wifi_set_temperature < 20){
-				    pro_t.wifi_set_temperature=20;
+		
+				disp_t.disp_set_temp_value ++;
+	            if(disp_t.disp_set_temp_value < 20){
+				    disp_t.disp_set_temp_value=20;
 				}
 				
-				if(pro_t.wifi_set_temperature > 40)pro_t.wifi_set_temperature= 20;
+				if(disp_t.disp_set_temp_value > 40)disp_t.disp_set_temp_value= 20;
 
-				if(power_on_fisrt_flag ==0){
-				     power_on_fisrt_flag ++;
-			     	pro_t.wifi_set_temperature =40;
-
-
-			      }
+			
             
-			    decade_temp =  pro_t.wifi_set_temperature / 10 ;
-				unit_temp =  pro_t.wifi_set_temperature % 10; //
+			    decade_temp =  disp_t.disp_set_temp_value / 10 ;
+				unit_temp =  disp_t.disp_set_temp_value % 10; //
                 
 				lcd_t.number1_low=decade_temp;
 				lcd_t.number1_high =decade_temp;
@@ -596,15 +590,11 @@ static void ADD_Key_Fun(void)
 				lcd_t.number2_low = unit_temp;
 				lcd_t.number2_high = unit_temp;
 
-				pro_t.panel_key_setup_timer_flag = 1;
-                
-               pro_t.key_add_dec_spec_flag=0;
-					
-			
-			   break;
+				
+               break;
 
-			   case 1:
-				    display_model++;
+			   case set_timer_timing:
+				    
 					pro_t.gTimer_key_timing =0;
                  
 					disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
@@ -619,7 +609,7 @@ static void ADD_Key_Fun(void)
 					temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
 					temp_bit_1_hours = disp_t.disp_timer_time_hours %10;
                  
-					disp_t.disp_timer_time_minutes  =0;
+			
 
 					temp_bit_2_minute =0;
 					temp_bit_1_minute =0;
@@ -636,13 +626,13 @@ static void ADD_Key_Fun(void)
 					lcd_t.number8_low = temp_bit_1_minute;
 					lcd_t.number8_high = temp_bit_1_minute;
 
-				pro_t.key_add_dec_spec_flag=0;
+		
 				break;
 				}	
 			
 		     }
             }
-         
+         DisplayPanel_Ref_Handler();
 
 		 pro_t.gKey_command_tag = KEY_NULL;
           
@@ -659,43 +649,36 @@ static void ADD_Key_Fun(void)
 ************************************************************************/
 static void DEC_Key_Fun(void)
 {
+
+    uint8_t  decade_temp,unit_temp,temp_bit_1_hours,temp_bit_2_hours;
 	if(pro_t.gPower_On ==1){
-	   	if(pro_t.ptc_warning ==0 && pro_t.fan_warning ==0){
-	   	SendData_Buzzer();
-        HAL_Delay(20);
+	   	if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
+	   	
 	     switch(pro_t.setup_timer_timing_item){
 
-		   case 0: 
+		   case set_temperature:  //default tempearture value 
 	
-	        pro_t.wifi_set_temperature_value_flag =0;
-			pro_t.wifi_set_temperature--;
-			if(pro_t.wifi_set_temperature<20) pro_t.wifi_set_temperature=40;
-	        if(pro_t.wifi_set_temperature >40)pro_t.wifi_set_temperature=40;
+			disp_t.disp_set_temp_value--;
+			if(disp_t.disp_set_temp_value<20) disp_t.disp_set_temp_value=40;
+	        if(disp_t.disp_set_temp_value >40)disp_t.disp_set_temp_value=40;
 
-			if(power_on_fisrt_flag ==0){
-				power_on_fisrt_flag ++;
-			  pro_t.wifi_set_temperature =40;
+	
 
-
-			}
-
-	        decade_temp =  pro_t.wifi_set_temperature / 10;
-			unit_temp =  pro_t.wifi_set_temperature % 10; //
-         //    HAL_Delay(5);
+	        decade_temp =  disp_t.disp_set_temp_value / 10;
+			unit_temp =  disp_t.disp_set_temp_value % 10; //
+      
 			lcd_t.number1_low=decade_temp;
 			lcd_t.number1_high =decade_temp;
 
 			lcd_t.number2_low = unit_temp;
 			lcd_t.number2_high = unit_temp;
 			
-			pro_t.panel_key_setup_timer_flag = 1;
-	    	
-            pro_t.key_add_dec_spec_flag=0;
+		
 		    break;
 
-			case 1:
+			case set_timer_timing: //timer timing set "decrease -down"
 	    
-			    display_model++;
+	
 				pro_t.gTimer_key_timing =0;
            
 				disp_t.disp_timer_time_hours -- ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes - 1;
@@ -710,7 +693,7 @@ static void DEC_Key_Fun(void)
 					temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
 					temp_bit_1_hours = disp_t.disp_timer_time_hours  %10;
                     
-					disp_t.disp_timer_time_minutes  =0;
+				
 
 					temp_bit_2_minute=0;
 					temp_bit_1_minute=0;
@@ -727,7 +710,7 @@ static void DEC_Key_Fun(void)
 
 					lcd_t.number8_low = temp_bit_1_minute;
 					lcd_t.number8_high = temp_bit_1_minute;
-                    pro_t.key_add_dec_spec_flag=0;
+                    
 
              break;
 
@@ -735,8 +718,8 @@ static void DEC_Key_Fun(void)
 	   	  }
 		}
 
-      pro_t.gKey_command_tag = KEY_NULL;
-      pro_t.key_add_dec_spec_flag=0;
+      DisplayPanel_Ref_Handler();
+     
 
 
 
@@ -758,7 +741,7 @@ static void Ptc_Temperature_Compare_Value(void)
       switch(pro_t.temperature_set_flag ){
 
       case 1:
-	    if(pro_t.gTimer_pro_temp_delay> 61 && pro_t.ptc_warning==0){
+	    if(pro_t.gTimer_pro_temp_delay> 61 && ctl_t.ptc_warning==0){
                pro_t.gTimer_pro_temp_delay =0;
 		 
 		  
@@ -782,7 +765,7 @@ static void Ptc_Temperature_Compare_Value(void)
 
        case 0:
            
-           if(pro_t.gTimer_pro_temp_delay > 66  && pro_t.ptc_warning==0 ){ //WT.EDIT 2023.07.27 over 40 degree shut of ptc off
+           if(pro_t.gTimer_pro_temp_delay > 66  && ctl_t.ptc_warning==0 ){ //WT.EDIT 2023.07.27 over 40 degree shut of ptc off
                 pro_t.gTimer_pro_temp_delay=0;
 
             if(smartphone_set_temp_value() >19 && smartphone_set_temp_value() < 41){

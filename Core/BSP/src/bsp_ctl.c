@@ -18,8 +18,7 @@ uint8_t (*smartphone_set_timer_timing)(void);
 uint8_t (*smartphone_set_temp_value)(void);
 
 
-uint8_t (*beijing_hours_time)(void);
-uint8_t (*beijing_minutes_time)(void);
+
 
 
 
@@ -38,8 +37,7 @@ static uint8_t smartphone_set_timer_default_fun(void);
 static uint8_t smartphone_set_temp_default_fun();
 
 
-static uint8_t beijing_hours_fun(void);
-static uint8_t beijing_minutes_fun(void);
+
 
 
 
@@ -66,10 +64,6 @@ void bsp_ctlint(void)
 
 	Smartphone_Set_Timer_Handler(smartphone_set_timer_default_fun);
     Smartphone_Set_Temp_Handler(smartphone_set_temp_default_fun);
-
-	
-   Beijing_hours_Handler(beijing_hours_fun);
-   Beijing_minutes_handler(beijing_minutes_fun);
 
 }
 
@@ -198,15 +192,8 @@ static uint8_t smartphone_set_temp_default_fun()
 }
 
 
-static uint8_t beijing_hours_fun(void)
-{
-    return ctl_t.gBeijing_hours_time;
 
-}
-static uint8_t beijing_minutes_fun(void)
-{
-   return ctl_t.gBeijing_minutes_time;
-}
+
 
 /************************************************************
 	*
@@ -260,16 +247,6 @@ void Smartphone_Set_Temp_Handler(uint8_t(*set_temp_value)(void))
   smartphone_set_temp_value = set_temp_value;
 }
 
-void Beijing_hours_Handler(uint8_t(*beijing_hours_handler)(void))
-{
-	beijing_hours_time = beijing_hours_handler;
-
-}
-void Beijing_minutes_handler(uint8_t(*beijing_minutes_handler)(void))
-{
-    beijing_minutes_time = beijing_minutes_handler;
-
-}
 
 
 

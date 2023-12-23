@@ -90,7 +90,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
        case WIFI_BEIJING_TIME: //7//run_t.wifi_connect_success_flag
          if(power_state() ==1){
-           if(disp_t.timer_timing_define_flag==timing_not_definition ){
+           if(disp_t.timer_timing_define_flag==works_time ){
 		   	
 			 lcd_t.number5_low=beijing_hours_time()/10;
 	         lcd_t.number5_high =beijing_hours_time() /10;
@@ -147,10 +147,10 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 		  
 			  run_t.wifi_set_temperature_value_flag =1;
 
-			  run_t.wifi_set_temperature = run_t.wifi_set_oneself_temperature;
+			  run_t.disp_set_temp_value = run_t.wifi_set_oneself_temperature;
 
-		      temperature_decade=  run_t.wifi_set_temperature /10 ;
-			  temperature_unit =  run_t.wifi_set_temperature %10;
+		      temperature_decade=  run_t.disp_set_temp_value /10 ;
+			  temperature_unit =  run_t.disp_set_temp_value %10;
 		      // HAL_Delay(5);
 	         lcd_t.number1_high = temperature_decade;
 			 lcd_t.number1_low = temperature_decade;

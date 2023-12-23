@@ -24,10 +24,6 @@ typedef enum{
 	 WIFI_CONNECT_FAIL=0x55,
 
 	 WIFI_CONNECT_SUCCESS= 0xAA
-	 
-
-
-
 }works_t;
 
 
@@ -55,7 +51,7 @@ typedef enum {
 
 typedef enum TIMING_T{
 
-   timing_not_definition,
+   works_time,
    timing_success 
 }timing_t;
 
@@ -74,12 +70,14 @@ typedef struct {
    uint8_t gReal_humidity_value;
    uint8_t gReal_tem_value;
 
+   //warning
+   uint8_t ptc_warning;
+   uint8_t fan_warning;
+
    uint8_t gSet_timer_value;
    uint8_t gSet_temperature_value;
-   uint8_t gBeijing_hours_time;
-   uint8_t gBeijing_minutes_time;
-   uint8_t gBeijing_seconds_time ;
-  
+ 
+ 
 
    
  }bsp_ctl;
@@ -103,8 +101,6 @@ extern uint8_t (*smartphone_set_temp_value)(void);
 
 
 
-extern uint8_t (*beijing_hours_time)(void);
-extern uint8_t (*beijing_minutes_time)(void);
 
 
 
@@ -126,9 +122,6 @@ void Smartphone_Set_Timer_Handler(uint8_t(*set_timer_timing)(void));
 void Smartphone_Set_Temp_Handler(uint8_t(*set_temp_value)(void));
 
 
-
-void Beijing_hours_Handler(uint8_t(*beijing_hours_handler)(void));
-void Beijing_minutes_handler(uint8_t(*beijing_minutes_handler)(void));
 
 
 

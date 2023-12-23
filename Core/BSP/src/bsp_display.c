@@ -3,13 +3,129 @@
 
 DISP_T disp_t;
 
+
+uint8_t (*display_works_hours_value)(void);
+uint8_t (*display_works_minutes_value)(void);
+
+int8_t (*display_timer_hours_value)(void);
+uint8_t (*display_timer_minutes_value)(void);
+
+static uint8_t display_works_hours_default_fun(void);
+static uint8_t display_works_minutes_default_fun(void);
+
+
+static int8_t display_timer_hours_default_fun(void);
+static uint8_t display_timer_minutes_default_fun(void);
+
+static void Display_Works_Time_Handler(void);
+static void Display_Timer_Time_Handler(void);
+
 /*************************************************************
  * 
  * Function Name:void DisplaySMG_LED(void)
  * Function :
  * 
 *************************************************************/
-void Display_Temperature_Humidity_Value(void)
+void Disp_Init(void)
+{
+    Display_Works_Hours_Handler(display_works_hours_default_fun);
+    Display_Works_Minutes_Handler(display_works_minutes_default_fun);
+
+    Display_Timer_Hours_Handler(display_timer_hours_default_fun);
+    Display_Timer_Minutes_Handler(display_timer_minutes_default_fun);
+
+}
+/*************************************************************
+ * 
+ * Function Name:void DisplaySMG_LED(void)
+ * Function :
+ * 
+*************************************************************/
+static void Display_Works_Time_Handler(void)
+{
+	
+	   if(disp_t.gTimer_disp_minutes_time >59){ //minute
+
+			disp_t.gTimer_disp_minutes_time =0;
+			disp_t.disp_minutes_time++;
+          
+            if(disp_t.disp_minutes_time > 59){
+				disp_t.disp_minutes_time=0;
+				disp_t.disp_hours_time ++;
+			    
+				if(disp_t.disp_hours_time >23){
+					disp_t.disp_hours_time=0;
+
+				}
+
+			}
+	   }
+            
+         
+	Setup_Timer_Times_Donot_Display();
+	lcd_t.number5_low=(disp_t.disp_hours_time ) /10;
+	lcd_t.number5_high =(disp_t.disp_hours_time) /10;
+
+	lcd_t.number6_low = (disp_t.disp_hours_time) %10;;
+	lcd_t.number6_high = (disp_t.disp_hours_time ) %10;
+
+	lcd_t.number7_low = (disp_t.disp_minutes_time )/10;
+	lcd_t.number7_high = (disp_t.disp_minutes_time )/10;
+
+	lcd_t.number8_low = (disp_t.disp_minutes_time )%10;
+	lcd_t.number8_high = (disp_t.disp_minutes_time )%10;
+    }
+}
+/*************************************************************
+ * 
+ * Function Name:void DisplaySMG_LED(void)
+ * Function :
+ * 
+*************************************************************/
+static void Display_Timer_Time_Handler(void)
+{
+	 if(disp_t.gTimer_disp_timer_timing  > 59){ //
+        
+  		 disp_t.gTimer_disp_timer_timing  =0;
+		 disp_t.disp_timer_time_minutes--;
+	    if( disp_t.disp_timer_time_minutes < 0){
+		     disp_t.disp_timer_time_hours -- ;
+			 disp_t.disp_timer_time_minutes =59;
+           
+			if( disp_t.disp_timer_time_hours < 0 ){
+
+	           
+			    disp_t.disp_timer_time_minutes=0;
+				disp_t.disp_timer_time_minutes=0;
+				//run_t.wifi_send_buzzer_sound=0xff;
+				Power_Off_Fun();
+			}
+           
+                            
+                
+        }
+    }
+            
+    lcd_t.number5_low=(disp_t.disp_timer_time_hours  ) /10;
+	lcd_t.number5_high =(disp_t.disp_timer_time_hours ) /10;
+
+	lcd_t.number6_low = (disp_t.disp_timer_time_hours  ) %10;;
+	lcd_t.number6_high = (disp_t.disp_timer_time_hours  ) %10;
+
+	lcd_t.number7_low = ( disp_t.disp_timer_time_minutes )/10;
+	lcd_t.number7_high = ( disp_t.disp_timer_time_minutes)/10;
+
+	lcd_t.number8_low = ( disp_t.disp_timer_time_minutes)%10;
+	lcd_t.number8_high = ( disp_t.disp_timer_time_minutes )%10;
+
+}
+/*************************************************************
+ * 
+ * Function Name:void DisplaySMG_LED(void)
+ * Function :
+ * 
+*************************************************************/
+void Display_Temperature_Humidity_Value_Handler(void)
 {
      static uint8_t m,n,p,q;
     if(pro_t.gPower_On==1){
@@ -52,27 +168,26 @@ void Display_Temperature_Humidity_Value(void)
 	*Return Ref:NO
 	*
 ************************************************************************/  
-static void Timing_Handler(void)
+void Timing_Handler(void)
 {
-     switch(run_t.display_set_timer_timing ){
+     switch(disp_t.timer_timing_define_flag){
          
-     case beijing_time:
-      // beijing_time_fun();
-        Display_Works_Times_Value();
+     case works_time:
+        Display_Works_Time_Handler();
 
 						 
     break;
     
-    case timer_time:
+    case timing_success:
 	
-		//Setup_Timer_Times();
-		Display_Works_Times_Value();
+		Display_Timer_Time_Handler();
 		Works_Counter_Time();
 	
      
      break;
 		
     }
+    DisplayPanel_Ref_Handler();
 }
 
 /*************************************************************************
@@ -83,13 +198,11 @@ static void Timing_Handler(void)
 	*
 	*
 *************************************************************************/
-static void Setup_Timer_Times(void)
+void Setup_Timer_Times(void)
 {
-
-
-      if(pro_t.gTimer_timing > 59){ //
+	if(disp_t.gTiimer_disp_timer_timing> 59){ //
         
-        pro_t.gTimer_timing =0;
+        disp_t.gTiimer_disp_timer_timing=0;
 		 disp_t.disp_timer_time_minutes --;
 	    if(disp_t.disp_timer_time_minutes < 0){
 		     disp_t.disp_timer_time_hours -- ;
@@ -100,16 +213,9 @@ static void Setup_Timer_Times(void)
 	           if(disp_t.timer_timing_define_flag == timing_success){
 			    disp_t.disp_timer_time_hours=0;
 				disp_t.disp_timer_time_minutes=0;
-				//run_t.wifi_send_buzzer_sound=0xff;
+				
 				Power_Off_Fun();
-			
-
-			    //run_t.gFan_RunContinue=1;
-				//run_t.fan_off_60s = 0;
-	           
-	          
-                
-                }
+				}
                 else{
      
                      disp_t.disp_timer_time_hours =0;
@@ -117,28 +223,24 @@ static void Setup_Timer_Times(void)
 				     disp_t.display_set_timer_timing=beijing_time;
                      ctl_t.gAi_flag =1 ;//run_t.gModel=1;
 					 SendData_Set_Command(MODE_AI_NO_BUZZER);
-                 }
+                }
                             
                 
-                }
-              }
-            
-		     }
+            }
+        }
+    }
 
-	     
-     
-   
-			lcd_t.number5_low=(disp_t.disp_timer_time_hours ) /10;
-			lcd_t.number5_high =(disp_t.disp_timer_time_hours) /10;
+	lcd_t.number5_low=(disp_t.disp_timer_time_hours ) /10;
+	lcd_t.number5_high =(disp_t.disp_timer_time_hours) /10;
 
-			lcd_t.number6_low = (disp_t.disp_timer_time_hours ) %10;;
-			lcd_t.number6_high = (disp_t.disp_timer_time_hours ) %10;
+	lcd_t.number6_low = (disp_t.disp_timer_time_hours ) %10;;
+	lcd_t.number6_high = (disp_t.disp_timer_time_hours ) %10;
 
-			lcd_t.number7_low = (disp_t.disp_timer_time_minutes )/10;
-			lcd_t.number7_high = (disp_t.disp_timer_time_minutes)/10;
+	lcd_t.number7_low = (disp_t.disp_timer_time_minutes )/10;
+	lcd_t.number7_high = (disp_t.disp_timer_time_minutes)/10;
 
-			lcd_t.number8_low = (disp_t.disp_timer_time_minutes)%10;
-			lcd_t.number8_high = (disp_t.disp_timer_time_minutes )%10;
+	lcd_t.number8_low = (disp_t.disp_timer_time_minutes)%10;
+	lcd_t.number8_high = (disp_t.disp_timer_time_minutes )%10;
 }
 /*************************************************************************
 	*
@@ -150,54 +252,41 @@ static void Setup_Timer_Times(void)
 *************************************************************************/       
 void Setup_Timer_Times_Donot_Display(void)
 {
-   if(pro_t.gTimer_timing > 59){ //
+
+
+   
+   if(disp_t.gTimer_disp_timer_timing  > 59){ //
         
-        pro_t.gTimer_timing =0;
-		disp_t.disp_timer_time_minutes --;
-	    if(disp_t.disp_timer_time_minutes < 0){
+  		 disp_t.gTimer_disp_timer_timing  =0;
+		 disp_t.disp_timer_time_minutes--;
+	    if( disp_t.disp_timer_time_minutes < 0){
 		     disp_t.disp_timer_time_hours -- ;
 			 disp_t.disp_timer_time_minutes =59;
            
-			if(disp_t.disp_timer_time_hours < 0 ){
+			if( disp_t.disp_timer_time_hours < 0 ){
 
-	           if(disp_t.timer_timing_define_flag == timing_success){
-			    disp_t.disp_timer_time_hours=0;
-				disp_t.disp_timer_time_minutes=0;
-				//pro_t.wifi_send_buzzer_sound=0xff;
-				Power_Off_Fun();
-
-			
-				pro_t.gPower_On =0 ;
-			    pro_t.gFan_RunContinue=1;
-				pro_t.fan_off_60s = 0;
 	           
-	          
-                
-                }
-                 else{
-     
-                     disp_t.disp_timer_time_hours =0;
-                     disp_t.disp_timer_time_minutes =0;
-                 
-                 }
+			    disp_t.disp_timer_time_minutes=0;
+				disp_t.disp_timer_time_minutes=0;
+				//run_t.wifi_send_buzzer_sound=0xff;
+				Power_Off_Fun();
+			}
+           
                             
                 
-                }
-              }
-            
-		     }
-
-
+        }
+    }
 
 
 }
 
 /***************************************************************
- * 
- * Function Name:
- * 
- *
- * 
+	 * 
+	 * Function Name:
+	 * Function:
+	 * Input Ref:
+	 * Return Ref:
+	 * 
  **************************************************************/
 static void Works_Counter_Time(void)
 {
@@ -224,5 +313,130 @@ static void Works_Counter_Time(void)
   }
 }
 
+/***************************************************************
+	 * 
+	 * Function Name:static uint8_t display_works_hours_default_fun(void)
+	 * Function:display works hours 
+	 * Input Ref:
+	 * Return Ref: works of hours 
+	 * 
+ **************************************************************/
+static uint8_t display_works_hours_default_fun(void)
+{
+     static uint8_t disp_hours;
+
+	if(disp_t.gTimer_disp_minutes_time > 59){
+        disp_t.gTimer_disp_minutes_time 0;
+		disp_hours ++ ;
+
+	}
+
+	if(disp_hours > 24){
+       disp_hours =0; 
+
+	}
+
+	return disp_hours;
+
+}
+
+/***************************************************************
+	 * 
+	 * Function Name:
+	 * Function:
+	 * Input Ref:
+	 * Return Ref:
+	 * 
+ **************************************************************/
+static uint8_t display_works_minutes_default_fun(void)
+{
+     return disp_t.gTimer_disp_minutes_time;
+
+}
+/***************************************************************
+	 * 
+	 * Function Name:
+	 * Function:
+	 * Input Ref:
+	 * Return Ref:
+	 * 
+ **************************************************************/
+static int8_t display_timer_hours_default_fun(void)
+{
+     return  disp_t.disp_timer_time_hours;
+
+}
+/***************************************************************
+	 * 
+	 * Function Name:
+	 * Function:
+	 * Input Ref:
+	 * Return Ref:
+	 * 
+ **************************************************************/
+static uint8_t display_timer_minutes_default_fun(void)
+{
+
+    if(disp_t.gTimer_disp_timer_timing > 59){
+	    disp_t.gTimer_disp_timer_timing = 0;
+        disp_t.disp_timer_time_minutes --;
+
+		if(disp_t.disp_timer_time_minutes <0){
+	    
+        disp_t.disp_timer_time_hours --;
+        if(disp_t.disp_timer_time_hours > -1){
+		  
+		    disp_t.disp_timer_time_minutes = 59;
+
+              
+	   }
+	   }
+
+	  if( disp_t.disp_timer_time_hours < 0){
+
+          disp_t.disp_timer_time_hours= -1;
+		  disp_t.disp_timer_time_minutes = 0;
+
+	     
+
+	  }
+
+    }
+
+	return disp_t.disp_timer_time_minutes;
+
+	
+
+}
+
+
+
+/***************************************************************
+	 * 
+	 * Function Name:
+	 * Function:
+	 * Input Ref:
+	 * Return Ref:
+	 * 
+ **************************************************************/
+
+void Display_Works_Hours_Handler(uint8(*disp_hours_handler)(void))
+{
+   display_works_hours_value = disp_hours_handler;
+}
+void Display_Works_Minutes_Handler(uint8(*disp_minutes_handler)(void))
+{
+  display_works_minutes_value = disp_minutes_handler;
+}
+
+void Display_Timer_Hours_Handler(uint8(*disp_timer_hours_handler)(void))
+{
+   display_timer_hours_value = disp_timer_hours_handler;
+
+}
+void Display_Timer_Minutes_Handler(uint8(*disp_timer_minutes_handler)(void))
+{
+  display_timer_minutes_value = disp_timer_minutes_handler;
+}
 
 
