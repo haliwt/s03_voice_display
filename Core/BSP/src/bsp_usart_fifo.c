@@ -91,7 +91,7 @@ void bsp_InitUart(void)
 	
 	UartVarInit();		/* 必须先初始化全局变量,再配置硬件 */
 
-	InitHardUart();		/* 配置串口的硬件参数(波特率等) */
+	//InitHardUart();		/* 配置串口的硬件参数(波特率等) */
 
 	RS485_InitTXE();	/* 配置RS485芯片的发送使能硬件，配置为推挽输出 */
 }
@@ -393,11 +393,11 @@ void RS485_SendStr(char *_pBuf)
 *	返 回 值: 无
 *********************************************************************************************************
 */
-extern void MODS_ReciveNew(uint8_t _byte);
-void RS485_ReciveNew(uint8_t _byte)
-{
-	MODS_ReciveNew(_byte);
-}
+////extern void MODS_ReciveNew(uint8_t _byte);
+//void RS485_ReciveNew(uint8_t _byte)
+//{
+//	MODS_ReciveNew(_byte);
+//}
 
 /*
 *********************************************************************************************************

@@ -6,20 +6,61 @@
 key_types key_t;
 uint8_t power_key_detected;
 uint16_t key_mode_counter;
+uint8_t key_set_timer_flag;
+
 
 uint8_t (*power_on_off_state)(void);
 
 static uint8_t power_default_fun(void);
 
-uint8_t key_set_timer_flag;
 
+/**************************************************************
+	*
+	*Function Name:void Key_Init(void)
+	*
+	*
+	*
+	*
+**************************************************************/
 void Key_Init(void)
 {
    Power_Handler(power_default_fun);
 
 }
 
+/***********************************************************
+ *  *
+    *Function Name: static uint8_t power_default_fun(void);
+    *Function: power turn on or turn off
+    *Input Ref: NO
+    *Return Ref:  1->turn on ,0-> turn off
+    * 
+***********************************************************/
+static uint8_t power_default_fun(void)
+{
+      if(pro_t.gPower_On ==1) return 1;
+	  else return 0;
 
+}
+
+void Power_Handler(uint8_t(* power_on_handler)(void))
+{
+
+	power_on_off_state =power_on_handler;
+
+
+}
+
+
+
+/**************************************************************
+	*
+	*Function Name:uint8_t KEY_Scan(void)
+	*
+	*
+	*
+	*
+**************************************************************/
 uint8_t KEY_Scan(void)
 {
 
@@ -354,21 +395,6 @@ uint8_t ReadKey(void)
    return 0;
 }
 #endif 
-/***********************************************************
- *  *
-    *Function Name: static uint8_t power_default_fun(void);
-    *Function: power turn on or turn off
-    *Input Ref: NO
-    *Return Ref:  1->turn on ,0-> turn off
-    * 
-***********************************************************/
-static uint8_t power_default_fun(void)
-{
-      if(pro_t.gPower_On ==1) return 1;
-	  else return 0;
-
-}
-
 
 
 

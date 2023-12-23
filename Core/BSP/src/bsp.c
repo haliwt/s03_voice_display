@@ -10,7 +10,7 @@ PRO_T pro_t;
 static void Process_Key_Handler(uint8_t keylabel);
 static void DispPocess_Command_Handler(void);
 static void Power_On_Fun(void);
-static void Power_Off_Fun(void);
+
 static void power_off_fan_run(void);
 
 static void Ptc_Temperature_Compare_Value(void);
@@ -205,7 +205,7 @@ static void DispPocess_Command_Handler(void)
 
 			pro_t.ack_power_on_sig=0;
 			Lcd_PowerOn_Fun();
-		    Display_Temperature_Humidity_Value();
+		    Display_Temperature_Humidity_Value_Handler();
 		    Timing_Handler();
 	       
             run_process_step=1;
@@ -393,7 +393,7 @@ static void Power_On_Fun(void)
      
 
 
-static void Power_Off_Fun(void)
+void Power_Off_Fun(void)
 {
 	 		 
     pro_t.gPower_On = power_off;     

@@ -20,6 +20,7 @@ static int8_t display_timer_minutes_default_fun(void);
 static void Display_Works_Time_Handler(void);
 static void Display_Timer_Time_Handler(void);
 static void Setup_Timer_Times_Donot_Display(void);
+static void Works_Time_Continue(void);
 
 
 /*************************************************************
@@ -186,6 +187,7 @@ void Timing_Handler(void)
          
      case works_time:
         Display_Works_Time_Handler();
+	   
 
 						 
     break;
@@ -193,13 +195,13 @@ void Timing_Handler(void)
     case timing_success:
 	
 		Display_Timer_Time_Handler();
-		Works_Counter_Time();
-	
+		
+	    Works_Time_Continue(); //still recoder "works time"
      
      break;
 
 	case timer_time:
-		
+		 
 
 
 	break;
@@ -210,6 +212,35 @@ void Timing_Handler(void)
 		
     }
     DisplayPanel_Ref_Handler();
+}
+/***************************************************************
+ * 
+ * Function Name:
+ * 
+ *
+ * 
+ **************************************************************/
+static void Works_Time_Continue(void)
+{
+  if(disp_t.timer_timing_define_flag == timing_success){
+	 
+	 if(disp_t.gTimer_disp_minutes_time >59){ //minute
+
+			disp_t.gTimer_disp_minutes_time =0;
+			disp_t.disp_minutes_time++;
+          
+            if(disp_t.disp_minutes_time > 59){
+				disp_t.disp_minutes_time=0;
+				disp_t.disp_hours_time ++;
+			    
+				if(disp_t.disp_hours_time >23){
+					disp_t.disp_hours_time=0;
+
+				}
+
+			}
+	}
+  }
 }
 
 /*************************************************************************

@@ -18,6 +18,7 @@
 #include "bsp_usart_fifo.h"
 #include "bsp_wifi.h"
 #include "bsp_decoder.h"
+#include "bsp_key.h"
 
 
 
@@ -105,6 +106,9 @@ extern PRO_T pro_t;
 void bsp_Idle(void);
 void Key_Handler(uint8_t keyvalue);
 void Display_Process_Handler(void);
+
+void Power_Off_Fun(void);
+
 
 
 

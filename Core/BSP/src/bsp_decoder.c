@@ -3,6 +3,9 @@
 
 DECODER_T decoder_t;
 
+static void Receive_Wifi_Cmd(uint8_t cmd);
+
+
 static void Receive_MainBoard_Data_Handler(uint8_t cmd);
 
 
@@ -43,7 +46,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
 	 
 	 case WIFI_REAL_TEMP: //4//set temperature value
-	       if(power_state() ==1){
+	       if(power_on_off_state() ==1){
 		   	   
             temperature_decade= temperature_value() /10 ;
             temperature_unit = temperature_value() %10;
@@ -61,7 +64,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
 	 case PANEL_DATA://1
 	   
-        if(power_state() ==1){
+        if(power_on_off_state()  ==1){
         hum1 =  humidity_value()/10 ;  //Humidity 
         hum2 =  humidity_value()%10;
         
@@ -89,7 +92,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
       break;
 
        case WIFI_BEIJING_TIME: //7//run_t.wifi_connect_success_flag
-         if(power_state() ==1){
+         if(power_on_off_state() ==1){
            if(disp_t.timer_timing_define_flag==works_time ){
 		   	
 			 lcd_t.number5_low=disp_t.disp_hours_time/10;
@@ -137,7 +140,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
 	  case WIFI_SET_TEMPERATURE://11
 
-		if(power_state() ==1){
+		if(power_on_off_state()  ==1){
 
 			temperature_decade= disp_t.disp_set_temp_value /10 ;
 			temperature_unit =  disp_t.disp_set_temp_value %10;
@@ -174,144 +177,112 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 *Return Ref: NO
 *
 **********************************************************************/
-#if 0
-void Receive_Wifi_Cmd(uint8_t cmd)
+static void Receive_Wifi_Cmd(uint8_t cmd)
 {
 	switch(cmd){
 
 
 		   case WIFI_POWER_ON: //turn on 
 		 	
-           
-              run_t.wifi_send_buzzer_sound = WIFI_POWER_ON_ITEM;
-	         
-		      run_t.wifi_connect_success_flag =1;
-			  run_t.gPower_On = 1;
+             // pro_t.gPower_On =power_on;
+              //run_t.wifi_connect_success_flag =1;
+              ctl_t.gWifi_flag =1;
+		      pro_t.gKey_value = power_on;
 			  
-				run_t.gModel =1;
-				run_t.display_set_timer_timing=beijing_time ;
-				run_t.gKey_command_tag = POWER_ON_ITEM;
-                run_t.key_add_dec_spec_flag=1;
 			  cmd=0xff;
 
 	         break;
 
 			 case WIFI_POWER_OFF: //turn off 
-                
-			   run_t.wifi_connect_success_flag =1;
-			   run_t.wifi_send_buzzer_sound = WIFI_POWER_OFF_ITEM;
-				
-			   run_t.gKey_command_tag=POWER_OFF_ITEM;
-               run_t.key_add_dec_spec_flag=1;
+
+			   ctl_t.gWifi_flag =1;
+		       pro_t.gKey_value = power_off;
+             
 				
               cmd=0xff;
 
 			 break;
 
 			case WIFI_MODE_1: //AI Model
-                if(run_t.gPower_On==1){
+                if(pro_t.gPower_On==power_on){
 			
-				
-					run_t.display_set_timer_timing = beijing_time;
-					run_t.gModel=1;
+				    
+				disp_t.display_timer_or_works_timing = works_time;
+				ctl_t.gAi_flag =1;
 
-
-		    	}
+				}
 			break;
 
 			 case WIFI_MODE_2: //Timer Model
-                 if(run_t.gPower_On==1){
+                 if(pro_t.gPower_On==power_on){
 				
-
-					
-						run_t.display_set_timer_timing = timer_time;
-						run_t.gModel=2;
-
-
-			 	   
-                 }
+				disp_t.display_timer_or_works_timing = timer_time;
+				ctl_t.gAi_flag = 0;
+			 }
              break;
 
 			 case WIFI_KILL_ON: //kill turn on plasma
-			  if(run_t.gPower_On==1){
-                    run_t.gPlasma = 1;
-			        run_t.gFan_RunContinue =0;
-                 // HAL_Delay(200);
+			  if(pro_t.gPower_On==power_on){
+                    ctl_t.gPlasma_flag = 1;
+			      
                 } 
 			 break;
 
 			 case WIFI_KILL_OFF: //kill turn off
-                if(run_t.gPower_On==1){
-			 	  run_t.gPlasma =0;
+                if(pro_t.gPower_On==power_on){
+			 	  ctl_t.gPlasma_flag = 0;
 				  
-		          run_t.gFan_RunContinue =0;
-                   // HAL_Delay(200);
+		         
                 }
 			 break;
 
 			 case WIFI_PTC_ON://dry turn on
-                if(run_t.gPower_On==1){
-			        run_t.gDry =1;
-                    run_t.gFan_RunContinue =0;
-                   // HAL_Delay(200);
+                if(pro_t.gPower_On==power_on){
+			        ctl_t.gPtc_flag =1;
+                   
+                   
                  
                 }
 			 break;
 
 			 case WIFI_PTC_OFF: //dry turn off
                
-			 	if(run_t.gPower_On==1){
-					run_t.gDry=0;
-                 
-		            run_t.gFan_RunContinue =0;
-                    //HAL_Delay(200);
+			 	if(pro_t.gPower_On==power_on){
+					   ctl_t.gPtc_flag =0;
 			 	}
 
 			 break;
 
 			 case WIFI_SONIC_ON:  //drive bug
 		
-				 if(run_t.gPower_On==1){		   
-				  run_t.gUltransonic =1; //turn on 
-			
-				 run_t.gFan_RunContinue =0;
-                
+				 if(pro_t.gPower_On==power_on){		   
+				   ctl_t.gBug_flag =1;
 			    }
 
 			 break;
 
 			 case WIFI_SONIC_OFF: //drive bug turn off
-			 	if(run_t.gPower_On==1){
-				    run_t.gUltransonic=0;
-					run_t.gFan_RunContinue =0;
+			 	if(pro_t.gPower_On==power_on){
+				    ctl_t.gBug_flag =0;
                    
 			   }
 			 break;
 
 
 			 case PTC_ERROR:
-			 	 run_t.gTimer_ptc_fan_warning=0;
-			 	  run_t.gDry=0;
-				  run_t.ptc_too_hot_flag =1;
-			      run_t.ptc_warning =1;
+			 	  ctl_t.ptc_warning =1;
+			 	  ctl_t.gPtc_flag=0;//run_t.gDry=0;
 
 			 break;
 
 			 case FAN_ERROR:
-			 	 run_t.gTimer_ptc_fan_warning=31;
-			 	 run_t.ptc_too_hot_flag =1;
-			 	 run_t.disp_wind_speed_grade=0;
-	
-				 run_t.fan_warning =1;
+			 	 ctl_t.fan_warning = 1;//run_t.gTimer_ptc_fan_warning=31;
+			 	 ctl_t.gFan_speed_value = 0;
+			 	
 			 break;
 
 
-			 case FAN_REMOVE_ERROR:
-			 	 run_t.disp_wind_speed_grade=100;
-				 if( run_t.ptc_warning ==0)run_t.ptc_too_hot_flag =0;
-				 run_t.fan_warning =0;
-
-			 break;
+			 
 				default :
                   cmd =0;
 			 break;
@@ -321,4 +292,4 @@ void Receive_Wifi_Cmd(uint8_t cmd)
    
 }
 
-#endif 
+
