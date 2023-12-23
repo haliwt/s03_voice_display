@@ -25,6 +25,7 @@
 
 #include "bsp.h"
 #include <stdio.h>
+//#include <stdlib.h>
 
 /* 串口1的GPIO     PB6-TX1, PB7  communication mainboard */
 #define USART1_CLK_ENABLE()              __HAL_RCC_USART1_CLK_ENABLE()
@@ -123,6 +124,7 @@ UART_T *ComToUart(COM_PORT_E _ucPort)
 		#endif
 	}
 	
+	return 0;
 }
 
 /*
@@ -382,7 +384,7 @@ void RS485_SendBuf(uint8_t *_ucaBuf, uint16_t _usLen)
 */
 void RS485_SendStr(char *_pBuf)
 {
-	RS485_SendBuf((uint8_t *)_pBuf, strlen(_pBuf));
+	//RS485_SendBuf((uint8_t *)_pBuf, strlen(_pBuf));
 }
 
 /*
