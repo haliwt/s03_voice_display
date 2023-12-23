@@ -105,16 +105,7 @@ void Key_Handler(uint8_t key_value)
 //        run_t.wifi_receive_led_fast_led_flag=0; //adjust if mainboard receive of connect wifi of signal
         pro_t.wifi_led_fast_blink_flag=1;
       
-//	   	if(wifi_state() ==1){
-//		
-//		   SendData_Set_Command(WIFI_CONNECT_SUCCESS);
-//		   key_value =0xff;
-//        }
-//		else{
-//			
-//		   SendData_Set_Wifi(0x01);
-//
-//		}
+
        wifi_link_flag =1;
 	   key_value =0xff;
        break;
