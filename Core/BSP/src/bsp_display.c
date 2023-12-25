@@ -447,35 +447,45 @@ void Display_Voice_Set_Timer_Value(void)
 
    uint8_t temp_bit_1_hours,temp_bit_2_hours,temp_bit_1_minute,temp_bit_2_minute;
    
-	pro_t.gTimer_key_timing =0;
 	
-	pro_t.setup_timer_timing_item=  set_timer_timing;               
-	//disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
-	if(disp_t.disp_timer_time_hours > 24){ //if(pro_t.dispTime_minutes > 59){
+	if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
+	
 
-	 disp_t.disp_timer_time_hours=0;//pro_t.dispTime_hours =0;
+		   ctl_t.gAi_flag =0;
+		   pro_t.setup_timer_timing_item=timer_time;
+		 
+		   pro_t.gTimer_key_timing=0; //按键退出的限制，4秒以内
+		   pro_t.Timer_mode_flag=1; //set timer timing enable,
+	
+		   
+		   
+		   SendData_Set_Wifi(MODE_TIMER);             
+		//disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
+		if(disp_t.disp_timer_time_hours > 24){ //if(pro_t.dispTime_minutes > 59){
+
+		disp_t.disp_timer_time_hours=0;//pro_t.dispTime_hours =0;
 
 
+		}
+
+		temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
+		temp_bit_1_hours = disp_t.disp_timer_time_hours %10;
+
+		temp_bit_2_minute =0;
+		temp_bit_1_minute =0;
+
+		lcd_t.number5_low=temp_bit_2_hours;
+		lcd_t.number5_high =temp_bit_2_hours;
+
+		lcd_t.number6_low = temp_bit_1_hours;
+		lcd_t.number6_high = temp_bit_1_hours;
+
+		lcd_t.number7_low=temp_bit_2_minute;
+		lcd_t.number7_high =temp_bit_2_minute;
+
+		lcd_t.number8_low = temp_bit_1_minute;
+		lcd_t.number8_high = temp_bit_1_minute;
 	}
-
-	temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
-	temp_bit_1_hours = disp_t.disp_timer_time_hours %10;
-
-	temp_bit_2_minute =0;
-	temp_bit_1_minute =0;
-
-	lcd_t.number5_low=temp_bit_2_hours;
-	lcd_t.number5_high =temp_bit_2_hours;
-
-	lcd_t.number6_low = temp_bit_1_hours;
-	lcd_t.number6_high = temp_bit_1_hours;
-
-	lcd_t.number7_low=temp_bit_2_minute;
-	lcd_t.number7_high =temp_bit_2_minute;
-
-	lcd_t.number8_low = temp_bit_1_minute;
-	lcd_t.number8_high = temp_bit_1_minute;
-
 
 }
 /***************************************************************

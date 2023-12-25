@@ -241,8 +241,9 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 		
 			if(K2 > 60000){
                   K2= 0;
-				 // ctl_t.gWifi_flag =1;
-				 pro_t.key_set_timer_flag =1;
+
+				 pro_t.key_set_timer_flag =set_timer_fun_on;
+				
                  return ;
               
 			}

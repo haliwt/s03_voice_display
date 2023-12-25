@@ -578,7 +578,6 @@ static void voice_close_plasma(uint8_t data ,uint8_t check_code)
 
 	}
 }
-
 static void voice_open_rat(uint8_t data ,uint8_t check_code)
 {
 	if(data==OPEN_RAT_DATA && check_code==OPEN_RAT_DATA_CHECK){
@@ -609,10 +608,7 @@ static void voice_close_rat(uint8_t data ,uint8_t check_code)
 		v_t.voice_ctl_flag =0;
 
 	}
-
-	
 }
-
 /**********************************************************************************
  *  *
     *Function Name: static uint8_t voice_set_temp_data(uint8_t data,uint8_t check)

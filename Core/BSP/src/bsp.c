@@ -110,6 +110,11 @@ void Key_Handler(uint8_t key_value)
 	   key_value =0xff;
        break;
 
+	   case set_timer_fun_on://case model_long_key:
+	  	 Mode_Long_Key_Fun();
+
+	  break;
+
 
 
 		case mode_ai:
@@ -168,7 +173,7 @@ void Display_Process_Handler(void)
                 
      }
 	
-   Process_Key_Handler(pro_t.gKey_value);
+   	Process_Key_Handler(pro_t.gKey_value);
 
 	DispPocess_Command_Handler();
 	USART1_Cmd_Error_Handler();
@@ -219,9 +224,10 @@ static void DispPocess_Command_Handler(void)
 		  Timing_Handler();
 
 		}
-        if(counter >10000){
+        if(counter >10000 && counter < 12000 ){
+			
 
-              //beep is alarm sound
+             Error_Sound();  //beep is alarm sound
 
 		}
 
@@ -531,7 +537,7 @@ static void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_
 		   pro_t.gTimer_key_timing=0; //按键退出的限制，4秒以内
 		
            
-		   pro_t.Timer_mode_flag=1; //set timer timing enable,
+		   pro_t.Timer_mode_flag=timer_time; //set timer timing enable,
 		   
 		   
 		   SendData_Set_Wifi(MODE_TIMER);
@@ -539,7 +545,6 @@ static void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_
 		   
 	  	 }
         }
-		//pro_t.gKey_command_tag = KEY_NULL;
 
 
 }
