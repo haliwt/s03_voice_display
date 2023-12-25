@@ -5,7 +5,9 @@
 
 void Key_Sound(void);
 
+void Voice_Buzzer_Sound(void);
 
+void Error_Sound(void);
 
 
 

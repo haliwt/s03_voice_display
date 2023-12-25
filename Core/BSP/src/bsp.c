@@ -232,9 +232,7 @@ static void DispPocess_Command_Handler(void)
 	      if(pro_t.gTimer_pro_ms > 20){ //200ms
 
 		     Display_Panel_Action_Handler();
-            
-
-	      }
+          }
 	  
 	      if(pro_t.gTimer_pro_disp > 7 && pro_t.gTimer_pro_disp < 9){
 	 	     Display_Temperature_Humidity_Value_Handler();
@@ -247,7 +245,7 @@ static void DispPocess_Command_Handler(void)
 
 		  }
 	      if(wifi_link_flag ==1){
-			  run_process_step=5;
+			  run_process_step=4;
           }
 		  else
             run_process_step=2;
@@ -276,18 +274,11 @@ static void DispPocess_Command_Handler(void)
 	 	
 
 
-	  run_process_step=4;
+	  run_process_step=1;
 
 	  break;
 
-	  case 4:
-		
-
-
-		  run_process_step=1;
-     break;
-
-	 case 5:
+	 case 4:
 	   if(wifi_state() ==1){
 		
 		  SendData_Set_Command(WIFI_CONNECT_SUCCESS);

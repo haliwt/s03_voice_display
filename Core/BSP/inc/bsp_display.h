@@ -64,7 +64,9 @@ void Display_Timer_Hours_Handler(int8_t(*disp_timer_hours_handler)(void));
 void Display_Timer_Minutes_Handler(int8_t(*disp_timer_minutes_handler)(void));
 
 
+void Display_Voice_Set_Temp_Value(void);
 
+void Display_Voice_Set_Timer_Value(void);
 
 
 

@@ -361,7 +361,7 @@ void DisplayPanel_Ref_Handler(void)
 				  disp_t.disp_timer_or_works_timing = timer_time;
 				 
 			}
-			pro_t.setup_timer_timing_item=0; //be changed to normal "works time" mode
+			pro_t.setup_timer_timing_item=0; //be changed to normal adjust "temperature value  is up or down"
 
 
 		  }

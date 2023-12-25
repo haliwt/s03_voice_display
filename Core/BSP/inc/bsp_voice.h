@@ -8,9 +8,16 @@
 typedef struct{
 
     uint8_t voice_enable;
+	uint8_t voice_ctl_flag;
 	uint8_t RxBuf[V_RX_BUF_SIZE];
 	uint8_t rx_data_enable;
 	uint8_t rxCounter;
+
+	//voice ctl display function "icon" 
+	uint8_t voice_ptc_flag;
+	uint8_t voice_plasma_flag;
+	uint8_t voice_bug_flag;
+	
    
 	uint8_t RxStatus;
 	
@@ -29,6 +36,7 @@ extern uint8_t (*voice_plasma_state)(void);
 extern uint8_t (*voice_bug_state)(void);
 
 
+void Voice_Init(void);
 
 void Rx_Voice_Data_Handler(void(*rx_voice_handler)(uint8_t data));
 void Voice_Hello_Word_Handler(uint8_t(*hell_handler)(void));

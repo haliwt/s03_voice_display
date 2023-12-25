@@ -418,8 +418,66 @@ static int8_t display_timer_minutes_default_fun(void)
 
 }
 
+void Display_Voice_Set_Temp_Value(void)
+{
+    if(disp_t.disp_set_temp_value < 20){
+	    disp_t.disp_set_temp_value=20;
+	}
+	
+	if(disp_t.disp_set_temp_value > 40)disp_t.disp_set_temp_value= 20;
 
 
+
+   // decade_temp =  disp_t.disp_set_temp_value / 10 ;
+	//unit_temp =  disp_t.disp_set_temp_value % 10; //
+    
+	lcd_t.number1_low=disp_t.disp_set_temp_value / 10 ;
+	lcd_t.number1_high =disp_t.disp_set_temp_value / 10 ;
+
+	lcd_t.number2_low = disp_t.disp_set_temp_value % 10; //
+	lcd_t.number2_high = disp_t.disp_set_temp_value % 10; //
+	
+	lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
+    pro_t.temperature_set_flag=1;  //set temperature value flag
+
+}
+
+void Display_Voice_Set_Timer_Value(void)
+{
+
+   uint8_t temp_bit_1_hours,temp_bit_2_hours,temp_bit_1_minute,temp_bit_2_minute;
+   
+	pro_t.gTimer_key_timing =0;
+	
+	pro_t.setup_timer_timing_item=  set_timer_timing;               
+	//disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
+	if(disp_t.disp_timer_time_hours > 24){ //if(pro_t.dispTime_minutes > 59){
+
+	 disp_t.disp_timer_time_hours=0;//pro_t.dispTime_hours =0;
+
+
+	}
+
+	temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
+	temp_bit_1_hours = disp_t.disp_timer_time_hours %10;
+
+	temp_bit_2_minute =0;
+	temp_bit_1_minute =0;
+
+	lcd_t.number5_low=temp_bit_2_hours;
+	lcd_t.number5_high =temp_bit_2_hours;
+
+	lcd_t.number6_low = temp_bit_1_hours;
+	lcd_t.number6_high = temp_bit_1_hours;
+
+	lcd_t.number7_low=temp_bit_2_minute;
+	lcd_t.number7_high =temp_bit_2_minute;
+
+	lcd_t.number8_low = temp_bit_1_minute;
+	lcd_t.number8_high = temp_bit_1_minute;
+
+
+}
 /***************************************************************
 	 * 
 	 * Function Name:
