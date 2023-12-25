@@ -62,6 +62,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  
     lcd_t.gTimer_wifi_500ms++;
 	lcd_t.gTimer_fan_10ms++;
+	pro_t.gTimer_pro_ms++;
 	
     if(tm1>9){ //100ms 
        tm1=0;

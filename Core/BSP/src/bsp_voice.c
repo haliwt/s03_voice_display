@@ -178,7 +178,7 @@ voice_sound_t v_t;
 void (*rx_voice_data)(uint8_t data);
 uint8_t (*hello_word_state)(void);
 
-static uint8_t const voice_temp_value[21]{
+static uint8_t const voice_temp_value[21]={
 	0x36,0x38,0x3a,0x3c,0x3e,
 	0x40,0x42,0x44,0x46,0x48,
 	0x4a,0x4c,0x4e,0x50,0x52,
@@ -187,7 +187,7 @@ static uint8_t const voice_temp_value[21]{
 
 };
 
-static uint8_t const voice_timer_array[24]{
+static uint8_t const voice_timer_array[24]={
 	0x60,0x62,0x64,0x66,0x68,
 	0x6a,0x6c,0x6e,0x70,0x72,
 	0x74,0x76,0x78,0x7a,0x7c,
@@ -200,29 +200,29 @@ static uint8_t const voice_timer_array[24]{
 static void rx_voice_data_default_fun(uint8_t data);
 static uint8_t v_hello_21h(void);
 
-static void voice_ctl_fun(unit8_t data,uint8_t check_code);
+static void voice_ctl_fun(uint8_t data,uint8_t check_code);
 
 static void voice_power_on(uint8_t data ,uint8_t check_code);
-static void voice_power_off(int8_t data ,uint8_t check_code);
+static void voice_power_off(uint8_t data ,uint8_t check_code);
 
-static void voice_link_net(int8_t data ,uint8_t check_code);
+static void voice_link_net(uint8_t data ,uint8_t check_code);
 
-static void voice_open_ptc(int8_t data ,uint8_t check_code);
-static void voice_close_ptc(int8_t data ,uint8_t check_code);
+static void voice_open_ptc(uint8_t data ,uint8_t check_code);
+static void voice_close_ptc(uint8_t data ,uint8_t check_code);
 
-static void voice_open_plasma(int8_t data ,uint8_t check_code);
-static void voice_close_plasma(int8_t data ,uint8_t check_code);
+static void voice_open_plasma(uint8_t data ,uint8_t check_code);
+static void voice_close_plasma(uint8_t data ,uint8_t check_code);
 
-static void voice_open_rat(int8_t data ,uint8_t check_code);
-static void voice_close_rat(int8_t data ,uint8_t check_code);
+static void voice_open_rat(uint8_t data ,uint8_t check_code);
+static void voice_close_rat(uint8_t data ,uint8_t check_code);
 
 
 
 static int8_t voice_set_temp_data(uint8_t data,uint8_t check_code);
 static int8_t  voice_set_timer_data(uint8_t data,uint8_t chek_code);
 
-static int8_t BinarySearch_Temp(uint8_t *pta,uint8_t key,uint8_t n);
-static int8_t BinarySearch_Timer(uint8_t *pta,uint8_t key,uint8_t n);
+static int8_t BinarySearch_Temp(const uint8_t *pta,uint8_t key,uint8_t n);
+static int8_t BinarySearch_Timer(const uint8_t *pta,uint8_t key,uint8_t n);
 
 
 
@@ -240,7 +240,7 @@ void Voice_Init(void)
 	 v_t.voice_plasma_flag =1;
 	 v_t.voice_ptc_flag = 1;
 
-	 Rx_Voice_Data_Handler(rx_voice_data_default_fun);
+	Rx_Voice_Data_Handler(rx_voice_data_default_fun);
 	Voice_Hello_Word_Handler(v_hello_21h);
 
 
@@ -310,7 +310,7 @@ static uint8_t v_hello_21h(void)
 	if(v_t.rxCounter != 8)
 	{
 		v_t.rx_data_enable =0;			/* 数据值域错误 */
-		return;
+		return 0;
 	}
 
     if(v_t.RxBuf[7] == 0xFB){
@@ -344,7 +344,7 @@ static uint8_t v_hello_21h(void)
     *Return Ref:  NO
     * 
 ***********************************************************/
-void Voice_Decoder_Handler(void);
+void Voice_Decoder_Handler(void)
 {
     int8_t ret_temp_value,ret_timer_value;
     if(hello_word_state() ==1){
@@ -362,7 +362,7 @@ void Voice_Decoder_Handler(void);
 		 voice_ctl_fun(v_t.RxBuf[4],v_t.RxBuf[6]);
 	
 	  } //voice set temperature value 
-      else if(v_t.RxBuf[4] > 0x0A && (v_t.RxBuf[4] < 0x20){
+      else if(v_t.RxBuf[4] > 0x0A && (v_t.RxBuf[4] < 0x20)){
 	  	
            ret_temp_value = voice_set_temp_data(v_t.RxBuf[4],v_t.RxBuf[6]);
 		   if(ret_temp_value >= 0){
@@ -411,7 +411,7 @@ void Voice_Decoder_Handler(void);
     *Return Ref:  NO
     * 
 *************************************************************************************/
-static void voice_ctl_fun(unit8_t data,uint8_t check_code)
+static void voice_ctl_fun(uint8_t data,uint8_t check_code)
 {
 		switch(data){
 
@@ -645,7 +645,7 @@ static int8_t voice_set_temp_data(uint8_t data,uint8_t check_code)
     *Return Ref:  NO
     * 
 ***********************************************************************************/
-static int8_t BinarySearch_Temp(uint8_t *pta,uint8_t key,uint8_t n)
+static int8_t BinarySearch_Temp(const uint8_t *pta,uint8_t key,uint8_t n)
 {
 
       uint8_t left,right,mid;
@@ -654,13 +654,13 @@ static int8_t BinarySearch_Temp(uint8_t *pta,uint8_t key,uint8_t n)
 	  while(left <= right){
 
 		 mid = (left+right)/2;
-		 if(pta(mid)==key){
+		 if(pta[mid]==key){
 			  return mid;
 		 }
-		 else if(pta(mid)>key){
+		 else if(pta[mid]>key){
 			 right = mid -1;  //from  before middle look up this is key value 
 		 }
-		 else if(pat(mid) < key){
+		 else if(pta[mid] < key){
 			 left = mid +1;  //from  before middle look up this is key value 
 		 }
 
@@ -700,7 +700,7 @@ static int8_t  voice_set_timer_data(uint8_t data,uint8_t check_code)
 
 
 }
-static int8_t BinarySearch_Timer(uint8_t *pta,uint8_t key,uint8_t n)
+static int8_t BinarySearch_Timer(const uint8_t *pta,uint8_t key,uint8_t n)
 {
    uint8_t left,right,mid;
    left = 0;
@@ -713,12 +713,12 @@ static int8_t BinarySearch_Timer(uint8_t *pta,uint8_t key,uint8_t n)
       if(mid == key){
          return mid;
 	  }
-	  else if(pt(mid) > key){
+	  else if(pta[mid]> key){
 
 	      right = right -1;
 
 	  }
-	  else if(pt(mid) < key){
+	  else if(pta[mid] < key){
 
           left = mid +1 ;
 

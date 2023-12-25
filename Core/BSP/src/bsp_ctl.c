@@ -34,7 +34,7 @@ static uint8_t humidity_default_fun(void);
 static uint8_t temp_default_fun(void);
 
 static uint8_t smartphone_set_timer_default_fun(void);
-static uint8_t smartphone_set_temp_default_fun();
+static uint8_t smartphone_set_temp_default_fun(void);
 
 
 
@@ -70,21 +70,57 @@ void bsp_ctlint(void)
 void Display_Panel_Action_Handler(void)
 {
 
-   if(v_t.voice_cmd == 1){
-       v_t.voice_cmd = 0;
+   if(v_t.voice_ctl_flag  == 1){
+       v_t.voice_ctl_flag  = 0;
 
-     
+       if( ptc_state() ==1 && v_t.voice_ptc_flag ==0){
+
+	         ctl_t.gPtc_flag = 0;
+			 SendData_Set_Command(DRY_OFF_NO_BUZZER);
+			 
 
 
 
+	   }
+	   else if(ptc_state() ==0 && v_t.voice_ptc_flag ==1){
+
+	    ctl_t.gPtc_flag = 1;
+	    SendData_Set_Command(DRY_ON_NO_BUZZER);
+
+
+	   }
+
+	   if(plasma_state() == 1 && v_t.voice_plasma_flag ==0){
+
+            ctl_t.gPlasma_flag = 0;
+			SendData_Set_Command(PLASMA_OFF);
+
+
+	   }
+	   else if(plasma_state() == 0 && v_t.voice_plasma_flag ==1){
+
+			
+		   ctl_t.gPlasma_flag = 1;
+		   SendData_Set_Command(PLASMA_ON);
+
+
+	   }
+
+	  if(bug_state() == 1 && v_t.voice_bug_flag ==0){
+	  	  ctl_t.gBug_flag =0;
+		   SendData_Set_Command(BUG_OFF);
+
+
+	  }
+	  else if(bug_state() == 0 && v_t.voice_bug_flag ==1){
+		  ctl_t.gBug_flag =1;
+		  SendData_Set_Command(BUG_ON);
+
+	  }
 
    }
    
-
-
-
 }
-
 
 /**********************************************************************************************************
 	*	函 数 名: static uint8_t wifi_default_fun(void)

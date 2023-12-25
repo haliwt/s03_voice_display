@@ -19,6 +19,7 @@
 #include "bsp_wifi.h"
 #include "bsp_decoder.h"
 #include "bsp_key.h"
+#include "bsp_delay.h"
 
 
 
@@ -97,6 +98,7 @@ typedef struct{
 	uint8_t gTimer_pro_disp;
 	uint8_t gTimer_pro_fan;
 	uint8_t gTimer_usart_error;
+	uint8_t gTimer_pro_ms;
 
 }PRO_T;
 

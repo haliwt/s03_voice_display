@@ -51,6 +51,9 @@ extern int8_t (*display_timer_hours_value)(void);
 extern int8_t (*display_timer_minutes_value)(void);
 
 
+void Disp_Init(void);
+
+
 void Display_Temperature_Humidity_Value_Handler(void);
 
 void Timing_Handler(void);

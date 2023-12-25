@@ -2,14 +2,14 @@
 #define __BSP_VOICE_H
 #include "main.h"
 
-#include V_RX_BUF_SIZE  10
+#define  RX_BUF_SIZE  10
 
 
 typedef struct{
 
     uint8_t voice_enable;
 	uint8_t voice_ctl_flag;
-	uint8_t RxBuf[V_RX_BUF_SIZE];
+	uint8_t RxBuf[RX_BUF_SIZE];
 	uint8_t rx_data_enable;
 	uint8_t rxCounter;
 

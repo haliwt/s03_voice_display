@@ -7,7 +7,7 @@
 PRO_T pro_t;
 
 
-static void Process_Key_Handler(uint8_t keylabel);
+
 static void DispPocess_Command_Handler(void);
 static void Power_On_Fun(void);
 
@@ -172,8 +172,9 @@ void Display_Process_Handler(void)
           Decode_Function();
                 
      }
-	
-   	Process_Key_Handler(pro_t.gKey_value);
+
+	Voice_Decoder_Handler();
+    Key_Handler(pro_t.gKey_value);
 
 	DispPocess_Command_Handler();
 	USART1_Cmd_Error_Handler();
@@ -384,7 +385,6 @@ void Power_Off_Fun(void)
 	pro_t.wifi_led_fast_blink_flag=0;
 	pro_t.Timer_mode_flag = 0;
 
-	pro_t.setup_temperature_value=0;
 	disp_t.disp_timer_time_hours =0;
 	disp_t.disp_timer_time_minutes =0;
 	disp_t.timer_timing_define_flag = 0;

@@ -14,6 +14,9 @@ typedef enum{
 	 PLASMA_ON = 0x20,
 	 PLASMA_OFF = 0x21,
 
+   BUG_ON = 0x30,
+   BUG_OFF = 0x31,
+
 	 FAN_ON =0x10,
 	 FAN_OFF = 0x11,
 
