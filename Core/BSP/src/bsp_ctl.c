@@ -67,6 +67,25 @@ void bsp_ctlint(void)
 
 }
 
+void Display_Panel_Action_Handler(void)
+{
+
+   if(v_t.voice_cmd == 1){
+       v_t.voice_cmd = 0;
+
+     
+
+
+
+
+   }
+   
+
+
+
+}
+
+
 /**********************************************************************************************************
 	*	函 数 名: static uint8_t wifi_default_fun(void)
 	*	功能说明: 
@@ -190,6 +209,9 @@ static uint8_t smartphone_set_temp_default_fun()
 {
     return ctl_t.gSet_temperature_value;
 }
+
+
+
 
 
 

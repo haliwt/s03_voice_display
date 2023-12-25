@@ -83,7 +83,7 @@ typedef struct{
 
    //temperature 
    uint8_t temperature_set_flag;
-   uint8_t setup_temperature_value;
+   uint8_t set_temperature_value;
    //warning
  
 	//wifi

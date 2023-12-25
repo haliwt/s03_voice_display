@@ -239,7 +239,7 @@ void DisplayPanel_Ref_Handler(void)
 
    /***********************setup temperature value ********************************/
 	 //digital 1,2 ->display "temperature"  blink  
-	 if(pro_t.setup_temperature_value ==1){
+	 if(pro_t.temperature_set_flag ==1){
 	     LCD_DisplayNumber_OneTwo_Icon_Handler();
          TIM1723_Write_Cmd(LUM_VALUE);//(0x9B);
 	 }
@@ -1215,14 +1215,11 @@ static void LCD_DisplayNumber_OneTwo_Icon_Handler(void)
 			 number_blink_times++;
 		     if(number_blink_times > 3){
                  number_blink_times =0;
-				 pro_t.setup_temperature_value =0;
-			     disp_t.timer_timing_define_flag=0;//pro_t.panel_key_setup_timer_flag=0;
-			     disp_t.disp_timer_or_works_timing = works_time;
-				 pro_t.temperature_set_flag = 1;
+				 pro_t.temperature_set_flag = 0;
+				 pro_t.set_temperature_value = disp_t.disp_set_temp_value;
 				 
-				
-				 
-			 }
+			    
+			}
 
 		}
 //	 

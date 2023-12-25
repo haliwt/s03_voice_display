@@ -60,6 +60,7 @@ typedef struct {
    uint8_t gAi_flag;
    uint8_t gPlasma_flag;
    uint8_t gBug_flag;
+   uint8_t gSet_temp_value;
 
    uint8_t gFan_speed_value;
   
@@ -116,6 +117,9 @@ void Temp_Handler(uint8_t(*temp_handler)(void));
 
 void Smartphone_Set_Timer_Handler(uint8_t(*set_timer_timing)(void));
 void Smartphone_Set_Temp_Handler(uint8_t(*set_temp_value)(void));
+
+void Display_Panel_Action_Handler(void);
+
 
 
 

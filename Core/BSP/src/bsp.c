@@ -168,7 +168,7 @@ void Display_Process_Handler(void)
                 
      }
 	
-  // Process_Key_Handler(pro_t.gKey_command_tag);
+   Process_Key_Handler(pro_t.gKey_value);
 
 	DispPocess_Command_Handler();
 	USART1_Cmd_Error_Handler();
@@ -228,6 +228,14 @@ static void DispPocess_Command_Handler(void)
 	 break;
 
 	 case 1:  //display works time + "temperature value " + "humidity value"
+
+	      if(pro_t.gTimer_pro_ms > 20){ //200ms
+
+		     Display_Panel_Action_Handler();
+            
+
+	      }
+	  
 	      if(pro_t.gTimer_pro_disp > 7 && pro_t.gTimer_pro_disp < 9){
 	 	     Display_Temperature_Humidity_Value_Handler();
 
@@ -262,32 +270,9 @@ static void DispPocess_Command_Handler(void)
       break;
 
 	  case 3: //to pancel of key set tempeature value 
-	    //Enable digital "1,2" -> blink LED
-       //Enable digital "1,2" -> blink LED
-	   if(disp_t.timer_timing_define_flag==timing_success){
-            pro_t.setup_temperature_value=1;
-		   lcd_t.gTimer_numbers_one_two_blink=0;
-	       disp_t.disp_timer_or_works_timing = timer_time;
-	     	  
-	   }
-
-	   //digital "1,2" ->display is dhtd11 real temperature value
-	   if(pro_t.gTimer_pro_temp > 10){
-	   	    
-			pro_t.gTimer_pro_temp =0;
-
-	        temp1 = temperature_value()/10 %10;  // temperature
-            temp2 = temperature_value()%10;
-
-		    lcd_t.number1_low=temp1;
-			lcd_t.number1_high =temp1;
-
-			lcd_t.number2_low = temp2;
-			lcd_t.number2_high = temp2;
-		
-			
-	   }
 	   
+      
+	  
 	 	
 
 
@@ -296,11 +281,6 @@ static void DispPocess_Command_Handler(void)
 	  break;
 
 	  case 4:
-		
-		if(smartphone_set_temp_value() != 1){
-			SendData_Temp_Data(smartphone_set_temp_value());
-			
-		}
 		
 
 
@@ -615,7 +595,9 @@ static void ADD_Key_Fun(void)
 
 				lcd_t.number2_low = unit_temp;
 				lcd_t.number2_high = unit_temp;
-
+				
+				lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
+                pro_t.temperature_set_flag=1;  //set temperature value flag
 				
                break;
 
@@ -631,12 +613,9 @@ static void ADD_Key_Fun(void)
 
 					}
 				
-                  
-					temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
+                    temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
 					temp_bit_1_hours = disp_t.disp_timer_time_hours %10;
                  
-			
-
 					temp_bit_2_minute =0;
 					temp_bit_1_minute =0;
                     
@@ -655,15 +634,9 @@ static void ADD_Key_Fun(void)
 		
 				break;
 				}	
-			
-		     }
-            }
+			}
+        }
          DisplayPanel_Ref_Handler();
-
-
-          
-
-
 }
 /************************************************************************
 	*
@@ -684,7 +657,7 @@ static void DEC_Key_Fun(void)
 	     switch(pro_t.setup_timer_timing_item){
 
 		   case set_temperature:  //default tempearture value 
-	
+	    
 			disp_t.disp_set_temp_value--;
 			if(disp_t.disp_set_temp_value<20) disp_t.disp_set_temp_value=40;
 	        if(disp_t.disp_set_temp_value >40)disp_t.disp_set_temp_value=40;
@@ -699,8 +672,9 @@ static void DEC_Key_Fun(void)
 
 			lcd_t.number2_low = unit_temp;
 			lcd_t.number2_high = unit_temp;
-			
-		
+
+			 lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led"
+			pro_t.temperature_set_flag=1;  //set temperature value flag
 		    break;
 
 			case set_timer_timing: //timer timing set "decrease -down"
