@@ -264,9 +264,10 @@ static void DispPocess_Command_Handler(void)
 	  case 3: //to pancel of key set tempeature value 
 	    //Enable digital "1,2" -> blink LED
        //Enable digital "1,2" -> blink LED
-	   if(disp_t.timer_timing_define_flag==1){
+	   if(disp_t.timer_timing_define_flag==timing_success){
             pro_t.setup_temperature_value=1;
 		   lcd_t.gTimer_numbers_one_two_blink=0;
+	       disp_t.disp_timer_or_works_timing = timer_time;
 	     	  
 	   }
 
@@ -367,7 +368,8 @@ static void Power_On_Fun(void)
 	 disp_t.disp_timer_time_minutes =0;
 	 pro_t.setup_timer_timing_item=0;
 
-	 disp_t.timer_timing_define_flag = works_time;
+	 disp_t.timer_timing_define_flag = 0;
+	 disp_t.disp_timer_or_works_timing = works_time;
 
 	 
     //display work time is begin form "0"
@@ -408,7 +410,8 @@ void Power_Off_Fun(void)
 	pro_t.setup_temperature_value=0;
 	disp_t.disp_timer_time_hours =0;
 	disp_t.disp_timer_time_minutes =0;
-	disp_t.timer_timing_define_flag = works_time;
+	disp_t.timer_timing_define_flag = 0;
+	disp_t.disp_timer_or_works_timing = works_time;
 
 	ctl_t.ptc_warning = 0;
 	ctl_t.fan_warning=0;
@@ -515,20 +518,16 @@ static void Mode_Ai_Fun(void)
 		 //SendData_Buzzer();
 			 
 	   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
-			   if(disp_t.timer_timing_define_flag == works_time){
-			
-				   //timer time + don't has ai item
-				 //  disp_t.timer_timing_define_flag = ;
-				  // ai_state()=2; //Timer time Model
-				  ctl_t.gAi_flag = 0;
-				  disp_t.timer_timing_define_flag = timer_time;
+			   if(disp_t.disp_timer_or_works_timing == works_time){
+				ctl_t.gAi_flag = 0;
+				  disp_t.disp_timer_or_works_timing = timer_time;
 				  SendData_Set_Wifi(MODE_TIMER);
 				 // HAL_Delay(10);
 				   
 				}
-				else if(disp_t.timer_timing_define_flag == timer_time){
+				else if(disp_t.disp_timer_or_works_timing == timer_time){
 					//beijing time + ai item
-					disp_t.timer_timing_define_flag  = works_time;
+					disp_t.disp_timer_or_works_timing = works_time;
 				 
 				  ctl_t.gAi_flag =0; //AI model
 				  SendData_Set_Wifi(MODE_AI);

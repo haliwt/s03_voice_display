@@ -2,7 +2,7 @@
 #define _BSP_USART_FIFO_H_
 
 
-#define	UART1_FIFO_EN	1
+#define	UART1_FIFO_EN	0
 #define	UART2_FIFO_EN	1
 
 

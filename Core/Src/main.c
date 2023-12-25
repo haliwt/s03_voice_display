@@ -98,6 +98,10 @@ int main(void)
   bsp_ctlint();
   Key_Init();
   Disp_Init();
+  voice_Init();
+  HAL_TIM_Base_Start_IT(&htim17);
+  HAL_UART_Receive_IT(&huart1,inputBuf,1);
+ // HAL_UART_Receive_IT(&huart2, g_tModS.rs485_RxInputBuf,10);
   /* USER CODE END 2 */
 
   /* Infinite loop */

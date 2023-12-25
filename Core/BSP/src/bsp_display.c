@@ -99,8 +99,8 @@ static void Display_Timer_Time_Handler(void)
 
 			  if(disp_t.timer_timing_define_flag == timing_success){
 			    disp_t.disp_timer_time_minutes=0;
-				disp_t.disp_timer_time_minutes=0;
-				//run_t.wifi_send_buzzer_sound=0xff;
+				//disp_t.disp_timer_or_works_timing = timer_time;
+			
 				pro_t.gKey_value = power_off;
 				Power_Off_Fun();
 			}
@@ -110,6 +110,7 @@ static void Display_Timer_Time_Handler(void)
                  disp_t.disp_timer_time_minutes =0;
 			     //run_t.display_set_timer_timing=beijing_time;
 			     disp_t.timer_timing_define_flag = works_time;
+				 disp_t.disp_timer_or_works_timing = works_time;
                  ctl_t.gAi_flag = 1;//run_t.gModel=1;
 				 SendData_Set_Command(MODE_AI_NO_BUZZER);
             }
@@ -183,25 +184,19 @@ void Display_Temperature_Humidity_Value_Handler(void)
 ************************************************************************/  
 void Timing_Handler(void)
 {
-     switch(disp_t.timer_timing_define_flag){
+    switch(disp_t.disp_timer_or_works_timing){ //disp_t.timer_timing_define_flag
          
-     case works_time:
+    case works_time:
         Display_Works_Time_Handler();
 	   
 
-						 
-    break;
+	break;
     
-    case timing_success:
-	
-		Display_Timer_Time_Handler();
-		
-	    Works_Time_Continue(); //still recoder "works time"
-     
-     break;
-
-	case timer_time:
+    case timer_time:
 		 
+	  Display_Timer_Time_Handler();
+			
+	  Works_Time_Continue(); //still recoder "works time"
 
 
 	break;
@@ -274,6 +269,7 @@ void Setup_Timer_Times(void)
                      disp_t.disp_timer_time_hours =0;
                      disp_t.disp_timer_time_minutes =0;
 					 disp_t.timer_timing_define_flag = works_time;
+					 disp_t.disp_timer_or_works_timing = works_time;
                      ctl_t.gAi_flag =1 ;//run_t.gModel=1;
 					 SendData_Set_Command(MODE_AI_NO_BUZZER);
                 }
@@ -325,40 +321,7 @@ static void Setup_Timer_Times_Donot_Display(void)
         }
     }
 }
-/***************************************************************
-	 * 
-	 * Function Name:
-	 * Function:
-	 * Input Ref:
-	 * Return Ref:
-	 * 
- **************************************************************/
-#if 0
-static void Works_Counter_Time(void)
-{
-  if(disp_t.timer_timing_define_flag == timing_success){ //设置定时模式 is enable
-	  if(disp_t.gTimer_minute_Counter >59){ //minute
-		
-		disp_t.gTimer_minute_Counter=0;
-        disp_t.disp_minutes_time ++;
-       
-          
-		if( disp_t.disp_minutes_time > 59){
-			  disp_t.disp_minutes_time=0;
-			disp_t.disp_hours_time ++;
-		  
-		if(disp_t.disp_hours_time >24){
-			disp_t.disp_hours_time=0;
 
-		}
-
-		}
-
-
-	  }
-  }
-}
-#endif 
 /***************************************************************
 	 * 
 	 * Function Name:static uint8_t display_works_hours_default_fun(void)

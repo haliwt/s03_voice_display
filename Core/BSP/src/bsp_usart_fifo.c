@@ -75,7 +75,9 @@ static void UartVarInit(void);
 //static void InitHardUart(void);
 static void UartSend(UART_T *_pUart, uint8_t *_ucaBuf, uint16_t _usLen);
 static uint8_t UartGetChar(UART_T *_pUart, uint8_t *_pByte);
-static void UartIRQ(UART_T *_pUart);
+static void UartIRQ_2(UART_T *_pUart);
+static void UartIRQ_1(UART_T *_pUart);
+
 
 void RS485_InitTXE(void);
 
@@ -709,7 +711,7 @@ uint8_t UartTxEmpty(COM_PORT_E _ucPort)
 *	返 回 值: 无
 *********************************************************************************************************
 */
-static void UartIRQ(UART_T *_pUart)
+static void UartIRQ_2(UART_T *_pUart)
 {
 	uint32_t isrflags   = READ_REG(_pUart->uart->ISR);
 	uint32_t cr1its     = READ_REG(_pUart->uart->CR1);
@@ -720,26 +722,25 @@ static void UartIRQ(UART_T *_pUart)
 	{
 		/* 从串口接收数据寄存器读取数据存放到接收FIFO */
 		uint8_t ch;
+//
+//		ch = READ_REG(_pUart->uart->RDR);
+//		_pUart->pRxBuf[_pUart->usRxWrite] = ch; //Read one word of data
+//		if (++_pUart->usRxWrite >= _pUart->usRxBufSize)
+//		{
+//			_pUart->usRxWrite = 0; //
+//		}
+//		if (_pUart->usRxCount < _pUart->usRxBufSize) //has receive data usRxCount++;
+//		{
+//			_pUart->usRxCount++;
+//		}
 
-		ch = READ_REG(_pUart->uart->RDR);
-		_pUart->pRxBuf[_pUart->usRxWrite] = ch;
-		if (++_pUart->usRxWrite >= _pUart->usRxBufSize)
-		{
-			_pUart->usRxWrite = 0;
-		}
-		if (_pUart->usRxCount < _pUart->usRxBufSize)
-		{
-			_pUart->usRxCount++;
-		}
+		ch = USART2->RDR;
 
 		/* 回调函数,通知应用程序收到新数据,一般是发送1个消息或者设置一个标记 */
 		//if (_pUart->usRxWrite == _pUart->usRxRead)
 		//if (_pUart->usRxCount == 1)
 		{
-			if (_pUart->ReciveNew)
-			{
-				_pUart->ReciveNew(ch); /* 比如，交给MODBUS解码程序处理字节流 */
-			}
+			rx_voice_data(ch);
 		}
 	}
 
@@ -843,14 +844,14 @@ static void UartIRQ(UART_T *_pUart)
 #if UART1_FIFO_EN == 1
 void USART1_IRQHandler(void)
 {
-	UartIRQ(&g_tUart1);
+	UartIRQ_1(&g_tUart1);
 }
 #endif
 
 #if UART2_FIFO_EN == 1
 void USART2_IRQHandler(void)
 {
-	UartIRQ(&g_tUart2);
+	UartIRQ_2(&g_tUart2);
 }
 #endif
 

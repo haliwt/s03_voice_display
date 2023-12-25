@@ -68,8 +68,8 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
         hum1 =  humidity_value()/10 ;  //Humidity 
         hum2 =  humidity_value()%10;
         
-        temp1 = humidity_value()/10 ;  // temperature
-        temp2 = humidity_value()%10;
+        temp1 = temperature_value()/10 ;  // temperature
+        temp2 = temperature_value()%10;
        
          //temperature 
 		 lcd_t.number1_high = temp1;
@@ -93,7 +93,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
        case WIFI_BEIJING_TIME: //7//run_t.wifi_connect_success_flag
          if(power_on_off_state() ==1){
-           if(disp_t.timer_timing_define_flag==works_time ){
+           if(disp_t.disp_timer_or_works_timing==works_time){
 		   	
 			 lcd_t.number5_low=disp_t.disp_hours_time/10;
 	         lcd_t.number5_high =disp_t.disp_hours_time /10;
@@ -207,7 +207,7 @@ static void Receive_Wifi_Cmd(uint8_t cmd)
                 if(pro_t.gPower_On==power_on){
 			
 				    
-				disp_t.display_timer_or_works_timing = works_time;
+				disp_t.disp_timer_or_works_timing = works_time;
 				ctl_t.gAi_flag =1;
 
 				}
@@ -216,7 +216,7 @@ static void Receive_Wifi_Cmd(uint8_t cmd)
 			 case WIFI_MODE_2: //Timer Model
                  if(pro_t.gPower_On==power_on){
 				
-				disp_t.display_timer_or_works_timing = timer_time;
+				disp_t.disp_timer_or_works_timing = timer_time;
 				ctl_t.gAi_flag = 0;
 			 }
              break;

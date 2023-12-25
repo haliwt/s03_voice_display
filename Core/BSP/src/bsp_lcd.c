@@ -358,6 +358,7 @@ void DisplayPanel_Ref_Handler(void)
 				disp_t.gTimer_disp_timer_timing=0;
 			if(disp_t.disp_timer_time_hours !=0){	 
 			      disp_t.timer_timing_define_flag = timing_success;
+				  disp_t.disp_timer_or_works_timing = timer_time;
 				 
 			}
 			pro_t.setup_timer_timing_item=0; //be changed to normal "works time" mode
@@ -1216,6 +1217,7 @@ static void LCD_DisplayNumber_OneTwo_Icon_Handler(void)
                  number_blink_times =0;
 				 pro_t.setup_temperature_value =0;
 			     disp_t.timer_timing_define_flag=0;//pro_t.panel_key_setup_timer_flag=0;
+			     disp_t.disp_timer_or_works_timing = works_time;
 				 pro_t.temperature_set_flag = 1;
 				 
 				
