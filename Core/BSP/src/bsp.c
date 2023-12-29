@@ -75,29 +75,31 @@ void bsp_Idle(void)
 */
 void Key_Handler(uint8_t key_value)
 {
-  
+      static uint8_t mode_flag,power_flag;
        switch(key_value){
 
 	   case power_id: //power off
 
-	       if(pro_t.gKey_value == power_on){
+	       if(power_flag == power_on){
 		       pro_t.long_key_flag =0;
 	           SendData_PowerOnOff(0);
 	           Power_Off_Fun();
+			   LCD_Backlight_Off();
 		       Key_Sound();
-			   pro_t.gKey_value =power_off;
+			   power_flag =power_off;
 			   pro_t.gKey_command_tag = power_off_fan_pro;
            }
-	       else{
-	
+	       else if(power_flag == power_off){
+	        power_flag = power_on;
             pro_t.long_key_flag =0;
             pro_t.gKey_command_tag = run_update_data;
 			SendData_PowerOnOff(1);
 		    Power_On_Fun();
+			LCD_Backlight_On();
 			Key_Sound();
 
 	       }
-            key_value =0xff;     
+           key_value =0xff;     
         break;
 
        case wifi_fun_on:
@@ -124,22 +126,24 @@ void Key_Handler(uint8_t key_value)
 	  break;
 
 
-
-		case mode_ai:
+        case mode_id:
+			
+		  if(mode_flag == 0){
 		  pro_t.long_key_flag =0;
 		  pro_t.gKey_command_tag = mode_ai;
 		  ctl_t.gAi_flag = 1;
 		  SendData_Set_Wifi(MODE_AI);
 		   Key_Sound();
-		  key_value =0xff;
-		break;
-
-		case mode_no_ai:
-		  pro_t.long_key_flag =0;
-		  pro_t.gKey_command_tag = mode_no_ai;
-		  ctl_t.gAi_flag =0;
-		  SendData_Set_Wifi(MODE_TIMER);
-		  Key_Sound();
+		 
+		
+		   }
+          else{
+			  pro_t.long_key_flag =0;
+			  pro_t.gKey_command_tag = mode_no_ai;
+			  ctl_t.gAi_flag =0;
+			  SendData_Set_Wifi(MODE_TIMER);
+			  Key_Sound();
+          }
 		 key_value =0xff;
 		break;
 
@@ -183,7 +187,7 @@ void Display_Process_Handler(void)
      }
 
 	Voice_Decoder_Handler();
-    Key_Handler(pro_t.gKey_value);
+ 
 
 	DispPocess_Command_Handler();
 	USART1_Cmd_Error_Handler();
@@ -265,6 +269,7 @@ static void DispPocess_Command_Handler(void)
           }
 		  else
             run_process_step=2;
+		  Lcd_PowerOn_Fun();
 
 	 break;
 

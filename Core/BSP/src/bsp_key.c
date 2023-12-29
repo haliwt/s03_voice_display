@@ -15,7 +15,7 @@ uint16_t  K3=0;
 uint16_t  K4=0;
 
 
-uint8_t cnt;
+uint16_t cnt;
 uint8_t value1 = 0;
 uint8_t value2 = 0;
 uint8_t value3 = 0;
@@ -339,10 +339,11 @@ uint8_t ReadKey(void)
 //		return value1;
 //	T1msFlag = 0;
 	
-  if(POWER_KEY_VALUE() == KEY_DOWN && pro_t.long_key_flag ==0){ //KEY1 =POWER_KEY ,KEY2 = MODES
+  if(POWER_KEY_VALUE() == KEY_DOWN && MODE_KEY_VALUE() ==KEY_UP && pro_t.long_key_flag ==0){ //KEY1 =POWER_KEY ,KEY2 = MODES
 		cnt = 0;
 		pro_t.long_key_flag =0;
-		K1++;	 //Fun_key press 
+		K1++;
+		K2=0;//Fun_key press 
 		 if(K1 > 199000){
                K1= 0;
 			// ctl_t.gWifi_flag =1;
@@ -352,16 +353,15 @@ uint8_t ReadKey(void)
               
 		}
   }
-  if(MODE_KEY_VALUE() ==KEY_DOWN && pro_t.long_key_flag ==0){
+  if(MODE_KEY_VALUE() ==KEY_DOWN && POWER_KEY_VALUE() == KEY_UP && pro_t.long_key_flag ==0){
   		cnt = 0;
 		K2++;   //Confirm_key press
+		K1=0;
 		pro_t.long_key_flag =0;
 		if(K2 > 199000){
               K2=0;
 			  cnt = 0;
-		      K1 = 0;
-			  value1=0;
-			  value2=0;
+			 
 			  pro_t.long_key_flag =1;
 			  
 			  return 0x82;
@@ -383,16 +383,16 @@ if(ADD_KEY_VALUE() == KEY_DOWN){
 
 if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 
-      && DEC_KEY_VALUE() && ADD_KEY_VALUE() && pro_t.long_key_flag ==0){ //oneself key 
+      && DEC_KEY_VALUE()==0 && ADD_KEY_VALUE()==0 && pro_t.long_key_flag ==0){ //oneself key 
 		cnt++;
-		if(cnt<70){ //按键松开消抖,一定要大于短按键次数 > 20
+		if(cnt<300){ //按键松开消抖,一定要大于短按键次数 > 20
 		    return 0; 
 
 		}
 		
 		cnt = 0;//
 		//POWER_KEY
-		if(K1>60){ //KEY_FUN
+		if(K1>290){ //KEY_FUN
 			value1 = power_id;	//short time power press ---power on 
 		}
 		else{
@@ -401,7 +401,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 		}
 
 		//MODE_KEY
-		if(K2>60 ){//short time modes press 
+		if(K2>290 ){//short time modes press 
             value2 = mode_id;
 
 		}
@@ -410,7 +410,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 		}
 
 		//DEC_CONFIRM 
-		if(K3>60 ){//short time modes press 
+		if(K3>290 ){//short time modes press 
             value3 = dec_key;
 
 		}
@@ -420,7 +420,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 
 		
 		//ADD_KEY
-		if(K4>60 ){//short time modes press 
+		if(K4>290 ){//short time modes press 
 			value4 = add_key;
 		
 		}

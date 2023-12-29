@@ -149,6 +149,24 @@ static void TM1723_Write_OneByte(uint8_t data);
 //static void TIM1723_Write_Cmd(uint8_t cmd);
 static void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat);
 
+/*****************************************************
+ * 
+ * Function Name:void LCD_Backlight_On(void)
+ *
+ * 
+ * 
+******************************************************/
+void LCD_Backlight_On(void)
+{
+	LCD_BACK_LIGHT_ON()	;
+
+}
+void LCD_Backlight_Off(void)
+{
+	LCD_BACK_LIGHT_OFF() ;
+
+
+}
 
 
 /*****************************************************

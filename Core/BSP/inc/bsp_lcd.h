@@ -2,7 +2,7 @@
 #define __BSP_LCD_H_
 #include "main.h"
 
-#define TM1723_POWER_ON()				HAL_GPIO_WritePin(LCD_POWER_GPIO_Port, LCD_POWER_Pin,GPIO_PIN_SET)
+#define TM1723_POWER_ON()			   HAL_GPIO_WritePin(LCD_POWER_GPIO_Port, LCD_POWER_Pin,GPIO_PIN_SET)
 #define TM1723_POWER_OFF()             HAL_GPIO_WritePin(LCD_POWER_GPIO_Port, LCD_POWER_Pin,GPIO_PIN_RESET)
 
 
@@ -120,6 +120,10 @@ void DisplayPanel_Ref_Handler(void);
 
 void TIM1723_Write_Cmd(uint8_t cmd);
 void LCD_Display_Wind_Icon_Handler(void);
+
+void LCD_Backlight_On(void);
+void LCD_Backlight_Off(void);
+
 
 
 
