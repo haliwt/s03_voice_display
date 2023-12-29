@@ -180,11 +180,7 @@ void Key_Handler(uint8_t key_value)
 */
 void Display_Process_Handler(void)
 {
-     if(pro_t.decodeFlag ==1){
-		  pro_t.decodeFlag =0;
-          Decode_Function();
-                
-     }
+     
 
 	Voice_Decoder_Handler();
  
@@ -222,10 +218,10 @@ static void DispPocess_Command_Handler(void)
 	 case 0:
 		//if(pro_t.ack_power_on_sig ==1){
 
-			pro_t.ack_power_on_sig=0;
+			pro_t.ack_power_on_sig=0; 
 			Lcd_PowerOn_Fun();
-		    Display_Temperature_Humidity_Value_Handler();
-		    Timing_Handler();
+//		    Display_Temperature_Humidity_Value_Handler();
+//		    Timing_Handler();
 	       
             run_process_step=1;
 
@@ -249,7 +245,7 @@ static void DispPocess_Command_Handler(void)
 
 	 case 1:  //display works time + "temperature value " + "humidity value"
 
-	      if(pro_t.gTimer_pro_ms > 20){ //200ms
+	      if(pro_t.gTimer_pro_ms > 30){ //200ms
 
 		     Display_Panel_Action_Handler();
           }
@@ -269,7 +265,7 @@ static void DispPocess_Command_Handler(void)
           }
 		  else
             run_process_step=2;
-		  Lcd_PowerOn_Fun();
+		 
 
 	 break;
 
@@ -450,7 +446,7 @@ void power_off_fan_run(void)
 static void Wifi_Link_Fun(void)
 {
 	#if 0
-	if(pro_t.gPower_On ==1){
+	if(pro_t.gPower_On ==power_on){
             send_times++;
            if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
             if(wifi_long_key!=send_times){
@@ -499,7 +495,7 @@ static void Wifi_Link_Fun(void)
 static void Mode_Ai_Fun(void)
 {
 	
-	if(pro_t.gPower_On ==1){
+	if(pro_t.gPower_On ==power_on){
 		 //SendData_Buzzer();
 			 
 	   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
@@ -535,7 +531,7 @@ static void Mode_Ai_Fun(void)
 ************************************************************************/
 static void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_key:
 {
-	  if(pro_t.gPower_On ==1){
+	  if(pro_t.gPower_On ==power_on){
 	   if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
 	  	
 		  
@@ -569,7 +565,7 @@ static void ADD_Key_Fun(void)
  
     uint8_t  decade_temp,unit_temp,temp_bit_1_hours,temp_bit_2_hours,temp_bit_2_minute,temp_bit_1_minute;
 
-	 if(pro_t.gPower_On ==1){
+	 if(pro_t.gPower_On ==power_on){
 
 		   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
 		
@@ -655,7 +651,7 @@ static void DEC_Key_Fun(void)
 
     uint8_t  decade_temp,unit_temp,temp_bit_1_hours,temp_bit_2_hours;
 	uint8_t temp_bit_2_minute=0,temp_bit_1_minute=0;
-	if(pro_t.gPower_On ==1){
+	if(pro_t.gPower_On ==power_on){
 	   	if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
 	   	
 	     switch(pro_t.setup_timer_timing_item){

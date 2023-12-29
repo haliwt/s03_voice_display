@@ -78,10 +78,7 @@ void Display_Panel_Action_Handler(void)
 	         ctl_t.gPtc_flag = 0;
 			 SendData_Set_Command(DRY_OFF_NO_BUZZER);
 			 
-
-
-
-	   }
+		}
 	   else if(ptc_state() ==0 && v_t.voice_ptc_flag ==1){
 
 	    ctl_t.gPtc_flag = 1;

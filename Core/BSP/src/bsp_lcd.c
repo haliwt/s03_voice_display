@@ -329,7 +329,7 @@ void DisplayPanel_Ref_Handler(void)
 	 }
 	 /*T2 end*/
      //Humidity Icon "0xC9"-numbers "4-4B,4G,4C","5-5A,5F,5E,5D"
-     if(pro_t.Timer_mode_flag == 1 && pro_t.gPower_On == 1 && pro_t.setup_timer_timing_item==1 && ctl_t.ptc_warning ==0){ //digital -> 5,6,7,8 blink .
+     if(pro_t.Timer_mode_flag == 1 && pro_t.gPower_On == power_on && pro_t.setup_timer_timing_item==1 && ctl_t.ptc_warning ==0){ //digital -> 5,6,7,8 blink .
 
      	 if(lcd_t.gTimer_digital5678_ms < 3){
              TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber4_Low[lcd_t.number4_low]+lcdNumber5_High[lcd_t.number5_high]) & 0xff);//display digital '4,5'

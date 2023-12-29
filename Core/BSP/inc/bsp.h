@@ -45,8 +45,8 @@ typedef enum{
 typedef enum{
 
    power_off,
-   power_id,
    power_on,
+   power_id,
    wifi_fun_on,
    set_timer_fun_on,
    mode_id,

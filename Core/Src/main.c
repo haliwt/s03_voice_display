@@ -101,8 +101,9 @@ int main(void)
   Voice_Init();
   HAL_TIM_Base_Start_IT(&htim17);
   HAL_UART_Receive_IT(&huart1,inputBuf,1);
- // pro_t.gKey_command_tag = power_off_fan_pro;
-  pro_t.gKey_value =power_off;
+  pro_t.gKey_command_tag = power_off_fan_pro;
+
+  Feed_Dog();
  // HAL_UART_Receive_IT(&huart2, g_tModS.rs485_RxInputBuf,10);
   /* USER CODE END 2 */
 
@@ -113,10 +114,17 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	//bsp_Idle();
-    Key_value = ReadKey();
-	Key_Handler(Key_value);
-	Display_Process_Handler();
+	bsp_Idle();
+	if(pro_t.decodeFlag ==1){
+		  pro_t.decodeFlag =0;
+          Decode_Function();
+                
+     }
+	else{
+	    Key_value = ReadKey();
+		Key_Handler(Key_value);
+		Display_Process_Handler();
+	}
   }
   /* USER CODE END 3 */
 }

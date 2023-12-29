@@ -53,7 +53,7 @@ void Key_Init(void)
 ***********************************************************/
 static uint8_t power_default_fun(void)
 {
-      if(pro_t.gPower_On ==1) return 1;
+      if(pro_t.gPower_On ==power_on) return 1;
 	  else return 0;
 
 }
@@ -143,7 +143,7 @@ uint8_t KEY_Scan(void)
 		{
 			if(key_t.read == key_t.buffer) //again adjust key if be pressed down 
 			{
-				if(++key_t.on_time> 1000 && pro_t.gPower_On ==1)// 500 long key be down
+				if(++key_t.on_time> 1000 && pro_t.gPower_On ==power_on)// 500 long key be down
 				{
 					
 					key_t.value = key_t.value|0x80; //key.value(power_on) = 0x01 | 0x80  =0x81  
@@ -295,7 +295,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 	case KEY_ADD_Pin:
 
-	if(ADD_KEY_VALUE() == KEY_DOWN && pro_t.gPower_On ==1){
+	if(ADD_KEY_VALUE() == KEY_DOWN && pro_t.gPower_On ==power_on){
 
        // while(ADD_KEY_VALUE() == KEY_DOWN);
 

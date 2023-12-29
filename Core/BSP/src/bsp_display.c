@@ -142,7 +142,7 @@ static void Display_Timer_Time_Handler(void)
 void Display_Temperature_Humidity_Value_Handler(void)
 {
      static uint8_t m,n,p,q;
-    if(pro_t.gPower_On==1){
+    if(pro_t.gPower_On==power_on){
 
 		
 		panel_led_fun();
