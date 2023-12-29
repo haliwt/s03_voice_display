@@ -407,7 +407,7 @@ void DisplayPanel_Ref_Handler(void)
 				  	TM1723_Write_Display_Data(0xCA,T15+lcdNumber5_Low_E[0]+lcdNumber6_High_r[0]);//display digital '5,6'  
 			 }
 	         }
-	        else if(lcd_t.gTimer_fan_10ms <10){
+	        else if(lcd_t.gTimer_fan_10ms <10){ //10*10ms =100ms
 		  	  if(pro_t.Timer_mode_flag == 0){
 			  	    if(ctl_t.ptc_warning ==0)
 			  			TM1723_Write_Display_Data(0xCA,lcdNumber5_Low[lcd_t.number5_low]+lcdNumber6_High[lcd_t.number6_high]);//display digital '5,6'
@@ -1234,7 +1234,11 @@ static void LCD_DisplayNumber_OneTwo_Icon_Handler(void)
 		     if(number_blink_times > 3){
                  number_blink_times =0;
 				 pro_t.temperature_set_flag = 0;
-				 pro_t.set_temperature_value = disp_t.disp_set_temp_value;
+				
+				 ctl_t.gSet_temperature_value = disp_t.disp_set_temp_value; 
+				 ctl_t.gSet_temperature_value_flag = 1;
+				 
+				 pro_t.gTimer_pro_temp_delay =62; //at once run "Ptc_Temperature_Compare_Value()"
 				 
 			    
 			}

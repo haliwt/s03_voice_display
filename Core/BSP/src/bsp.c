@@ -754,7 +754,7 @@ static void DEC_Key_Fun(void)
 static void Ptc_Temperature_Compare_Value(void)
 {
       //set up temparature value 
-      switch(pro_t.temperature_set_flag ){
+      switch(ctl_t.gSet_temperature_value_flag){
 
       case 1:
 	    if(pro_t.gTimer_pro_temp_delay> 61 && ctl_t.ptc_warning==0){
