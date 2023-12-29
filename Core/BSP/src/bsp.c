@@ -132,19 +132,20 @@ void Key_Handler(uint8_t key_value)
 			
 		  if(mode_flag == 0){
 		  pro_t.long_key_flag =0;
-		  pro_t.gKey_command_tag = mode_ai;
+		
 		  ctl_t.gAi_flag = 1;
+		  mode_flag =1;
 		  SendData_Set_Wifi(MODE_AI);
-		   Key_Sound();
+		 //  Key_Sound();
 		 
 		
 		   }
           else{
+		  	  mode_flag =0;
 			  pro_t.long_key_flag =0;
-			  pro_t.gKey_command_tag = mode_no_ai;
 			  ctl_t.gAi_flag =0;
 			  SendData_Set_Wifi(MODE_TIMER);
-			  Key_Sound();
+			//  Key_Sound();
           }
 		 key_value =0xff;
 		break;
@@ -248,10 +249,11 @@ static void DispPocess_Command_Handler(void)
 	 case 1:  //display works time + "temperature value " + "humidity value"
 	      
 
-	      if(pro_t.gTimer_pro_ms > 30){ //200ms
+	      if(pro_t.gTimer_pro_ms > 20){ //200ms
+			 pro_t.gTimer_pro_ms =0;
 
 		     Display_Panel_Action_Handler();
-			 Ptc_Temperature_Compare_Value();
+			 
           }
 	  
 	      if(pro_t.gTimer_pro_disp > 56 ){
@@ -266,7 +268,7 @@ static void DispPocess_Command_Handler(void)
 
 		  }
 
-		  
+		  Ptc_Temperature_Compare_Value();
 		  
 	      if(wifi_link_flag ==1){
 			  run_process_step=4;
@@ -279,20 +281,23 @@ static void DispPocess_Command_Handler(void)
 
 	 break;
 
+	
+
 	 case 2: //set timer times pro
      run_process_step=3;
 	 if(pro_t.gTimer_pro_disp_ms > 3){ //200ms
-
-		   pro_t.gTimer_pro_disp_ms=0;
-			 DisplayPanel_Ref_Handler();
+			pro_t.gTimer_pro_disp_ms=0;
+			DisplayPanel_Ref_Handler();
        }
+	   
+
 	   run_process_step=3;
 
 
 	 break;
 
 	 case 3:
-
+       run_process_step=1;
 	  if(pro_t.set_timer_flag==1){ //
 		  pro_t.set_timer_flag++;
              
@@ -300,7 +305,6 @@ static void DispPocess_Command_Handler(void)
 		  
       }
 
-	  
 	  run_process_step=1;
       break;
 
@@ -584,11 +588,7 @@ static void ADD_Key_Fun(void)
 
 		   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
 		
-			 SendData_Buzzer();
-             HAL_Delay(20);
-		
-
-		    switch(pro_t.setup_timer_timing_item){
+			switch(pro_t.setup_timer_timing_item){
 
 			case set_temperature: //set temperature value add number
       

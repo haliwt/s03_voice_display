@@ -385,14 +385,14 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 
       && DEC_KEY_VALUE()==0 && ADD_KEY_VALUE()==0 && pro_t.long_key_flag ==0){ //oneself key 
 		cnt++;
-		if(cnt<300){ //按键松开消抖,一定要大于短按键次数 > 20
+		if(cnt<100){ //按键松开消抖,一定要大于短按键次数 > 20
 		    return 0; 
 
 		}
 		
 		cnt = 0;//
 		//POWER_KEY
-		if(K1>295){ //KEY_FUN
+		if(K1>95){ //KEY_FUN
 			value1 = power_id;	//short time power press ---power on 
 		}
 		else{
@@ -401,7 +401,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 		}
 
 		//MODE_KEY
-		if(K2>295 ){//short time modes press 
+		if(K2>95 ){//short time modes press 
             value2 = mode_id;
 
 		}
@@ -410,7 +410,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 		}
 
 		//DEC_CONFIRM 
-		if(K3>295 ){//short time modes press 
+		if(K3>95 ){//short time modes press 
             value3 = dec_key;
 
 		}
@@ -420,7 +420,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 
 		
 		//ADD_KEY
-		if(K4>295){//short time modes press 
+		if(K4>95){//short time modes press 
 			value4 = add_key;
 		
 		}

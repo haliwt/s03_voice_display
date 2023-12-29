@@ -106,6 +106,7 @@ typedef struct{
 	uint8_t gTimer_pro_ms;
 	uint8_t gTimer_pro_disp_timer ;
 	uint8_t gTimer_pro_disp_ms;
+	
 
 }PRO_T;
 

@@ -121,7 +121,11 @@ int main(void)
                 
      }
 	else{
-	    Key_value = ReadKey();
+		
+			
+	     Key_value = ReadKey();
+        	
+		
 		Key_Handler(Key_value);
 		Display_Process_Handler();
 	}
