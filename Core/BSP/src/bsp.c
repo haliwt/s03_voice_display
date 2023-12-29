@@ -32,6 +32,8 @@ uint8_t fun_key_counter,display_keep_temp_value;
 uint8_t  disp_keep_temp_value ;
 uint8_t fan_runContinue;
 uint8_t wifi_link_flag;
+uint8_t run_process_step;
+
 
 /*
 *********************************************************************************************************
@@ -76,25 +78,30 @@ void Key_Handler(uint8_t key_value)
   
        switch(key_value){
 
-	   case power_off: //power off
-	    
-           SendData_PowerOnOff(0);
-           Power_Off_Fun();
-	       Key_Sound();
-		   pro_t.gKey_command_tag = power_off_fan_pro;
-       key_value =0xff;
-	   break;
+	   case power_id: //power off
 
-		case power_on: //power on
-       
+	       if(pro_t.gKey_value == power_on){
+		       pro_t.long_key_flag =0;
+	           SendData_PowerOnOff(0);
+	           Power_Off_Fun();
+		       Key_Sound();
+			   pro_t.gKey_value =power_off;
+			   pro_t.gKey_command_tag = power_off_fan_pro;
+           }
+	       else{
+	
+            pro_t.long_key_flag =0;
             pro_t.gKey_command_tag = run_update_data;
 			SendData_PowerOnOff(1);
 		    Power_On_Fun();
-			 Key_Sound();
+			Key_Sound();
+
+	       }
             key_value =0xff;     
         break;
 
        case wifi_fun_on:
+	   	pro_t.long_key_flag =0;
         SendData_Set_Wifi(0x01);
 
 	    Key_Sound();
@@ -111,6 +118,7 @@ void Key_Handler(uint8_t key_value)
        break;
 
 	   case set_timer_fun_on://case model_long_key:
+	     pro_t.long_key_flag =0;
 	  	 Mode_Long_Key_Fun();
 
 	  break;
@@ -118,7 +126,7 @@ void Key_Handler(uint8_t key_value)
 
 
 		case mode_ai:
-		  
+		  pro_t.long_key_flag =0;
 		  pro_t.gKey_command_tag = mode_ai;
 		  ctl_t.gAi_flag = 1;
 		  SendData_Set_Wifi(MODE_AI);
@@ -127,11 +135,12 @@ void Key_Handler(uint8_t key_value)
 		break;
 
 		case mode_no_ai:
+		  pro_t.long_key_flag =0;
 		  pro_t.gKey_command_tag = mode_no_ai;
 		  ctl_t.gAi_flag =0;
 		  SendData_Set_Wifi(MODE_TIMER);
 		  Key_Sound();
-		  key_value =0xff;
+		 key_value =0xff;
 		break;
 
 		case add_key:
@@ -195,7 +204,7 @@ static void DispPocess_Command_Handler(void)
 
    static uint8_t temp1,temp2;
   
-   static uint8_t run_process_step;
+  
    static uint16_t counter;
 
    switch(pro_t.gKey_command_tag){
@@ -207,7 +216,7 @@ static void DispPocess_Command_Handler(void)
 
 
 	 case 0:
-		if(pro_t.ack_power_on_sig ==1){
+		//if(pro_t.ack_power_on_sig ==1){
 
 			pro_t.ack_power_on_sig=0;
 			Lcd_PowerOn_Fun();
@@ -216,21 +225,21 @@ static void DispPocess_Command_Handler(void)
 	       
             run_process_step=1;
 
-		}
-		else{
-		  counter++ ;
-		  Lcd_PowerOn_Fun();
-          SendData_PowerOnOff(1);
-		  Display_Temperature_Humidity_Value_Handler();
-		  Timing_Handler();
-
-		}
-        if(counter >10000 && counter < 12000 ){
-			
-
-             Error_Sound();  //beep is alarm sound
-
-		}
+		//}
+//		else{
+//		  counter++ ;
+//		  Lcd_PowerOn_Fun();
+//          SendData_PowerOnOff(1);
+//		  Display_Temperature_Humidity_Value_Handler();
+//		  Timing_Handler();
+//
+//		}
+//        if(counter >10000 && counter < 12000 ){
+//			
+//
+//             Error_Sound();  //beep is alarm sound
+//
+//		}
 
 	 break;
 
@@ -275,13 +284,7 @@ static void DispPocess_Command_Handler(void)
       break;
 
 	  case 3: //to pancel of key set tempeature value 
-	   
-      
-	  
-	 	
-
-
-	  run_process_step=1;
+		run_process_step=1;
 
 	  break;
 

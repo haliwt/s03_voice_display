@@ -3,6 +3,8 @@
 #include "main.h"
 
 
+#define INTERRUPT_KEY                0
+#define NORMAL_KEY                   1
 
 #define POWER_KEY_VALUE()            HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port ,KEY_POWER_Pin)
 

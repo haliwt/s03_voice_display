@@ -55,7 +55,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   static uint8_t tm0,tm1;
     
-   if(htim->Instance==TIM3){
+   if(htim->Instance==TIM17){
     
     tm0++;  //10ms
 	tm1++;

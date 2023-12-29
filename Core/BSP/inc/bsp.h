@@ -45,9 +45,11 @@ typedef enum{
 typedef enum{
 
    power_off,
+   power_id,
    power_on,
    wifi_fun_on,
    set_timer_fun_on,
+   mode_id,
    mode_ai,
    mode_no_ai,
    add_key,
@@ -65,8 +67,11 @@ typedef enum{
 }process_state;
 
 typedef struct{
+
+  //key
    uint8_t gKey_value;
    uint8_t gPower_On;
+   uint8_t long_key_flag;
   
    uint8_t ack_wifi_led;
    uint8_t ack_power_on_sig;

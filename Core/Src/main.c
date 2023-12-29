@@ -30,7 +30,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+uint8_t Key_value;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -88,7 +88,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_IWDG_Init();
+ // MX_IWDG_Init();
   MX_TIM1_Init();
   MX_TIM17_Init();
   MX_USART1_UART_Init();
@@ -101,6 +101,8 @@ int main(void)
   Voice_Init();
   HAL_TIM_Base_Start_IT(&htim17);
   HAL_UART_Receive_IT(&huart1,inputBuf,1);
+ // pro_t.gKey_command_tag = power_off_fan_pro;
+  pro_t.gKey_value =power_off;
  // HAL_UART_Receive_IT(&huart2, g_tModS.rs485_RxInputBuf,10);
   /* USER CODE END 2 */
 
@@ -111,8 +113,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	bsp_Idle();
-	Key_Handler(pro_t.gKey_value);
+	//bsp_Idle();
+    Key_value = ReadKey();
+	Key_Handler(Key_value);
 	Display_Process_Handler();
   }
   /* USER CODE END 3 */

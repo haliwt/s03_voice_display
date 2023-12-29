@@ -144,6 +144,7 @@ void SysTick_Handler(void)
 /**
   * @brief This function handles EXTI line 2 and line 3 interrupts.
   */
+ #if INTERRUPT_KEY
 void EXTI2_3_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI2_3_IRQn 0 */
@@ -174,6 +175,7 @@ void EXTI4_15_IRQHandler(void)
 
   /* USER CODE END EXTI4_15_IRQn 1 */
 }
+#endif 
 
 /**
   * @brief This function handles TIM17 global interrupt.
