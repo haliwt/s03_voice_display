@@ -327,61 +327,46 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 uint8_t ReadKey(void)
 {
 
-
- // static uint16_t  K1=0;
- // static uint16_t  K2=0;
-
-//  static uint8_t cnt;
-  //uint8_t 	 	value1 = 0;
- // uint8_t   	value2 = 0;
-
-//	if(!T1msFlag)  //10ms check once 
-//		return value1;
-//	T1msFlag = 0;
-	
-  if(POWER_KEY_VALUE() == KEY_DOWN && MODE_KEY_VALUE() ==KEY_UP && pro_t.long_key_flag ==0){ //KEY1 =POWER_KEY ,KEY2 = MODES
-		cnt = 0;
-		pro_t.long_key_flag =0;
-		K1++;
-		K2=0;//Fun_key press 
-		 if(K1 > 199000 && pro_t.gPower_On ==power_on){
-               K1= 0;
-			// ctl_t.gWifi_flag =1;
-			  pro_t.long_key_flag =1;
-			  pro_t.gKey_value = wifi_fun_on;
-              return  0x81;
-              
-		}
-  }
-  if(MODE_KEY_VALUE() ==KEY_DOWN && POWER_KEY_VALUE() == KEY_UP && pro_t.long_key_flag ==0){
-  		cnt = 0;
-		K2++;   //Confirm_key press
-		K1=0;
-		pro_t.long_key_flag =0;
-		if(K2 > 199000 && pro_t.gPower_On ==power_on){
-              K2=0;
-			  cnt = 0;
-			 
-			  pro_t.long_key_flag =1;
-			  
-			  return 0x82;
-            }
+	if(POWER_KEY_VALUE() == KEY_DOWN && MODE_KEY_VALUE() ==KEY_UP && pro_t.long_key_flag ==0){ //KEY1 =POWER_KEY ,KEY2 = MODES
+			cnt = 0;
+			pro_t.long_key_flag =0;
+			K1++;
+			K2=0;//Fun_key press 
+			 if(K1 > 20000 && pro_t.gPower_On ==power_on){
+	               K1= 0;
+				// ctl_t.gWifi_flag =1;
+				  pro_t.long_key_flag =1;
+				  pro_t.gKey_value = wifi_fun_on;
+	              return  0x81;
+	              
+			}
+	}
+	else if(MODE_KEY_VALUE() ==KEY_DOWN && POWER_KEY_VALUE() == KEY_UP && pro_t.long_key_flag ==0){
+	  		cnt = 0;
+			K2++;   //Confirm_key press
+			K1=0;
+			pro_t.long_key_flag =0;
+			if(K2 > 20000 && pro_t.gPower_On ==power_on){
+	              K2=0;
+				  cnt = 0;
+				 
+				  pro_t.long_key_flag =1;
+				  
+				  return 0x82;
+	            }
 
 
- }
- if(DEC_KEY_VALUE() == KEY_DOWN){
-       cnt =0;
-	   K3++;
-       
-}
-if(ADD_KEY_VALUE() == KEY_DOWN){
-	cnt =0;
-	K4++;
-}
-
-
-
-if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
+	 }
+	 else if(DEC_KEY_VALUE() == KEY_DOWN){
+	       cnt =0;
+		   K3++;
+	       
+	}
+	else if(ADD_KEY_VALUE() == KEY_DOWN){
+		cnt =0;
+		K4++;
+	}
+    else if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 
       && DEC_KEY_VALUE()==0 && ADD_KEY_VALUE()==0 && pro_t.long_key_flag ==0){ //oneself key 
 		cnt++;

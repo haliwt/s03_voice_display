@@ -352,7 +352,6 @@ static void Power_On_Fun(void)
    
    pro_t.gPower_On = power_on;
    ctl_t.gPtc_flag = 1;
-   ctl_t.gWifi_flag = 1;
    ctl_t.gAi_flag = 1;
    ctl_t.gPlasma_flag = 1;
    ctl_t.gBug_flag =1;

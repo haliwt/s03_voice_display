@@ -3,7 +3,7 @@
 
 
 #define	UART1_FIFO_EN	0
-#define	UART2_FIFO_EN	1
+#define	UART2_FIFO_EN	0
 
 
 /* PB2 控制RS485芯片的发送使能 */

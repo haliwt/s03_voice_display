@@ -101,6 +101,7 @@ int main(void)
   Voice_Init();
   HAL_TIM_Base_Start_IT(&htim17);
   HAL_UART_Receive_IT(&huart1,inputBuf,1);
+  HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
   pro_t.gKey_command_tag = power_off_fan_pro;
 
   Feed_Dog();
