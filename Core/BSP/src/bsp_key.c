@@ -344,7 +344,7 @@ uint8_t ReadKey(void)
 		pro_t.long_key_flag =0;
 		K1++;
 		K2=0;//Fun_key press 
-		 if(K1 > 199000){
+		 if(K1 > 199000 && pro_t.gPower_On ==power_on){
                K1= 0;
 			// ctl_t.gWifi_flag =1;
 			  pro_t.long_key_flag =1;
@@ -358,7 +358,7 @@ uint8_t ReadKey(void)
 		K2++;   //Confirm_key press
 		K1=0;
 		pro_t.long_key_flag =0;
-		if(K2 > 199000){
+		if(K2 > 199000 && pro_t.gPower_On ==power_on){
               K2=0;
 			  cnt = 0;
 			 
@@ -392,7 +392,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 		
 		cnt = 0;//
 		//POWER_KEY
-		if(K1>290){ //KEY_FUN
+		if(K1>295){ //KEY_FUN
 			value1 = power_id;	//short time power press ---power on 
 		}
 		else{
@@ -401,7 +401,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 		}
 
 		//MODE_KEY
-		if(K2>290 ){//short time modes press 
+		if(K2>295 ){//short time modes press 
             value2 = mode_id;
 
 		}
@@ -410,7 +410,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 		}
 
 		//DEC_CONFIRM 
-		if(K3>290 ){//short time modes press 
+		if(K3>295 ){//short time modes press 
             value3 = dec_key;
 
 		}
@@ -420,7 +420,7 @@ if(POWER_KEY_VALUE()==0 && MODE_KEY_VALUE()==0 \
 
 		
 		//ADD_KEY
-		if(K4>290 ){//short time modes press 
+		if(K4>295){//short time modes press 
 			value4 = add_key;
 		
 		}

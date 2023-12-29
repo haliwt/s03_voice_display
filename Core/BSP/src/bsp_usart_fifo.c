@@ -80,6 +80,7 @@ static void UartIRQ_1(UART_T *_pUart);
 
 
 void RS485_InitTXE(void);
+uint8_t rxBuf[1];
 
 /*
 *********************************************************************************************************
@@ -721,7 +722,7 @@ static void UartIRQ_2(UART_T *_pUart)
 	if ((isrflags & USART_ISR_RXNE_RXFNE) != RESET)
 	{
 		/* 从串口接收数据寄存器读取数据存放到接收FIFO */
-		uint8_t ch;
+		
 //
 //		ch = READ_REG(_pUart->uart->RDR);
 //		_pUart->pRxBuf[_pUart->usRxWrite] = ch; //Read one word of data
@@ -734,13 +735,13 @@ static void UartIRQ_2(UART_T *_pUart)
 //			_pUart->usRxCount++;
 //		}
 
-		ch = USART2->RDR;
+		rxBuf[0] = USART2->RDR;
 
 		/* 回调函数,通知应用程序收到新数据,一般是发送1个消息或者设置一个标记 */
 		//if (_pUart->usRxWrite == _pUart->usRxRead)
 		//if (_pUart->usRxCount == 1)
 		{
-			rx_voice_data(ch);
+			rx_voice_data(rxBuf[0]);
 		}
 	}
 

@@ -65,7 +65,7 @@ static void Display_Works_Time_Handler(void)
 	   }
             
          
-	Setup_Timer_Times_Donot_Display();
+	
 	lcd_t.number5_low=(disp_t.disp_hours_time ) /10;
 	lcd_t.number5_high =(disp_t.disp_hours_time) /10;
 
@@ -77,6 +77,8 @@ static void Display_Works_Time_Handler(void)
 
 	lcd_t.number8_low = (disp_t.disp_minutes_time )%10;
 	lcd_t.number8_high = (disp_t.disp_minutes_time )%10;
+
+	Setup_Timer_Times_Donot_Display();
 }
 /*************************************************************
  * 
@@ -165,7 +167,7 @@ void Display_Temperature_Humidity_Value_Handler(void)
 		  lcd_t.number8_high = q;
 		 lcd_t.number8_low = q;
 
-		 DisplayPanel_Ref_Handler();
+		// DisplayPanel_Ref_Handler();
 		
 
    }
@@ -193,7 +195,7 @@ void Timing_Handler(void)
     
     case timer_time:
 		 
-	  Display_Timer_Time_Handler();
+	//  Display_Timer_Time_Handler();
 			
 	  Works_Time_Continue(); //still recoder "works time"
 

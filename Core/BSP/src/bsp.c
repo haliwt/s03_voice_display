@@ -86,11 +86,13 @@ void Key_Handler(uint8_t key_value)
 	           Power_Off_Fun();
 			   LCD_Backlight_Off();
 		       Key_Sound();
+			   run_process_step=0;
 			   power_flag =power_off;
 			   pro_t.gKey_command_tag = power_off_fan_pro;
            }
 	       else if(power_flag == power_off){
 	        power_flag = power_on;
+			run_process_step=0;
             pro_t.long_key_flag =0;
             pro_t.gKey_command_tag = run_update_data;
 			SendData_PowerOnOff(1);
@@ -244,35 +246,52 @@ static void DispPocess_Command_Handler(void)
 	 break;
 
 	 case 1:  //display works time + "temperature value " + "humidity value"
+	      
 
 	      if(pro_t.gTimer_pro_ms > 30){ //200ms
 
 		     Display_Panel_Action_Handler();
+			 Ptc_Temperature_Compare_Value();
           }
 	  
-	      if(pro_t.gTimer_pro_disp > 46 ){
+	      if(pro_t.gTimer_pro_disp > 56 ){
 		  	pro_t.gTimer_pro_disp=0;
 	 	    Display_Temperature_Humidity_Value_Handler();
 
 	      }
 
-		  if(pro_t.gTimer_pro_disp_timer > 12){
+		  if(pro_t.gTimer_pro_disp_timer > 37){
 		  	pro_t.gTimer_pro_disp_timer =0;
 		    Timing_Handler();
 
 		  }
+
+		  
+		  
 	      if(wifi_link_flag ==1){
 			  run_process_step=4;
           }
 		  else
             run_process_step=2;
 		 
+	     
+		
 
 	 break;
 
 	 case 2: //set timer times pro
+     run_process_step=3;
+	 if(pro_t.gTimer_pro_disp_ms > 3){ //200ms
 
-	 
+		   pro_t.gTimer_pro_disp_ms=0;
+			 DisplayPanel_Ref_Handler();
+       }
+	   run_process_step=3;
+
+
+	 break;
+
+	 case 3:
 
 	  if(pro_t.set_timer_flag==1){ //
 		  pro_t.set_timer_flag++;
@@ -281,14 +300,9 @@ static void DispPocess_Command_Handler(void)
 		  
       }
 
-	  Ptc_Temperature_Compare_Value();
-	  run_process_step=3;
+	  
+	  run_process_step=1;
       break;
-
-	  case 3: //to pancel of key set tempeature value 
-		run_process_step=1;
-
-	  break;
 
 	 case 4:
 	   if(wifi_state() ==1){
