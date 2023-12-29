@@ -230,7 +230,7 @@ static void DispPocess_Command_Handler(void)
 //		  counter++ ;
 //		  Lcd_PowerOn_Fun();
 //          SendData_PowerOnOff(1);
-//		  Display_Temperature_Humidity_Value_Handler();
+		  Display_Temperature_Humidity_Value_Handler();
 //		  Timing_Handler();
 //
 //		}
@@ -250,13 +250,14 @@ static void DispPocess_Command_Handler(void)
 		     Display_Panel_Action_Handler();
           }
 	  
-	      if(pro_t.gTimer_pro_disp > 7 && pro_t.gTimer_pro_disp < 9){
-	 	     Display_Temperature_Humidity_Value_Handler();
+	      if(pro_t.gTimer_pro_disp > 46 ){
+		  	pro_t.gTimer_pro_disp=0;
+	 	    Display_Temperature_Humidity_Value_Handler();
 
 	      }
 
-		  if(pro_t.gTimer_pro_disp > 12){
-		  	pro_t.gTimer_pro_disp =0;
+		  if(pro_t.gTimer_pro_disp_timer > 12){
+		  	pro_t.gTimer_pro_disp_timer =0;
 		    Timing_Handler();
 
 		  }

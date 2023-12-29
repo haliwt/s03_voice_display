@@ -145,7 +145,6 @@ void Display_Temperature_Humidity_Value_Handler(void)
     if(pro_t.gPower_On==power_on){
 
 		
-		panel_led_fun();
 
 	    m = (disp_t.disp_hours_time/10) ;
 		n=	(disp_t.disp_hours_time%10); 
@@ -301,6 +300,9 @@ void Setup_Timer_Times(void)
 *************************************************************************/       
 static void Setup_Timer_Times_Donot_Display(void)
 {
+
+    if(disp_t.timer_timing_define_flag == timing_success){
+
 	if(disp_t.gTimer_disp_timer_timing  > 59){ //
         
   		 disp_t.gTimer_disp_timer_timing  =0;
@@ -319,6 +321,7 @@ static void Setup_Timer_Times_Donot_Display(void)
 			}
            
         }
+    }
     }
 }
 

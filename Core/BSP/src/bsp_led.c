@@ -1,7 +1,7 @@
 #include "bsp_led.h"
 #include "bsp.h"
 
-void (*panel_led_fun)(void);
+
 
 
 IWDG_HandleTypeDef IWDG_Handler;
@@ -99,31 +99,4 @@ void Lcd_PowerOff_Fun(void)
 }
 
 
-/*******************************************************************************************
- 	*
- 	* Function Name:void Panel_Led_OnOff_Function(void)
- 	* Function :panel of led turn on or off which key function 
- 	* Input Ref:NO
- 	* Return Ref:NO
- 	* 
-*******************************************************************************************/  
-void Panel_Led_OnOff_Function(void)
-{
-	
- 
-}
-
-/*******************************************************************************************
- 	*
- 	* Function Name:void Panel_Led_OnOff_Function(void)
- 	* Function :panel of led turn on or off which key function 
- 	* Input Ref:NO
- 	* Return Ref:NO
- 	* 
-*******************************************************************************************/  
-void Panel_Led_OnOff_RunCmd(void (*panelledHandler)(void))
-{
-
-	 panel_led_fun= panelledHandler;
-}
 

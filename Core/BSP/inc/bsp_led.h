@@ -17,7 +17,7 @@ extern IWDG_HandleTypeDef IWDG_Handler;
 
 
 
-extern void (*panel_led_fun)(void);
+
 
 
 void Breath_Led(void);
