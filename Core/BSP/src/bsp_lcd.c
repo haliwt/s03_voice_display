@@ -280,7 +280,7 @@ void DisplayPanel_Ref_Handler(void)
 	 
 	 /**********************************end temperature*****************************************/
      //T2->"WIFI" icon -> 0xC5
-     if(wifi_state() ==0){   // && pro_t.gPower_On==1){ //hasn't wifi wifi_state()
+     if(wifi_state() ==0 && pro_t.gPower_On==power_on){   // && pro_t.gPower_On==1){ //hasn't wifi wifi_state()
          if(pro_t.wifi_led_fast_blink_flag==0){
 			 if(lcd_t.gTimer_wifi_500ms >99 && lcd_t.gTimer_wifi_500ms<200){
 		          

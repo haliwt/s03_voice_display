@@ -8,7 +8,7 @@ PRO_T pro_t;
 
 
 
-static void DispPocess_Command_Handler(void);
+static void DispPocess_Command_Handler(uint8_t flag_key);
 static void Power_On_Fun(void);
 
 static void power_off_fan_run(void);
@@ -75,32 +75,40 @@ void bsp_Idle(void)
 */
 void Key_Handler(uint8_t key_value)
 {
-      static uint8_t mode_flag,power_flag;
+      static uint8_t power_flag;
        switch(key_value){
 
 	   case power_id: //power off
 
-	       if(power_flag == power_on){
-		       pro_t.long_key_flag =0;
-	           SendData_PowerOnOff(0);
-	           Power_Off_Fun();
-			   LCD_Backlight_Off();
-		       Key_Sound();
-			   run_process_step=0;
-			   power_flag =power_off;
-			   pro_t.gKey_command_tag = power_off_fan_pro;
-           }
-	       else if(power_flag == power_off){
-	        power_flag = power_on;
+	       power_flag = power_flag ^ 0x01;
+
+	      if(power_flag ==1){
+		  	 pro_t.gKey_command_tag = run_update_data;
+			 pro_t.gPower_On = power_on;   
 			run_process_step=0;
             pro_t.long_key_flag =0;
-            pro_t.gKey_command_tag = run_update_data;
+           
 			SendData_PowerOnOff(1);
 		    Power_On_Fun();
 			LCD_Backlight_On();
 			Key_Sound();
 
-	       }
+
+		  }
+		  else{
+
+	           pro_t.long_key_flag =0;
+			    pro_t.gKey_command_tag = power_off_fan_pro;
+			   pro_t.gPower_On = power_off;   
+	           SendData_PowerOnOff(0);
+	           Power_Off_Fun();
+			   LCD_Backlight_Off();
+		       Key_Sound();
+			   run_process_step=0xff;
+			  
+			  
+           }
+	       
            key_value =0xff;     
         break;
 
@@ -130,19 +138,17 @@ void Key_Handler(uint8_t key_value)
 
         case mode_id:
 			
-		  if(mode_flag == 0){
+		 if(ctl_t.gAi_flag == 0 ){
 		  pro_t.long_key_flag =0;
 		
-		  ctl_t.gAi_flag = 1;
-		  mode_flag =1;
+		  ctl_t.gAi_flag = 0;
 		  SendData_Set_Wifi(MODE_AI);
 		 //  Key_Sound();
 		 
 		
 		   }
           else{
-		  	  mode_flag =0;
-			  pro_t.long_key_flag =0;
+		  	 pro_t.long_key_flag =0;
 			  ctl_t.gAi_flag =0;
 			  SendData_Set_Wifi(MODE_TIMER);
 			//  Key_Sound();
@@ -188,7 +194,7 @@ void Display_Process_Handler(void)
 	Voice_Decoder_Handler();
  
 
-	DispPocess_Command_Handler();
+	DispPocess_Command_Handler(pro_t.gKey_command_tag);
 	USART1_Cmd_Error_Handler();
 	
 
@@ -201,7 +207,7 @@ void Display_Process_Handler(void)
 	*Return Ref:
 	*
 ******************************************************************************/
-static void DispPocess_Command_Handler(void)
+static void DispPocess_Command_Handler(uint8_t flag_key)
 {
    //key input run function
 
@@ -210,7 +216,7 @@ static void DispPocess_Command_Handler(void)
   
    static uint16_t counter;
 
-   switch(pro_t.gKey_command_tag){
+   switch(flag_key){
 
    case  run_update_data:
       
@@ -331,6 +337,8 @@ static void DispPocess_Command_Handler(void)
 
 	case power_off_fan_pro:
 		power_off_fan_run();
+		
+	    
 
 	break;
 
@@ -350,7 +358,7 @@ static void DispPocess_Command_Handler(void)
 static void Power_On_Fun(void)
 {
    
-   pro_t.gPower_On = power_on;
+  
    ctl_t.gPtc_flag = 1;
    ctl_t.gAi_flag = 1;
    ctl_t.gPlasma_flag = 1;
@@ -398,7 +406,7 @@ static void Power_On_Fun(void)
 void Power_Off_Fun(void)
 {
 	 		 
-    pro_t.gPower_On = power_off;     
+     
 	SendData_PowerOnOff(0);
 
 	pro_t.temperature_set_flag = 0;
@@ -453,55 +461,7 @@ void power_off_fan_run(void)
 	}
 
 }
-/************************************************************************
-	*
-	*Function Name: static void Power_On_Fun(void)
-	*Function : power on
-	*Input Ref:NO
-	*Return Ref:No
-	*
-************************************************************************/
-static void Wifi_Link_Fun(void)
-{
-	#if 0
-	if(pro_t.gPower_On ==power_on){
-            send_times++;
-           if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
-            if(wifi_long_key!=send_times){
-                wifi_long_key=send_times;
-                
-        	    SendData_Set_Wifi(0x01);
-                HAL_Delay(1);
-                pro_t.gTimer_set_temp_times=0; //conflict with send temperatur value 
-                pro_t.gTimer_wifi_connect_counter=0;
-                pro_t.gTimer_wifi_led_blink=0;
-                 pro_t.wifi_connect_success_flag =0;
-                pro_t.wifi_receive_led_fast_led_flag=0; //adjust if mainboard receive of connect wifi of signal
-                pro_t.wifi_led_fast_blink_flag=1;
-                pro_t.key_add_dec_spec_flag=0;
-                
-            }
-            
-            if(pro_t.wifi_receive_led_fast_led_flag==1){
-              pro_t.gKey_command_tag = KEY_NULL;//WT.EDIT 2023.07.27
-            }
-            else{
-               pro_t.gKey_command_tag =LINK_WIFI_ITEM;
-               SendData_Set_Wifi(0x01);
-               HAL_Delay(1);
-             
 
-
-            }
-            }
-           }
-           else{
-
-            pro_t.gKey_command_tag = KEY_NULL;
-            pro_t.key_add_dec_spec_flag=0;
-           }
-#endif 
-}
 /************************************************************************
 	*
 	*Function Name: static void Power_On_Fun(void)
@@ -650,7 +610,7 @@ static void ADD_Key_Fun(void)
 				}	
 			}
         }
-         DisplayPanel_Ref_Handler();
+       //  DisplayPanel_Ref_Handler();
 }
 /************************************************************************
 	*
@@ -733,7 +693,7 @@ static void DEC_Key_Fun(void)
 	   	  }
 		}
 
-      DisplayPanel_Ref_Handler();
+  //    DisplayPanel_Ref_Handler();
      
 
 

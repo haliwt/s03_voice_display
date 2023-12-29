@@ -121,7 +121,7 @@ int main(void)
           Decode_Function();
                 
      }
-	else{
+	
 		
 			
 	     Key_value = ReadKey();
@@ -129,7 +129,7 @@ int main(void)
 		
 		Key_Handler(Key_value);
 		Display_Process_Handler();
-	}
+	
   }
   /* USER CODE END 3 */
 }
