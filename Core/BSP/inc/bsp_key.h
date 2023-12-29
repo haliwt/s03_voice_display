@@ -131,7 +131,7 @@ void Key_Set_Timer_Handler(uint8_t(*key_timer_handler)(void));
 
 void Power_Handler(uint8_t(*power_on_handler)(void));
 
-
+uint8_t ReadKey(void);
 #endif 
 
 
