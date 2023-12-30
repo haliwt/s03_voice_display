@@ -50,6 +50,8 @@ typedef enum
 {
   KEY_UP   = 0,
   KEY_DOWN = 1,
+  KEY_POWER_LONG_DOWN=0x81,
+  KEY_MODE_LONG_DOWN=0x82
 }KEYState_TypeDef;
 
 

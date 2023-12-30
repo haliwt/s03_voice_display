@@ -126,18 +126,17 @@ int main(void)
 
 	    if(VK36N4D_IC_StateRead()==KEY_DOWN){
            key_value_flag = 1;
-
 		}
 		else key_value_flag  =0;
-	   //Power_Key_Detected();
-	  // Key_value = ReadKey();
+	  
 	   
 	  	Power_Key_Detected();
 		Mode_Key_Detected();
 		ADD_Key_Detected();
 		DEC_Key_Detected();
-	   if(key_value_flag  ==0)
+	   if(key_value_flag  ==0){
 	       Display_Process_Handler();
+	   }
 	 }
 	
   }

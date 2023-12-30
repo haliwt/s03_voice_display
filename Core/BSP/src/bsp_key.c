@@ -497,12 +497,29 @@ KEYState_TypeDef POWER_KEY_StateRead(void)
     if(HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)==KEY_DOWN_LEVEL)
     {
       /* 等待按键弹开才退出按键扫描函数 */
-      while(HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)==KEY_DOWN_LEVEL);      
+      while(HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)==KEY_DOWN_LEVEL){
+
+         K1++;
+		 if(pro_t.gPower_On == power_on){
+
+		    if(K1 > 900000){
+                K1=0;
+				pro_t.long_key_flag =1;
+				return KEY_POWER_LONG_DOWN;
+
+			}
+
+		}
+
+
+	  };      
        /* 按键扫描完毕，确定按键被按下，返回按键被按下状态 */
+	  K1=0;
       return KEY_DOWN;
     }
   }
   /* 按键没被按下，返回没被按下状态 */
+  K1=0;
   return KEY_UP;
 }
 

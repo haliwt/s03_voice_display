@@ -254,7 +254,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 
 	 case 1:  //display works time + "temperature value " + "humidity value"
 	      
-
+         pro_t.long_key_flag =0;
 	      if(pro_t.gTimer_pro_ms > 20){ //200ms
 			 pro_t.gTimer_pro_ms =0;
 
@@ -795,7 +795,7 @@ static void Ptc_Temperature_Compare_Value(void)
 void Power_Key_Detected(void)
 {
     static uint8_t power_flag;
-	if(POWER_KEY_StateRead()==KEY_DOWN){
+	if(POWER_KEY_StateRead()==KEY_DOWN && pro_t.long_key_flag ==0){
 
 	       power_flag = power_flag ^ 0x01;
 
@@ -828,6 +828,17 @@ void Power_Key_Detected(void)
 
 
 	   }
+
+	if(POWER_KEY_StateRead()==KEY_POWER_LONG_DOWN && pro_t.long_key_flag ==1){
+
+        SendData_Set_Wifi(0x01);
+
+	    Key_Sound();
+        pro_t.wifi_led_fast_blink_flag=1;
+		//pro_t.long_key_flag =0;
+
+
+	}
 
 
 }
