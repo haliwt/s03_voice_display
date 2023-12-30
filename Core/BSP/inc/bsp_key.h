@@ -4,8 +4,9 @@
 
 
 #define INTERRUPT_KEY                0
-#define NORMAL_KEY                   1
+#define NORMAL_KEY                   0
 #define NORMAL_KEY_2                 1
+#define NORMAL_KEY_3                 0
 
 #define POWER_KEY_VALUE()            HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)
 

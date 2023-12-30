@@ -840,7 +840,7 @@ void Mode_Key_Detected(void)
 		if(ctl_t.gAi_flag == 0 ){
 		  pro_t.long_key_flag =0;
 		
-		  ctl_t.gAi_flag = 0;
+		  ctl_t.gAi_flag = 1;
 		  SendData_Set_Wifi(MODE_AI);
 		 //  Key_Sound();
 		 

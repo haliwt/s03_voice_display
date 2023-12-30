@@ -76,6 +76,7 @@ void Power_Handler(uint8_t(* power_on_handler)(void))
 	*
 	*
 **************************************************************/
+#if NORMAL_KEY_3
 uint8_t KEY_Scan(void)
 {
 
@@ -200,7 +201,7 @@ uint8_t KEY_Scan(void)
 }
 
 
-
+#endif 
 /********************************************************************
 *
 *Function Name:
@@ -382,9 +383,7 @@ uint8_t ReadKey(void)
 		//MODE_KEY
 		if(K2>495 ){//short time modes press 
             value2 = mode_id;
-			value1=0;
-		    value3 =0;
-			value4 =0;
+			
 
 		}
 		else{ 
@@ -394,9 +393,7 @@ uint8_t ReadKey(void)
 		//DEC_CONFIRM 
 		if(K3>495 ){//short time modes press 
             value3 = dec_key;
-			value1=0;
-		    value2 =0;
-			value4 =0;
+			
 
 		}
 		else{ 
@@ -407,9 +404,7 @@ uint8_t ReadKey(void)
 		//ADD_KEY
 		if(K4>495){//short time modes press 
 			value4 = add_key;
-			value1=0;
-		    value2 =0;
-			value3 =0;
+			
 		
 		}
 		else{ 
@@ -418,9 +413,7 @@ uint8_t ReadKey(void)
 
 		if(K1>495){ //KEY_FUN
 			value1 = power_id;	//short time power press ---power on 
-			value2=0;
-		    value3 =0;
-			value4 =0;
+			
 		}
 		else{
 			value1 = 0;
