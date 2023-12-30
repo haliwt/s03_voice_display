@@ -9,8 +9,8 @@ uint8_t outputBuf[8];
 static uint8_t transferSize;
 static uint8_t state;
 uint8_t inputBuf[MAX_BUFFER_SIZE];
-uint8_t voice_inputBuf[MAX_BUFFER_SIZE];
-uint8_t voice_outputBuf[MAX_BUFFER_SIZE];
+uint8_t voice_inputBuf[1];
+uint8_t voice_outputBuf[16];
 
 
 
@@ -147,7 +147,7 @@ void SendData_Time_Data(uint8_t tdata)
 *******************************************************************************/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    static uint8_t us2;
+    static uint8_t us2, us2_rx_flag ;
 	if(huart==&huart1) // Motor Board receive data (filter)
 	{
 		switch(state)
@@ -342,9 +342,18 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	//Voice USART 2 
 	if(huart==&huart2) // Motor Board receive data (filter)
 	{
-
+//      if(voice_inputBuf[0]==0xA5){
+//        us2_rx_flag =1;
+//		us2=0;
+//	  }
+//	  if(us2_rx_flag ==1){
       voice_outputBuf[us2]=voice_inputBuf[0];
 	  us2++;
+	  if(us2 == 16)us2=0;
+
+	  
+
+	  
 	 HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
 
 
