@@ -815,7 +815,7 @@ void Power_Key_Detected(void)
 		  else{
 
 	           pro_t.long_key_flag =0;
-			    pro_t.gKey_command_tag = power_off_fan_pro;
+			   pro_t.gKey_command_tag = power_off_fan_pro;
 			   pro_t.gPower_On = power_off;   
 	           SendData_PowerOnOff(0);
 	           Power_Off_Fun();
