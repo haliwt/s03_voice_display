@@ -136,6 +136,7 @@ void Key_Set_Timer_Handler(uint8_t(*key_timer_handler)(void));
 void Power_Handler(uint8_t(*power_on_handler)(void));
 
 uint8_t ReadKey(void);
+KEYState_TypeDef VK36N4D_IC_StateRead(void);
 
 KEYState_TypeDef POWER_KEY_StateRead(void);
 KEYState_TypeDef MODE_KEY_StateRead(void);

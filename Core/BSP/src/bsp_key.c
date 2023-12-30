@@ -451,6 +451,34 @@ uint8_t ReadKey(void)
 #endif 
 
 #if NORMAL_KEY_2
+
+/**
+  * 函数功能: 读取按键KEY1的状态
+  * 输入参数：无
+  * 返 回 值: KEY_DOWN：按键被按下；
+  *           KEY_UP  ：按键没被按下
+  * 说    明：无。
+  */
+KEYState_TypeDef VK36N4D_IC_StateRead(void)
+{
+  /* 读取此时按键值并判断是否是被按下状态，如果是被按下状态进入函数内 */
+  if(HAL_GPIO_ReadPin(VK36N4D_INT_GPIO_Port,VK36N4D_INT_Pin)==KEY_DOWN_LEVEL)
+  {
+    /* 延时一小段时间，消除抖动 */
+    HAL_Delay(10);
+    /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
+    if(HAL_GPIO_ReadPin(VK36N4D_INT_GPIO_Port,VK36N4D_INT_Pin)==KEY_DOWN_LEVEL)
+    {
+      /* 等待按键弹开才退出按键扫描函数 */
+     // while(HAL_GPIO_ReadPin(KEY_DEC_GPIO_Port,KEY_DEC_Pin)==KEY_DOWN_LEVEL);      
+       /* 按键扫描完毕，确定按键被按下，返回按键被按下状态 */
+      return KEY_DOWN;
+    }
+  }
+  /* 按键没被按下，返回没被按下状态 */
+  return KEY_UP;
+}
+
 /**
   * 函数功能: 读取按键KEY1的状态
   * 输入参数：无

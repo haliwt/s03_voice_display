@@ -30,7 +30,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-uint8_t Key_value;
+uint8_t key_value_flag;
 
 /* USER CODE END PTD */
 
@@ -124,15 +124,20 @@ int main(void)
      }
 	 else{
 
-	 
+	    if(VK36N4D_IC_StateRead()==KEY_DOWN){
+           key_value_flag = 1;
+
+		}
+		else key_value_flag  =0;
 	   //Power_Key_Detected();
 	  // Key_value = ReadKey();
+	   
 	  	Power_Key_Detected();
 		Mode_Key_Detected();
 		ADD_Key_Detected();
 		DEC_Key_Detected();
-	 //  Key_Handler(Key_value);
-	   Display_Process_Handler();
+	   if(key_value_flag  ==0)
+	       Display_Process_Handler();
 	 }
 	
   }
