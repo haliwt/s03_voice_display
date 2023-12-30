@@ -74,10 +74,10 @@ typedef struct {
    uint8_t ptc_warning;
    uint8_t fan_warning;
 
-   uint8_t gSet_timer_value;
+   
    uint8_t gSet_temperature_value;
    uint8_t gSet_temperature_value_flag ;
-   
+   int8_t gSet_timer_value;
  
  
 

@@ -374,8 +374,9 @@ void DisplayPanel_Ref_Handler(void)
 				disp_t.disp_timer_time_minutes = 0;
 				
 				disp_t.gTimer_disp_timer_timing=0;
-			if(disp_t.disp_timer_time_hours !=0){	 
-			      disp_t.timer_timing_define_flag = timing_success;
+			if(disp_t.disp_timer_time_hours !=0){
+				  ctl_t.gSet_timer_value = disp_t.disp_timer_time_hours;
+			      disp_t.timer_timing_define_flag = timing_success; //
 				  disp_t.disp_timer_or_works_timing = timer_time;
 				 
 			}

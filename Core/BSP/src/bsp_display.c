@@ -88,51 +88,97 @@ static void Display_Works_Time_Handler(void)
 *************************************************************/
 static void Display_Timer_Time_Handler(void)
 {
-	 if(disp_t.gTimer_disp_timer_timing  > 59){ //
+
+     switch(disp_t.timer_timing_define_flag){
+
+       case timing_success:
+
+	    
+
+	   	 if(disp_t.gTimer_disp_timer_timing  > 59){ //
+
+		 	 disp_t.gTimer_disp_timer_timing  =0;
+			 disp_t.disp_timer_time_minutes--;
+		     if( disp_t.disp_timer_time_minutes < 0){
+			 	
+				disp_t.disp_timer_time_minutes =59;
+				ctl_t.gSet_timer_value --;
+				if(ctl_t.gSet_timer_value <0 ){
+				disp_t.disp_timer_time_minutes=0;
+
+				pro_t.long_key_flag =0;
+				pro_t.gKey_command_tag = power_off_fan_pro;
+				pro_t.gPower_On = power_off;   
+				SendData_PowerOnOff(0);
+				Power_Off_Fun();
+				LCD_Backlight_Off();
+				// Key_Sound();
+				run_process_step=0xff;
+
+				}
+		     }
+	   	}
+
+		 lcd_t.number5_low=(ctl_t.gSet_timer_value  ) /10;
+		 lcd_t.number5_high =(ctl_t.gSet_timer_value ) /10;
+		 
+		 lcd_t.number6_low = (ctl_t.gSet_timer_value ) %10;;
+		 lcd_t.number6_high = (ctl_t.gSet_timer_value) %10;
+		 
+		 lcd_t.number7_low = ( disp_t.disp_timer_time_minutes )/10;
+		 lcd_t.number7_high = ( disp_t.disp_timer_time_minutes)/10;
+		 
+		 lcd_t.number8_low = ( disp_t.disp_timer_time_minutes)%10;
+		 lcd_t.number8_high = ( disp_t.disp_timer_time_minutes )%10;
+		    
+	   break;
+
+	   case works_time:
+
+
+	  if(disp_t.gTimer_disp_timer_timing  > 59){ //
         
   		 disp_t.gTimer_disp_timer_timing  =0;
 		 disp_t.disp_timer_time_minutes--;
 	    if( disp_t.disp_timer_time_minutes < 0){
-		     disp_t.disp_timer_time_hours -- ;
-			 disp_t.disp_timer_time_minutes =59;
-           
+			
+			disp_t.disp_timer_time_hours -- ;
+			disp_t.disp_timer_time_minutes =59;
+
 			if( disp_t.disp_timer_time_hours < 0 ){
 
+			disp_t.disp_timer_time_hours =0;
+			disp_t.disp_timer_time_minutes =0;
+			//run_t.display_set_timer_timing=beijing_time;
+			disp_t.timer_timing_define_flag = works_time;
+			disp_t.disp_timer_or_works_timing = works_time;
+			ctl_t.gAi_flag = 1;//run_t.gModel=1;
+			SendData_Set_Command(MODE_AI_NO_BUZZER);
 
-			  if(disp_t.timer_timing_define_flag == timing_success){
-			    disp_t.disp_timer_time_minutes=0;
-				//disp_t.disp_timer_or_works_timing = timer_time;
-			
-				pro_t.gKey_value = power_off;
-				Power_Off_Fun();
-			}
-			else{ //don't set timer timing to be changed "works time modes"
-     
-                  disp_t.disp_timer_time_hours =0;
-                 disp_t.disp_timer_time_minutes =0;
-			     //run_t.display_set_timer_timing=beijing_time;
-			     disp_t.timer_timing_define_flag = works_time;
-				 disp_t.disp_timer_or_works_timing = works_time;
-                 ctl_t.gAi_flag = 1;//run_t.gModel=1;
-				 SendData_Set_Command(MODE_AI_NO_BUZZER);
-            }
-	      }
-                            
-                
-        }
-    }
+				
+		}
+	    }
+
+	  }
+
             
-    lcd_t.number5_low=(disp_t.disp_timer_time_hours  ) /10;
-	lcd_t.number5_high =(disp_t.disp_timer_time_hours ) /10;
+	    lcd_t.number5_low=(disp_t.disp_timer_time_hours  ) /10;
+		lcd_t.number5_high =(disp_t.disp_timer_time_hours ) /10;
 
-	lcd_t.number6_low = (disp_t.disp_timer_time_hours  ) %10;;
-	lcd_t.number6_high = (disp_t.disp_timer_time_hours  ) %10;
+		lcd_t.number6_low = (disp_t.disp_timer_time_hours  ) %10;;
+		lcd_t.number6_high = (disp_t.disp_timer_time_hours  ) %10;
 
-	lcd_t.number7_low = ( disp_t.disp_timer_time_minutes )/10;
-	lcd_t.number7_high = ( disp_t.disp_timer_time_minutes)/10;
+		lcd_t.number7_low = ( disp_t.disp_timer_time_minutes )/10;
+		lcd_t.number7_high = ( disp_t.disp_timer_time_minutes)/10;
 
-	lcd_t.number8_low = ( disp_t.disp_timer_time_minutes)%10;
-	lcd_t.number8_high = ( disp_t.disp_timer_time_minutes )%10;
+		lcd_t.number8_low = ( disp_t.disp_timer_time_minutes)%10;
+		lcd_t.number8_high = ( disp_t.disp_timer_time_minutes )%10;
+
+	
+
+	 break;
+
+	  }
 
 }
 /*************************************************************
@@ -195,7 +241,7 @@ void Timing_Handler(void)
     
     case timer_time:
 		 
-	//  Display_Timer_Time_Handler();
+	  Display_Timer_Time_Handler();
 			
 	  Works_Time_Continue(); //still recoder "works time"
 
@@ -249,6 +295,7 @@ static void Works_Time_Continue(void)
 *************************************************************************/
 void Setup_Timer_Times(void)
 {
+
 	if(disp_t.gTimer_disp_timer_timing> 59){ //
         
         disp_t.gTimer_disp_timer_timing=0;
@@ -291,6 +338,8 @@ void Setup_Timer_Times(void)
 
 	lcd_t.number8_low = (disp_t.disp_timer_time_minutes)%10;
 	lcd_t.number8_high = (disp_t.disp_timer_time_minutes )%10;
+
+	}
 }
 /*************************************************************************
 	*
