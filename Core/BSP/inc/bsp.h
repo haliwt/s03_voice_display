@@ -46,14 +46,14 @@ typedef enum{
 
    power_off,
    power_on,
-   power_id,
    wifi_fun_on,
    set_timer_fun_on,
    mode_id,
    mode_ai,
    mode_no_ai,
    add_key,
-   dec_key
+   dec_key,
+   power_id
    
 
 }key_input_state;
@@ -118,6 +118,13 @@ void Key_Handler(uint8_t keyvalue);
 void Display_Process_Handler(void);
 
 void Power_Off_Fun(void);
+
+void Power_Key_Detected(void);
+void Mode_Key_Detected(void);
+void ADD_Key_Detected(void);
+void DEC_Key_Detected(void);
+
+
 
 
 

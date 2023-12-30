@@ -31,6 +31,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 uint8_t Key_value;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -101,7 +102,7 @@ int main(void)
   Voice_Init();
   HAL_TIM_Base_Start_IT(&htim17);
   HAL_UART_Receive_IT(&huart1,inputBuf,1);
-  HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
+ // HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
   pro_t.gKey_command_tag = power_off_fan_pro;
 
   Feed_Dog();
@@ -121,14 +122,18 @@ int main(void)
           Decode_Function();
                 
      }
-	
-		
-			
-	     Key_value = ReadKey();
-        	
-		
-		Key_Handler(Key_value);
-		Display_Process_Handler();
+	 else{
+
+	 
+	   //Power_Key_Detected();
+	  // Key_value = ReadKey();
+	  	Power_Key_Detected();
+		Mode_Key_Detected();
+		ADD_Key_Detected();
+		DEC_Key_Detected();
+	 //  Key_Handler(Key_value);
+	   Display_Process_Handler();
+	 }
 	
   }
   /* USER CODE END 3 */

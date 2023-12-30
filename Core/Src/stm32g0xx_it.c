@@ -168,8 +168,8 @@ void SysTick_Handler(void)
 //
 //  /* USER CODE END EXTI4_15_IRQn 0 */
 //  HAL_GPIO_EXTI_IRQHandler(KEY_POWER_Pin);
-//  HAL_GPIO_EXTI_IRQHandler(KEY_MODE_Pin);
-//  HAL_GPIO_EXTI_IRQHandler(KEY_DEC_Pin);
+// // HAL_GPIO_EXTI_IRQHandler(KEY_MODE_Pin);
+// // HAL_GPIO_EXTI_IRQHandler(KEY_DEC_Pin);
 // // HAL_GPIO_EXTI_IRQHandler(VK36N4D_INT_Pin);
 //  /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 //

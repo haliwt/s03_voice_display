@@ -5,8 +5,9 @@
 
 #define INTERRUPT_KEY                0
 #define NORMAL_KEY                   1
+#define NORMAL_KEY_2                 1
 
-#define POWER_KEY_VALUE()            HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port ,KEY_POWER_Pin)
+#define POWER_KEY_VALUE()            HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)
 
 #define MODE_KEY_VALUE()             HAL_GPIO_ReadPin(KEY_MODE_GPIO_Port,KEY_MODE_Pin)
 
@@ -16,6 +17,7 @@
 
 #define VK36N4D_INT_VALUE()          HAL_GPIO_ReadPin(VK36N4D_INT_GPIO_Port,VK36N4D_INT_Pin) 
 
+#define KEY_DOWN_LEVEL               1  /* ¸ù¾ÝÔ­ÀíÍ¼Éè¼Æ£¬KEY2°´ÏÂÊ±Òý½ÅÎªµÍµçÆ½£¬ËùÒÔÕâÀïÉèÖÃÎª0 */
 
 
 #define		_KEY_ALL_OFF				 0XFF
@@ -48,6 +50,7 @@ typedef enum
   KEY_UP   = 0,
   KEY_DOWN = 1,
 }KEYState_TypeDef;
+
 
 
 
@@ -132,6 +135,14 @@ void Key_Set_Timer_Handler(uint8_t(*key_timer_handler)(void));
 void Power_Handler(uint8_t(*power_on_handler)(void));
 
 uint8_t ReadKey(void);
+
+KEYState_TypeDef POWER_KEY_StateRead(void);
+KEYState_TypeDef MODE_KEY_StateRead(void);
+KEYState_TypeDef ADD_KEY_StateRead(void);
+KEYState_TypeDef DEC_KEY_StateRead(void);
+
+
+
 #endif 
 
 

@@ -78,39 +78,39 @@ void Key_Handler(uint8_t key_value)
       static uint8_t power_flag;
        switch(key_value){
 
-	   case power_id: //power off
-
-	       power_flag = power_flag ^ 0x01;
-
-	      if(power_flag ==1){
-		  	 pro_t.gKey_command_tag = run_update_data;
-			 pro_t.gPower_On = power_on;   
-			run_process_step=0;
-            pro_t.long_key_flag =0;
-           
-			SendData_PowerOnOff(1);
-		    Power_On_Fun();
-			LCD_Backlight_On();
-			Key_Sound();
-
-
-		  }
-		  else{
-
-	           pro_t.long_key_flag =0;
-			    pro_t.gKey_command_tag = power_off_fan_pro;
-			   pro_t.gPower_On = power_off;   
-	           SendData_PowerOnOff(0);
-	           Power_Off_Fun();
-			   LCD_Backlight_Off();
-		       Key_Sound();
-			   run_process_step=0xff;
-			  
-			  
-           }
-	       
-           key_value =0xff;     
-        break;
+//	   case power_id: //power off
+//
+//	       power_flag = power_flag ^ 0x01;
+//
+//	      if(power_flag ==1){
+//		  	 pro_t.gKey_command_tag = run_update_data;
+//			 pro_t.gPower_On = power_on;   
+//			run_process_step=0;
+//            pro_t.long_key_flag =0;
+//           
+//			SendData_PowerOnOff(1);
+//		    Power_On_Fun();
+//			LCD_Backlight_On();
+//			//Key_Sound();
+//
+//
+//		  }
+//		  else{
+//
+//	           pro_t.long_key_flag =0;
+//			    pro_t.gKey_command_tag = power_off_fan_pro;
+//			   pro_t.gPower_On = power_off;   
+//	           SendData_PowerOnOff(0);
+//	           Power_Off_Fun();
+//			   LCD_Backlight_Off();
+//		      // Key_Sound();
+//			   run_process_step=0xff;
+//			  
+//			  
+//           }
+//	       
+//           key_value =0xff;     
+//        break;
 
        case wifi_fun_on:
 	   	pro_t.long_key_flag =0;
@@ -136,7 +136,7 @@ void Key_Handler(uint8_t key_value)
 	  break;
 
 
-        case mode_id:
+        case mode_id: //5
 			
 		 if(ctl_t.gAi_flag == 0 ){
 		  pro_t.long_key_flag =0;
@@ -572,6 +572,7 @@ static void ADD_Key_Fun(void)
 				
 				lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
                 pro_t.temperature_set_flag=1;  //set temperature value flag
+                DisplayPanel_Ref_Handler();
 				
                break;
 
@@ -605,7 +606,7 @@ static void ADD_Key_Fun(void)
 					lcd_t.number8_low = temp_bit_1_minute;
 					lcd_t.number8_high = temp_bit_1_minute;
 
-		
+					DisplayPanel_Ref_Handler();
 				break;
 				}	
 			}
@@ -649,6 +650,7 @@ static void DEC_Key_Fun(void)
 
 			 lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led"
 			pro_t.temperature_set_flag=1;  //set temperature value flag
+			DisplayPanel_Ref_Handler();
 		    break;
 
 			case set_timer_timing: //timer timing set "decrease -down"
@@ -685,7 +687,7 @@ static void DEC_Key_Fun(void)
 
 					lcd_t.number8_low = temp_bit_1_minute;
 					lcd_t.number8_high = temp_bit_1_minute;
-                    
+                    DisplayPanel_Ref_Handler();
 
              break;
 
@@ -788,5 +790,96 @@ static void Ptc_Temperature_Compare_Value(void)
      }
 
 }
+
+
+void Power_Key_Detected(void)
+{
+    static uint8_t power_flag;
+	if(POWER_KEY_StateRead()==KEY_DOWN){
+
+	       power_flag = power_flag ^ 0x01;
+
+	      if(power_flag ==1){
+		  	 pro_t.gKey_command_tag = run_update_data;
+			 pro_t.gPower_On = power_on;   
+			run_process_step=0;
+            pro_t.long_key_flag =0;
+           
+			SendData_PowerOnOff(1);
+		    Power_On_Fun();
+			LCD_Backlight_On();
+			//Key_Sound();
+
+
+		  }
+		  else{
+
+	           pro_t.long_key_flag =0;
+			    pro_t.gKey_command_tag = power_off_fan_pro;
+			   pro_t.gPower_On = power_off;   
+	           SendData_PowerOnOff(0);
+	           Power_Off_Fun();
+			   LCD_Backlight_Off();
+		      // Key_Sound();
+			   run_process_step=0xff;
+			  
+			  
+           }
+
+
+	   }
+
+
+}
+
+
+void Mode_Key_Detected(void)
+{
+	if(MODE_KEY_StateRead() == KEY_DOWN){
+
+		if(ctl_t.gAi_flag == 0 ){
+		  pro_t.long_key_flag =0;
+		
+		  ctl_t.gAi_flag = 0;
+		  SendData_Set_Wifi(MODE_AI);
+		 //  Key_Sound();
+		 
+		
+		 }
+          else{
+		  	 pro_t.long_key_flag =0;
+			  ctl_t.gAi_flag =0;
+			  SendData_Set_Wifi(MODE_TIMER);
+			//  Key_Sound();
+          }
+
+
+
+	} 
+
+
+}
+
+
+void ADD_Key_Detected(void)
+{
+	if(ADD_KEY_StateRead()==KEY_DOWN){
+
+		Key_Sound();
+		ADD_Key_Fun();
+    }
+
+
+}
+void DEC_Key_Detected(void)
+{
+	 if(DEC_KEY_StateRead()==KEY_DOWN){
+
+	 Key_Sound();
+		 DEC_Key_Fun();
+	 }
+
+}
+
 
 

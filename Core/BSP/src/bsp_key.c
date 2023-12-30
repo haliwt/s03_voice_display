@@ -327,31 +327,32 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 uint8_t ReadKey(void)
 {
 
-	if(POWER_KEY_VALUE() == KEY_DOWN && pro_t.long_key_flag ==0){ //KEY1 =POWER_KEY ,KEY2 = MODES
-			cnt = 0;
-			pro_t.long_key_flag =0;
-			K1++;
-			 if(K1 > 390000 && pro_t.gPower_On ==power_on){
-	               K1= 0;
-				// ctl_t.gWifi_flag =1;
-				  pro_t.long_key_flag =1;
-				  pro_t.gKey_value = wifi_fun_on;
-	              return  0x81;
-	              
-			}
-	}
-	else if(MODE_KEY_VALUE() ==KEY_DOWN  && pro_t.long_key_flag ==0 && pro_t.gPower_On == power_on){
+//	if(POWER_KEY_VALUE() == KEY_DOWN && pro_t.long_key_flag ==0){ //KEY1 =POWER_KEY ,KEY2 = MODES
+//			cnt = 0;
+//			pro_t.long_key_flag =0;
+//			K1++;
+//			if(K1 > 1990000 && pro_t.gPower_On ==power_on){
+//	               K1= 0;
+//				// ctl_t.gWifi_flag =1;
+//				  pro_t.long_key_flag =1;
+//				  pro_t.gKey_value = wifi_fun_on;
+//	              return   wifi_fun_on;
+//	              
+//			}
+//	}
+//	else
+		if(MODE_KEY_VALUE() ==KEY_DOWN  && pro_t.long_key_flag ==0 && pro_t.gPower_On == power_on){
 	  		cnt = 0;
 			K2++;   //Confirm_key press
 		
 			pro_t.long_key_flag =0;
-			if(K2 > 390000 && pro_t.gPower_On ==power_on){
+			if(K2 > 1990000 && pro_t.gPower_On ==power_on){
 	              K2=0;
 				  cnt = 0;
 				 
 				  pro_t.long_key_flag =1;
 				  
-				  return 0x82;
+				  return set_timer_fun_on;
 	            }
 
 
@@ -369,24 +370,21 @@ uint8_t ReadKey(void)
 
       && DEC_KEY_VALUE()==0 && ADD_KEY_VALUE()==0 && pro_t.long_key_flag ==0){ //oneself key 
 		cnt++;
-		if(cnt<100){ //按键松开消抖,一定要大于短按键次数 > 20
+		if(cnt<500){ //按键松开消抖,一定要大于短按键次数 > 20
 		    return 0; 
 
 		}
 		
 		cnt = 0;//
 		//POWER_KEY
-		if(K1>95){ //KEY_FUN
-			value1 = power_id;	//short time power press ---power on 
-		}
-		else{
-			value1 = 0;
-
-		}
+		
 
 		//MODE_KEY
-		if(K2>95 ){//short time modes press 
+		if(K2>495 ){//short time modes press 
             value2 = mode_id;
+			value1=0;
+		    value3 =0;
+			value4 =0;
 
 		}
 		else{ 
@@ -394,8 +392,11 @@ uint8_t ReadKey(void)
 		}
 
 		//DEC_CONFIRM 
-		if(K3>95 ){//short time modes press 
+		if(K3>495 ){//short time modes press 
             value3 = dec_key;
+			value1=0;
+		    value2 =0;
+			value4 =0;
 
 		}
 		else{ 
@@ -404,12 +405,26 @@ uint8_t ReadKey(void)
 
 		
 		//ADD_KEY
-		if(K4>95){//short time modes press 
+		if(K4>495){//short time modes press 
 			value4 = add_key;
+			value1=0;
+		    value2 =0;
+			value3 =0;
 		
 		}
 		else{ 
 		  value4 = 0;
+		}
+
+		if(K1>495){ //KEY_FUN
+			value1 = power_id;	//short time power press ---power on 
+			value2=0;
+		    value3 =0;
+			value4 =0;
+		}
+		else{
+			value1 = 0;
+
 		}
 
 		
@@ -442,6 +457,119 @@ uint8_t ReadKey(void)
 }
 #endif 
 
+#if NORMAL_KEY_2
+/**
+  * 函数功能: 读取按键KEY1的状态
+  * 输入参数：无
+  * 返 回 值: KEY_DOWN：按键被按下；
+  *           KEY_UP  ：按键没被按下
+  * 说    明：无。
+  */
+KEYState_TypeDef POWER_KEY_StateRead(void)
+{
+  /* 读取此时按键值并判断是否是被按下状态，如果是被按下状态进入函数内 */
+  if(HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)==KEY_DOWN_LEVEL)
+  {
+    /* 延时一小段时间，消除抖动 */
+    HAL_Delay(20);
+    /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
+    if(HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)==KEY_DOWN_LEVEL)
+    {
+      /* 等待按键弹开才退出按键扫描函数 */
+      while(HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)==KEY_DOWN_LEVEL);      
+       /* 按键扫描完毕，确定按键被按下，返回按键被按下状态 */
+      return KEY_DOWN;
+    }
+  }
+  /* 按键没被按下，返回没被按下状态 */
+  return KEY_UP;
+}
+
+/**
+  * 函数功能: 读取按键KEY1的状态
+  * 输入参数：无
+  * 返 回 值: KEY_DOWN：按键被按下；
+  *           KEY_UP  ：按键没被按下
+  * 说    明：无。
+  */
+
+KEYState_TypeDef MODE_KEY_StateRead(void)
+{
+  /* 读取此时按键值并判断是否是被按下状态，如果是被按下状态进入函数内 */
+  if(HAL_GPIO_ReadPin(KEY_MODE_GPIO_Port,KEY_MODE_Pin)==KEY_DOWN_LEVEL)
+  {
+    /* 延时一小段时间，消除抖动 */
+    HAL_Delay(20);
+    /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
+    if(HAL_GPIO_ReadPin(KEY_MODE_GPIO_Port,KEY_MODE_Pin)==KEY_DOWN_LEVEL)
+    {
+      /* 等待按键弹开才退出按键扫描函数 */
+      while(HAL_GPIO_ReadPin(KEY_MODE_GPIO_Port,KEY_MODE_Pin)==KEY_DOWN_LEVEL);      
+       /* 按键扫描完毕，确定按键被按下，返回按键被按下状态 */
+      return KEY_DOWN;
+    }
+  }
+  /* 按键没被按下，返回没被按下状态 */
+  return KEY_UP;
+}
+
+/**
+  * 函数功能: 读取按键KEY1的状态
+  * 输入参数：无
+  * 返 回 值: KEY_DOWN：按键被按下；
+  *           KEY_UP  ：按键没被按下
+  * 说    明：无。
+  */
+
+KEYState_TypeDef ADD_KEY_StateRead(void)
+{
+  /* 读取此时按键值并判断是否是被按下状态，如果是被按下状态进入函数内 */
+  if(HAL_GPIO_ReadPin(KEY_ADD_GPIO_Port,KEY_ADD_Pin)==KEY_DOWN_LEVEL)
+  {
+    /* 延时一小段时间，消除抖动 */
+    HAL_Delay(20);
+    /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
+    if(HAL_GPIO_ReadPin(KEY_ADD_GPIO_Port,KEY_ADD_Pin)==KEY_DOWN_LEVEL)
+    {
+      /* 等待按键弹开才退出按键扫描函数 */
+      while(HAL_GPIO_ReadPin(KEY_ADD_GPIO_Port,KEY_ADD_Pin)==KEY_DOWN_LEVEL);      
+       /* 按键扫描完毕，确定按键被按下，返回按键被按下状态 */
+      return KEY_DOWN;
+    }
+  }
+  /* 按键没被按下，返回没被按下状态 */
+  return KEY_UP;
+}
+
+/**
+  * 函数功能: 读取按键KEY1的状态
+  * 输入参数：无
+  * 返 回 值: KEY_DOWN：按键被按下；
+  *           KEY_UP  ：按键没被按下
+  * 说    明：无。
+  */
+
+KEYState_TypeDef DEC_KEY_StateRead(void)
+{
+  /* 读取此时按键值并判断是否是被按下状态，如果是被按下状态进入函数内 */
+  if(HAL_GPIO_ReadPin(KEY_DEC_GPIO_Port,KEY_DEC_Pin)==KEY_DOWN_LEVEL)
+  {
+    /* 延时一小段时间，消除抖动 */
+    HAL_Delay(20);
+    /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
+    if(HAL_GPIO_ReadPin(KEY_DEC_GPIO_Port,KEY_DEC_Pin)==KEY_DOWN_LEVEL)
+    {
+      /* 等待按键弹开才退出按键扫描函数 */
+      while(HAL_GPIO_ReadPin(KEY_DEC_GPIO_Port,KEY_DEC_Pin)==KEY_DOWN_LEVEL);      
+       /* 按键扫描完毕，确定按键被按下，返回按键被按下状态 */
+      return KEY_DOWN;
+    }
+  }
+  /* 按键没被按下，返回没被按下状态 */
+  return KEY_UP;
+}
 
 
+
+#endif 
 
