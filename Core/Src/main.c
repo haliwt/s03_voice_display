@@ -130,7 +130,7 @@ int main(void)
 		else key_value_flag  =0;
 	  
 	   
-	  	Power_Key_Detected();
+	    Power_Key_Detected();
 		Mode_Key_Detected();
 		ADD_Key_Detected();
 		DEC_Key_Detected();

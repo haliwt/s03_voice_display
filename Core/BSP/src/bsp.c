@@ -23,7 +23,7 @@ static void Mode_Ai_Fun(void);
 static void ADD_Key_Fun(void);
 
 static void DEC_Key_Fun(void);
-static void Mode_Long_Key_Fun(void);
+
 
 
 
@@ -192,8 +192,6 @@ void Display_Process_Handler(void)
      
 
 	Voice_Decoder_Handler();
- 
-
 	DispPocess_Command_Handler(pro_t.gKey_command_tag);
 	USART1_Cmd_Error_Handler();
 	
@@ -507,7 +505,7 @@ static void Mode_Ai_Fun(void)
 	*Return Ref:No
 	*
 ************************************************************************/
-static void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_key:
+void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_key:
 {
 	  if(pro_t.gPower_On ==power_on){
 	   if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
@@ -846,7 +844,7 @@ void Power_Key_Detected(void)
 
 void Mode_Key_Detected(void)
 {
-	if(MODE_KEY_StateRead() == KEY_DOWN){
+	if(MODE_KEY_StateRead() == KEY_DOWN && pro_t.long_key_flag ==0){
 
 		if(ctl_t.gAi_flag == 0 ){
 		  pro_t.long_key_flag =0;
@@ -867,6 +865,13 @@ void Mode_Key_Detected(void)
 
 
 	} 
+
+	if(MODE_KEY_StateRead()==KEY_MODE_LONG_DOWN && pro_t.long_key_flag ==1){
+
+       Mode_Long_Key_Fun();
+
+
+	}
 
 
 }

@@ -454,15 +454,9 @@ void Display_Voice_Set_Timer_Value(void)
 	if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
 	
 
-		   ctl_t.gAi_flag =0;
-		   pro_t.setup_timer_timing_item=timer_time;
-		 
-		   pro_t.gTimer_key_timing=0; //按键退出的限制，4秒以内
-		   pro_t.Timer_mode_flag=1; //set timer timing enable,
-	
+		  Mode_Long_Key_Fun();
+
 		   
-		   
-		   SendData_Set_Wifi(MODE_TIMER);             
 		//disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
 		if(disp_t.disp_timer_time_hours > 24){ //if(pro_t.dispTime_minutes > 59){
 

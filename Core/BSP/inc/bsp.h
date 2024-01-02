@@ -124,7 +124,7 @@ void Mode_Key_Detected(void);
 void ADD_Key_Detected(void);
 void DEC_Key_Detected(void);
 
-
+void Mode_Long_Key_Fun(void);
 
 
 
