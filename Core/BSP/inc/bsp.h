@@ -100,7 +100,7 @@ typedef struct{
 	uint8_t gTimer_pro_temp_delay ;
 	uint8_t gTimer_wifi_connect_counter;
 	uint8_t gTimer_key_timing;
-	uint8_t gTimer_pro_disp;
+
 	uint8_t gTimer_pro_fan;
 	uint8_t gTimer_usart_error;
 	uint8_t gTimer_pro_ms;

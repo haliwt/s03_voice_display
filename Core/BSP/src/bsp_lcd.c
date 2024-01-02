@@ -364,18 +364,19 @@ void DisplayPanel_Ref_Handler(void)
 	     
        if(lcd_t.gTimer_digital5678_ms > 3){ //4
             lcd_t.gTimer_digital5678_ms=0;
-     
+	   
 		   if(pro_t.gTimer_key_timing > 3){ //4
 
 		        pro_t.gTimer_mode_flag = 0; //return to default "ADD and DEC of key is temparture value"
-				disp_t.gTimer_disp_timer_timing=0;
 		   
 			if(disp_timer_deault!=disp_t.set_timer_timing_value_chaned_flag){
 				  disp_timer_deault = disp_t.set_timer_timing_value_chaned_flag;
-				  ctl_t.gSet_timer_value = disp_t.disp_timer_time_hours;
+				//  ctl_t.gSet_timer_value = disp_t.disp_timer_time_hours;
 			      disp_t.timer_timing_define_flag = timing_success; 
 				  ctl_t.gAi_flag = timer_time;
-				  disp_t.disp_timer_time_minutes = 0;
+				  ctl_t.set_timer_minutes = 0;// disp_t.disp_timer_time_minutes = 0;
+				  ctl_t.gTimer_ctl_timer_time=0;
+				  pro_t.gTimer_pro_disp_timer=40;// at once be changed "timer timing value"
 				 
 			}
 			

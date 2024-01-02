@@ -226,26 +226,13 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 
 			pro_t.ack_power_on_sig=0; 
 			Lcd_PowerOn_Fun();
-//		    Display_Temperature_Humidity_Value_Handler();
-//		    Timing_Handler();
+
 	       
             run_process_step=1;
 
-		//}
-//		else{
-//		  counter++ ;
-//		  Lcd_PowerOn_Fun();
-//          SendData_PowerOnOff(1);
-		  Display_Temperature_Humidity_Value_Handler();
-//		  Timing_Handler();
-//
-//		}
-//        if(counter >10000 && counter < 12000 ){
-//			
-//
-//             Error_Sound();  //beep is alarm sound
-//
-//		}
+
+		  Display_Power_On_Works_Time();
+
 
 	 break;
 
@@ -258,16 +245,11 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 		     Display_Panel_Action_Handler();
 			 
           }
-	  
-	      if(pro_t.gTimer_pro_disp > 56 ){
-		  	pro_t.gTimer_pro_disp=0;
-	 	    Display_Temperature_Humidity_Value_Handler();
-
-	      }
+	
 
 		  if(pro_t.gTimer_pro_disp_timer > 37){ //37s 
 		  	pro_t.gTimer_pro_disp_timer =0;
-		    Timing_Handler();
+		    Display_Works_Or_Timer_times_Handler();
 
 		  }
 
@@ -288,7 +270,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 
 	 case 2: //set timer times pro
      run_process_step=3;
-	 if(pro_t.gTimer_pro_disp_ms > 3){ //200ms
+	 if(pro_t.gTimer_pro_disp_ms > 3){ //40ms
 			pro_t.gTimer_pro_disp_ms=0;
 			DisplayPanel_Ref_Handler();
        }
@@ -373,7 +355,7 @@ static void Power_On_Fun(void)
 	 disp_t.disp_timer_time_minutes =0;
 
 
-	 disp_t.timer_timing_define_flag = 0;
+	 disp_t.timer_timing_define_flag = works_time;
 	
 
 	 
@@ -414,7 +396,9 @@ void Power_Off_Fun(void)
 
 	disp_t.disp_timer_time_hours =0;
 	disp_t.disp_timer_time_minutes =0;
-	disp_t.timer_timing_define_flag = 0;
+
+	ctl_t.gSet_timer_value =0;
+
 	
 
 	ctl_t.ptc_warning = 0;
@@ -537,6 +521,8 @@ static void ADD_Key_Fun(void)
 	 if(pro_t.gPower_On ==power_on){
 
 		   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
+
+			SendData_Buzzer();
 		
 			switch(pro_t.gTimer_mode_flag){
 
@@ -572,16 +558,17 @@ static void ADD_Key_Fun(void)
 					pro_t.gTimer_key_timing =0;
                     disp_t.set_timer_timing_value_chaned_flag++;
 			   		if(disp_t.set_timer_timing_value_chaned_flag > 254 ) disp_t.set_timer_timing_value_chaned_flag=0;
-					disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
-				    if(disp_t.disp_timer_time_hours > 24){ //if(pro_t.dispTime_minutes > 59){
+					
+					ctl_t.gSet_timer_value ++ ;//disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
+				    if(ctl_t.gSet_timer_value  > 24){ //if(pro_t.dispTime_minutes > 59){
 
-		                 disp_t.disp_timer_time_hours=0;//pro_t.dispTime_hours =0;
+		                 ctl_t.gSet_timer_value =0;//pro_t.dispTime_hours =0;
 		                
 
 					}
 				
-                    temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
-					temp_bit_1_hours = disp_t.disp_timer_time_hours %10;
+                    temp_bit_2_hours = ctl_t.gSet_timer_value  /10 ;
+					temp_bit_1_hours = ctl_t.gSet_timer_value  %10;
                  
 					temp_bit_2_minute =0;
 					temp_bit_1_minute =0;
@@ -620,6 +607,8 @@ static void DEC_Key_Fun(void)
 	uint8_t temp_bit_2_minute=0,temp_bit_1_minute=0;
 	if(pro_t.gPower_On ==power_on){
 	   	if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
+
+			SendData_Buzzer();
 	   	
 	     switch(pro_t.gTimer_mode_flag){
 
@@ -651,37 +640,33 @@ static void DEC_Key_Fun(void)
 				pro_t.gTimer_key_timing =0;
                 disp_t.set_timer_timing_value_chaned_flag--;
 			    if(disp_t.set_timer_timing_value_chaned_flag==0)disp_t.set_timer_timing_value_chaned_flag=255;
-				disp_t.disp_timer_time_hours -- ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes - 1;
-				if(disp_t.disp_timer_time_hours < 0){//if(pro_t.dispTime_minutes < 0){
+				
+				ctl_t.gSet_timer_value --;//disp_t.disp_timer_time_hours -- ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes - 1;
+				if(ctl_t.gSet_timer_value  < 0){//if(pro_t.dispTime_minutes < 0){
 
-				    disp_t.disp_timer_time_hours =24;//pro_t.dispTime_hours --;
+				    ctl_t.gSet_timer_value  =24;//pro_t.dispTime_hours --;
 					
 					
 				}
-				
-				   
-               
-					temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
-					temp_bit_1_hours = disp_t.disp_timer_time_hours  %10;
-                    
-				
+				temp_bit_2_hours = ctl_t.gSet_timer_value  /10 ;
+				temp_bit_1_hours = ctl_t.gSet_timer_value   %10;
 
-					temp_bit_2_minute=0;
-					temp_bit_1_minute=0;
-                 
+				temp_bit_2_minute=0;
+				temp_bit_1_minute=0;
 
-					lcd_t.number5_low=temp_bit_2_hours;
-					lcd_t.number5_high =temp_bit_2_hours;
 
-					lcd_t.number6_low = temp_bit_1_hours;
-					lcd_t.number6_high = temp_bit_1_hours;
+				lcd_t.number5_low=temp_bit_2_hours;
+				lcd_t.number5_high =temp_bit_2_hours;
 
-					lcd_t.number7_low=temp_bit_2_minute;
-					lcd_t.number7_high =temp_bit_2_minute;
+				lcd_t.number6_low = temp_bit_1_hours;
+				lcd_t.number6_high = temp_bit_1_hours;
 
-					lcd_t.number8_low = temp_bit_1_minute;
-					lcd_t.number8_high = temp_bit_1_minute;
-                    DisplayPanel_Ref_Handler();
+				lcd_t.number7_low=temp_bit_2_minute;
+				lcd_t.number7_high =temp_bit_2_minute;
+
+				lcd_t.number8_low = temp_bit_1_minute;
+				lcd_t.number8_high = temp_bit_1_minute;
+				DisplayPanel_Ref_Handler();
 
              break;
 
@@ -880,6 +865,7 @@ void ADD_Key_Detected(void)
 	if(ADD_KEY_StateRead()==KEY_DOWN){
 
 		//Key_Sound();
+		
 		ADD_Key_Fun();
     }
 
@@ -889,7 +875,6 @@ void DEC_Key_Detected(void)
 {
 	 if(DEC_KEY_StateRead()==KEY_DOWN){
 
-	// Key_Sound();
 		 DEC_Key_Fun();
 	 }
 

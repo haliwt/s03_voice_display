@@ -84,12 +84,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		lcd_t.gTimer_ptc_fan_warning ++;
 		disp_t.gTimer_disp_timer_timing++;
 		disp_t.gTimer_disp_minutes_time++;
-		pro_t.gTimer_pro_disp++;
+	
 		pro_t.gTimer_pro_fan++;
 		pro_t.gTimer_usart_error++;
 		pro_t.gTimer_pro_disp_timer ++;
-	
-
+		ctl_t.gTimer_ctl_timer_time ++ ;
+		
 	    if(disp_t.gTimer_disp_seconds_time >59){//60s ->1 minute 
 	      disp_t.gTimer_disp_seconds_time=0;
 		}

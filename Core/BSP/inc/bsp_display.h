@@ -57,9 +57,9 @@ extern int8_t (*display_timer_minutes_value)(void);
 void Disp_Init(void);
 
 
-void Display_Temperature_Humidity_Value_Handler(void);
+void Display_Power_On_Works_Time(void);
 
-void Timing_Handler(void);
+void Display_Works_Or_Timer_times_Handler(void);
 
 
 
@@ -72,7 +72,7 @@ void Display_Timer_Minutes_Handler(int8_t(*disp_timer_minutes_handler)(void));
 
 void Display_Voice_Set_Temp_Value(void);
 
-void Display_Voice_Set_Timer_Value(void);
+
 
 
 
