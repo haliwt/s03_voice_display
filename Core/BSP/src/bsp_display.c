@@ -152,8 +152,8 @@ static void Display_Timer_Time_Handler(void)
 			disp_t.disp_timer_time_minutes =0;
 			//run_t.display_set_timer_timing=beijing_time;
 			disp_t.timer_timing_define_flag = works_time;
-			disp_t.disp_timer_or_works_timing = works_time;
-			ctl_t.gAi_flag = 1;//run_t.gModel=1;
+	
+			ctl_t.gAi_flag = 1;//
 			SendData_Set_Command(MODE_AI_NO_BUZZER);
 
 				
@@ -232,7 +232,11 @@ void Display_Temperature_Humidity_Value_Handler(void)
 ************************************************************************/  
 void Timing_Handler(void)
 {
-    switch(disp_t.disp_timer_or_works_timing){ //disp_t.timer_timing_define_flag
+
+  static uint8_t disp_ai_mode;
+   disp_ai_mode = ai_state();
+
+   switch(disp_ai_mode){ //disp_t.timer_timing_define_flag
          
     case works_time:
         Display_Works_Time_Handler();

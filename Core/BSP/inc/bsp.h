@@ -82,9 +82,9 @@ typedef struct{
    uint8_t decodeFlag;
    //time
    uint8_t set_timer_flag;
-   uint8_t Timer_mode_flag;
+   uint8_t gTimer_mode_flag;
    uint8_t key_set_timer_flag;
-   uint8_t setup_timer_timing_item;
+
  
 
    //temperature 

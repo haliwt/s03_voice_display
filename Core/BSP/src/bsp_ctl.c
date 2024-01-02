@@ -52,7 +52,7 @@ static uint8_t smartphone_set_temp_default_fun(void);
 void bsp_ctlint(void)
 {
  
-    ctl_t.gAi_flag = mode_ai;
+    ctl_t.gAi_flag = works_time;
 	ctl_t.gBug_flag = 1;
 	ctl_t.gPlasma_flag =1;
 	ctl_t.gFan_speed_value = 100;
@@ -120,6 +120,7 @@ void Display_Panel_Action_Handler(void)
 	  }
 
    }
+
    
 }
 

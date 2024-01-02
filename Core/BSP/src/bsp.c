@@ -73,6 +73,7 @@ void bsp_Idle(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
+#if 0
 void Key_Handler(uint8_t key_value)
 {
       static uint8_t power_flag;
@@ -141,7 +142,7 @@ void Key_Handler(uint8_t key_value)
 		 if(ctl_t.gAi_flag == 0 ){
 		  pro_t.long_key_flag =0;
 		
-		  ctl_t.gAi_flag = 0;
+		  ctl_t.gAi_flag = works_time;
 		  SendData_Set_Wifi(MODE_AI);
 		 //  Key_Sound();
 		 
@@ -178,6 +179,7 @@ void Key_Handler(uint8_t key_value)
   
   
 }
+#endif 
 /*
 *********************************************************************************************************
 *	函 数 名: void Display_Process_Handler(void)
@@ -189,13 +191,10 @@ void Key_Handler(uint8_t key_value)
 */
 void Display_Process_Handler(void)
 {
-     
-
-	Voice_Decoder_Handler();
+    Voice_Decoder_Handler();
 	DispPocess_Command_Handler(pro_t.gKey_command_tag);
 	USART1_Cmd_Error_Handler();
 	
-
 }
 /******************************************************************************
 	*
@@ -358,7 +357,7 @@ static void Power_On_Fun(void)
    
   
    ctl_t.gPtc_flag = 1;
-   ctl_t.gAi_flag = 1;
+   ctl_t.gAi_flag = works_time;
    ctl_t.gPlasma_flag = 1;
    ctl_t.gBug_flag =1;
    fan_runContinue= 2;
@@ -372,10 +371,10 @@ static void Power_On_Fun(void)
 
 	 disp_t.disp_timer_time_hours =0;
 	 disp_t.disp_timer_time_minutes =0;
-	 pro_t.setup_timer_timing_item=0;
+
 
 	 disp_t.timer_timing_define_flag = 0;
-	 disp_t.disp_timer_or_works_timing = works_time;
+	
 
 	 
     //display work time is begin form "0"
@@ -411,12 +410,12 @@ void Power_Off_Fun(void)
 
 
 	pro_t.wifi_led_fast_blink_flag=0;
-	pro_t.Timer_mode_flag = 0;
+	pro_t.gTimer_mode_flag = 0;
 
 	disp_t.disp_timer_time_hours =0;
 	disp_t.disp_timer_time_minutes =0;
 	disp_t.timer_timing_define_flag = 0;
-	disp_t.disp_timer_or_works_timing = works_time;
+	
 
 	ctl_t.ptc_warning = 0;
 	ctl_t.fan_warning=0;
@@ -475,26 +474,25 @@ static void Mode_Ai_Fun(void)
 		 //SendData_Buzzer();
 			 
 	   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
-			   if(disp_t.disp_timer_or_works_timing == works_time){
-				ctl_t.gAi_flag = 0;
-				  disp_t.disp_timer_or_works_timing = timer_time;
-				  SendData_Set_Wifi(MODE_TIMER);
-				 // HAL_Delay(10);
+
+	          if(ai_state()==works_time){ //be chaned ai mode 
+			   //isp_t.disp_timer_or_works_timing = timer_time;
+				ctl_t.gAi_flag = timer_time;
+				SendData_Set_Wifi(MODE_TIMER);
+				
 				   
-				}
-				else if(disp_t.disp_timer_or_works_timing == timer_time){
-					//beijing time + ai item
-					disp_t.disp_timer_or_works_timing = works_time;
-				 
-				  ctl_t.gAi_flag =0; //AI model
+				
+	           }
+			   else{
+				 ctl_t.gAi_flag =works_time; //no_AI model
 				  SendData_Set_Wifi(MODE_AI);
 				 
 					
 				}
 				
 				
-			  } 	
-			 }
+	  } 	
+	}
 		 
 }
 /************************************************************************
@@ -510,23 +508,18 @@ void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_key:
 	  if(pro_t.gPower_On ==power_on){
 	   if(ctl_t.fan_warning ==0 && ctl_t.ptc_warning ==0){
 	  	
-		  
-		   ctl_t.gAi_flag =0;
-		   pro_t.setup_timer_timing_item=timer_time;
+		   
+		   ctl_t.gAi_flag =timer_time;
+
+		   pro_t.gTimer_mode_flag=1; //set timer timing enable,
 		 
 		   pro_t.gTimer_key_timing=0; //按键退出的限制，4秒以内
 		
-           
-		   pro_t.Timer_mode_flag=timer_time; //set timer timing enable,
-		   
-		   
-		   SendData_Set_Wifi(MODE_TIMER);
+           SendData_Set_Wifi(MODE_TIMER);
 		   
 		   
 	  	 }
         }
-
-
 }
 /************************************************************************
 	*
@@ -545,7 +538,7 @@ static void ADD_Key_Fun(void)
 
 		   if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
 		
-			switch(pro_t.setup_timer_timing_item){
+			switch(pro_t.gTimer_mode_flag){
 
 			case set_temperature: //set temperature value add number
       
@@ -627,7 +620,7 @@ static void DEC_Key_Fun(void)
 	if(pro_t.gPower_On ==power_on){
 	   	if(ctl_t.ptc_warning ==0 && ctl_t.fan_warning ==0){
 	   	
-	     switch(pro_t.setup_timer_timing_item){
+	     switch(pro_t.gTimer_mode_flag){
 
 		   case set_temperature:  //default tempearture value 
 	    
@@ -846,18 +839,18 @@ void Mode_Key_Detected(void)
 {
 	if(MODE_KEY_StateRead() == KEY_DOWN && pro_t.long_key_flag ==0){
 
-		if(ctl_t.gAi_flag == 0 ){
+		if(ai_state() == works_time ){
 		  pro_t.long_key_flag =0;
 		
-		  ctl_t.gAi_flag = 1;
+		  ctl_t.gAi_flag = timer_time;
 		  SendData_Set_Wifi(MODE_AI);
 		 //  Key_Sound();
 		 
 		
 		 }
-          else{
+         else{
 		  	 pro_t.long_key_flag =0;
-			  ctl_t.gAi_flag =0;
+			  ctl_t.gAi_flag = works_time;
 			  SendData_Set_Wifi(MODE_TIMER);
 			//  Key_Sound();
           }
