@@ -172,12 +172,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				if(inputBuf[0]=='D') decoder_t.single_data=PANEL_DATA; //receive data is single data
                 else if(inputBuf[0]=='W') decoder_t.single_data = WIFI_INFO; //wifi data
 				else if(inputBuf[0]=='C') decoder_t.single_data = WIFI_CMD; //command 
-				else if(inputBuf[0]=='B') decoder_t.single_data = WIFI_BEIJING_TIME;
+				else if(inputBuf[0]=='B') decoder_t.single_data = BEIJING_HOURS_TIME;
 				else if(inputBuf[0]=='S') decoder_t.single_data = WIFI_WIND_SPEED;
 				else if(inputBuf[0]=='T') decoder_t.single_data = PHONE_SET_TIMER_TIMING;
 				else if(inputBuf[0]=='E') decoder_t.single_data = PHONE_SET_TEMPERATURE;
-				else if(inputBuf[0]=='M') decoder_t.single_data = WIFI_SET_GMT_MINUTE;
-				else if(inputBuf[0]=='N') decoder_t.single_data = WIFI_SET_GMT_SECOND;
+				else if(inputBuf[0]=='M') decoder_t.single_data = BEIJING_MINUTES_TIME;
+				else if(inputBuf[0]=='N') decoder_t.single_data = BEIJING_SECOND_TIME;
 			    state=3;
 			}
 			else
@@ -254,7 +254,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			 break;
 
 
-			  case WIFI_BEIJING_TIME:
+			  case BEIJING_HOURS_TIME:
 			 	
 			  	 
                    disp_t.disp_works_hours_time  = inputBuf[0];
@@ -265,26 +265,25 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                  
              break;
 
-//			 case  WIFI_SET_GMT_MINUTE:
-//			 	
-//			 	   disp_t.disp_works_minutes_time = inputBuf[0];
-//				  //pro_t.dispTime_minutes = inputBuf[0];
-//
-//				//   decoder_t.single_data = WIFI_BEIJING_TIME;
-//					state=0;
-//		           pro_t.decodeFlag=1;
-//			 		
-//
-//
-//			 break;
+			 case  BEIJING_MINUTES_TIME:
+			 	
+			 	   disp_t.disp_works_minutes_time = inputBuf[0];
+			
+				   state=0;
+		           pro_t.decodeFlag=1;
+			 		
 
-//			 case WIFI_SET_GMT_SECOND:
-//				
-//				disp_t.disp_seconds_times = inputBuf[0]+1;
-//		
-//				 pro_t.decodeFlag=1;
-//				state=0;
-//			 break;
+
+			 break;
+
+			 case BEIJING_SECOND_TIME:
+				
+	
+				disp_t.gTimer_disp_minutes_time = inputBuf[0];
+		
+				// pro_t.decodeFlag=1;
+				state=0;
+			 break;
 
          	}
 
@@ -306,14 +305,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
            
 		    break;
 
-            case WIFI_BEIJING_TIME:
-		      
-			        disp_t.disp_works_minutes_time = inputBuf[0];
-					state=0;
-		           pro_t.decodeFlag=1;
-	
-		 
-		     break;
 			}
 
 		 break;

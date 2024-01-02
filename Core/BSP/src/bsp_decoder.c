@@ -89,7 +89,12 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
       break;
 
-       case WIFI_BEIJING_TIME: //7//run_t.wifi_connect_success_flag
+	  
+
+       case BEIJING_HOURS_TIME: //7//run_t.wifi_connect_success_flag
+
+
+	   case BEIJING_MINUTES_TIME:
          if(power_on_off_state() ==1){
           // if(ai_state()==works_time){
 		   	
@@ -112,6 +117,8 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 		
 	     // }
          }
+
+	 
 		    
         
  
