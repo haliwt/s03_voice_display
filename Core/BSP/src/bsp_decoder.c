@@ -91,7 +91,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
        case WIFI_BEIJING_TIME: //7//run_t.wifi_connect_success_flag
          if(power_on_off_state() ==1){
-           if(ai_state()==works_time){
+          // if(ai_state()==works_time){
 		   	
 			 lcd_t.number5_low=disp_t.disp_works_hours_time/10;
 	         lcd_t.number5_high =disp_t.disp_works_hours_time /10;
@@ -110,7 +110,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 	        DisplayPanel_Ref_Handler();
 
 		
-	      }
+	     // }
          }
 		    
         
@@ -140,9 +140,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
 		if(power_on_off_state()  ==1){
 
-			//temperature_decade=  ctl_t.gSet_temperature_value /10 ;
-			//temperature_unit =   ctl_t.gSet_temperature_value %10;
-			// HAL_Delay(5);
+	
 			
 			lcd_t.number1_high = ctl_t.gSet_temperature_value /10 ;
 		    lcd_t.number1_low =ctl_t.gSet_temperature_value /10 ;

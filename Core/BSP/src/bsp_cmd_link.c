@@ -265,18 +265,18 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                  
              break;
 
-			 case  WIFI_SET_GMT_MINUTE:
-			 	
-			 	   disp_t.disp_works_hours_time = inputBuf[0];
-				  //pro_t.dispTime_minutes = inputBuf[0];
-
-				   decoder_t.single_data = WIFI_BEIJING_TIME;
-					state=0;
-		           pro_t.decodeFlag=1;
-			 		
-
-
-			 break;
+//			 case  WIFI_SET_GMT_MINUTE:
+//			 	
+//			 	   disp_t.disp_works_minutes_time = inputBuf[0];
+//				  //pro_t.dispTime_minutes = inputBuf[0];
+//
+//				//   decoder_t.single_data = WIFI_BEIJING_TIME;
+//					state=0;
+//		           pro_t.decodeFlag=1;
+//			 		
+//
+//
+//			 break;
 
 //			 case WIFI_SET_GMT_SECOND:
 //				
