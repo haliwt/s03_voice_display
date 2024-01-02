@@ -34,7 +34,7 @@ void Decode_Function(void)
 *********************************************************************************************************/
 void Receive_MainBoard_Data_Handler(uint8_t cmd)
 {
-    static uint8_t temperature_decade, temperature_unit;
+   
 	static uint8_t hum1,hum2,temp1,temp2; 
 	
     switch(cmd){
@@ -46,17 +46,15 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
 	 
 	 case WIFI_REAL_TEMP: //4//set temperature value
-	       if(power_on_off_state() ==1){
+	       if(power_on_off_state() ==power_on){
 		   	   
-            temperature_decade= temperature_value() /10 ;
-            temperature_unit = temperature_value() %10;
-
-            lcd_t.number1_high = temperature_decade;
-            lcd_t.number1_low = temperature_decade;
+     
+            lcd_t.number1_high = ctl_t.gSet_temperature_value/10 ;//temperature_decade;
+            lcd_t.number1_low = ctl_t.gSet_temperature_value /10 ;//temperature_decade;
 
 
-            lcd_t.number2_high =  temperature_unit;
-            lcd_t.number2_low = temperature_unit;
+            lcd_t.number2_high =ctl_t.gSet_temperature_value %10;  //temperature_unit;
+            lcd_t.number2_low = ctl_t.gSet_temperature_value%10;//temperature_unit;
 
 	      }
 
@@ -64,19 +62,19 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
 	 case PANEL_DATA://1
 	   
-        if(power_on_off_state()  ==1){
+        if(power_on_off_state() ==power_on){
         hum1 =  humidity_value()/10 ;  //Humidity 
         hum2 =  humidity_value()%10;
         
-        temp1 = temperature_value()/10 ;  // temperature
-        temp2 = temperature_value()%10;
+        //temp1 = temperature_value()/10 ;  // temperature
+        //temp2 = temperature_value()%10;
        
          //temperature 
-		 lcd_t.number1_high = temp1;
-		 lcd_t.number1_low = temp1;
+		 lcd_t.number1_high = disp_t.disp_dht11_temp_value /10;
+		 lcd_t.number1_low = disp_t.disp_dht11_temp_value /10;
 
-		  lcd_t.number2_high = temp2;
-		 lcd_t.number2_low = temp2;
+		  lcd_t.number2_high = disp_t.disp_dht11_temp_value %10;//temp2;
+		 lcd_t.number2_low = disp_t.disp_dht11_temp_value %10;//temp2;
 
 		 //humidity
 		 
@@ -142,15 +140,15 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
 		if(power_on_off_state()  ==1){
 
-			temperature_decade= disp_t.disp_set_temp_value /10 ;
-			temperature_unit =  disp_t.disp_set_temp_value %10;
+			//temperature_decade=  ctl_t.gSet_temperature_value /10 ;
+			//temperature_unit =   ctl_t.gSet_temperature_value %10;
 			// HAL_Delay(5);
-			lcd_t.number1_high = temperature_decade;
-			lcd_t.number1_low = temperature_decade;
-
-
-			lcd_t.number2_high =  temperature_unit;
-			lcd_t.number2_low = temperature_unit;
+			
+			lcd_t.number1_high = ctl_t.gSet_temperature_value /10 ;
+		    lcd_t.number1_low =ctl_t.gSet_temperature_value /10 ;
+			
+            lcd_t.number2_high =  ctl_t.gSet_temperature_value %10;//temperature_unit;
+			lcd_t.number2_low = ctl_t.gSet_temperature_value %10;//temperature_unit;
 
 
 			lcd_t.gTimer_numbers_one_two_blink=0; //temperature of digital is blink.is "1,2"

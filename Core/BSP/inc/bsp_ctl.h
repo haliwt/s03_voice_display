@@ -68,7 +68,7 @@ typedef struct {
    uint8_t gFan_speed_value;
   
    uint8_t gReal_humidity_value;
-   uint8_t gReal_tem_value;
+
   
    
 

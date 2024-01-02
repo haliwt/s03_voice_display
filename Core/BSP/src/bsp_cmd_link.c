@@ -225,7 +225,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             break;
 
             case WIFI_REAL_TEMP ://3 //wifi modify temperature of value
-                 ctl_t.gReal_tem_value =inputBuf[0]; 
+                 ctl_t.gSet_temperature_value =inputBuf[0]; 
                  state=0;
                  pro_t.decodeFlag=1;
 
@@ -289,8 +289,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			 case WIFI_SET_GMT_SECOND:
 				
 				disp_t.disp_seconds_times = inputBuf[0]+1;
-			    //pro_t.dispTime_seconds = inputBuf[0]+1;
-				//pro_t.gTimer_minute_Counter =inputBuf[0]+1;
+		
 				 pro_t.decodeFlag=1;
 				state=0;
 			 break;
@@ -306,7 +305,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 				case PANEL_DATA:
 
-				ctl_t.gReal_tem_value= inputBuf[0]; //temperature value
+			  disp_t.disp_dht11_temp_value= inputBuf[0]; //DHT11 temperature value
               //pro_t.gReal_humtemp[1]=inputBuf[0]; //temperature value
 			
 		     state=0;

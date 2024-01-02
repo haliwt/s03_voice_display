@@ -64,122 +64,7 @@ void bsp_Idle(void)
 
 
 }
-/*
-*********************************************************************************************************
-*	函 数 名: Key_Handler(uint8_t key_value)
-*	功能说明: 中间层 
-*			 
-*	形    参: 输入按键的键值
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-#if 0
-void Key_Handler(uint8_t key_value)
-{
-      static uint8_t power_flag;
-       switch(key_value){
 
-//	   case power_id: //power off
-//
-//	       power_flag = power_flag ^ 0x01;
-//
-//	      if(power_flag ==1){
-//		  	 pro_t.gKey_command_tag = run_update_data;
-//			 pro_t.gPower_On = power_on;   
-//			run_process_step=0;
-//            pro_t.long_key_flag =0;
-//           
-//			SendData_PowerOnOff(1);
-//		    Power_On_Fun();
-//			LCD_Backlight_On();
-//			//Key_Sound();
-//
-//
-//		  }
-//		  else{
-//
-//	           pro_t.long_key_flag =0;
-//			    pro_t.gKey_command_tag = power_off_fan_pro;
-//			   pro_t.gPower_On = power_off;   
-//	           SendData_PowerOnOff(0);
-//	           Power_Off_Fun();
-//			   LCD_Backlight_Off();
-//		      // Key_Sound();
-//			   run_process_step=0xff;
-//			  
-//			  
-//           }
-//	       
-//           key_value =0xff;     
-//        break;
-
-       case wifi_fun_on:
-	   	pro_t.long_key_flag =0;
-        SendData_Set_Wifi(0x01);
-
-	    Key_Sound();
-//	    run_t.gTimer_set_temp_times=0; //conflict with send temperatur value 
-//        run_t.wifi_connect_flag =0;
-//        run_t.gTimer_wifi_connect_counter=0;
-//        run_t.gTimer_wifi_led_blink=0;
-//        run_t.wifi_receive_led_fast_led_flag=0; //adjust if mainboard receive of connect wifi of signal
-        pro_t.wifi_led_fast_blink_flag=1;
-      
-
-       wifi_link_flag =1;
-	   key_value =0xff;
-       break;
-
-	   case set_timer_fun_on://case model_long_key:
-	     pro_t.long_key_flag =0;
-	  	 Mode_Long_Key_Fun();
-
-	  break;
-
-
-        case mode_id: //5
-			
-		 if(ctl_t.gAi_flag == 0 ){
-		  pro_t.long_key_flag =0;
-		
-		  ctl_t.gAi_flag = works_time;
-		  SendData_Set_Wifi(MODE_AI);
-		 //  Key_Sound();
-		 
-		
-		   }
-          else{
-		  	 pro_t.long_key_flag =0;
-			  ctl_t.gAi_flag =0;
-			  SendData_Set_Wifi(MODE_TIMER);
-			//  Key_Sound();
-          }
-		 key_value =0xff;
-		break;
-
-		case add_key:
-		 Key_Sound();
-		 ADD_Key_Fun();
-		
-		 key_value =0xff;
-        break;
-
-		case dec_key:
-		 Key_Sound();
-		 DEC_Key_Fun();
-		  
-         key_value =0xff;
-		break;
-
-		default:
-		break;
-
-       }
-  
-  
-  
-}
-#endif 
 /*
 *********************************************************************************************************
 *	函 数 名: void Display_Process_Handler(void)
@@ -387,15 +272,10 @@ void Power_Off_Fun(void)
 
 	pro_t.temperature_set_flag = 0;
 
-
-	pro_t.wifi_led_fast_blink_flag=0;
+    pro_t.wifi_led_fast_blink_flag=0;
 	pro_t.gTimer_mode_flag = 0;
 
-
-
-	ctl_t.gSet_timer_hours =0;
-
-	
+    ctl_t.gSet_timer_hours =0;
 
 	ctl_t.ptc_warning = 0;
 	ctl_t.fan_warning=0;
@@ -405,11 +285,7 @@ void Power_Off_Fun(void)
 		pro_t.gTimer_pro_fan =0;
 
 	}
-	
-	
-	
-          
-          
+
 }
 void power_off_fan_run(void)
 {
@@ -512,7 +388,7 @@ void Mode_Long_Key_Fun(void)  //MODE_KEY_LONG_TIME_KEY://case model_long_key:
 static void ADD_Key_Fun(void)
 {
  
-    uint8_t  decade_temp,unit_temp,temp_bit_1_hours,temp_bit_2_hours,temp_bit_2_minute,temp_bit_1_minute;
+    uint8_t  temp_bit_1_hours,temp_bit_2_hours,temp_bit_2_minute,temp_bit_1_minute;
 
 	 if(pro_t.gPower_On ==power_on){
 
@@ -525,23 +401,23 @@ static void ADD_Key_Fun(void)
 			case set_temperature: //set temperature value add number
       
 		
-				disp_t.disp_set_temp_value ++;
-	            if(disp_t.disp_set_temp_value < 20){
-				    disp_t.disp_set_temp_value=20;
+				 ctl_t.gSet_temperature_value ++;
+	            if( ctl_t.gSet_temperature_value < 20){
+				     ctl_t.gSet_temperature_value=20;
 				}
 				
-				if(disp_t.disp_set_temp_value > 40)disp_t.disp_set_temp_value= 20;
+				if( ctl_t.gSet_temperature_value > 40) ctl_t.gSet_temperature_value= 20;
 
 			
             
-			    decade_temp =  disp_t.disp_set_temp_value / 10 ;
-				unit_temp =  disp_t.disp_set_temp_value % 10; //
+			   // decade_temp =   ctl_t.gSet_temperature_value / 10 ;
+				//unit_temp =   ctl_t.gSet_temperature_value % 10; //
                 
-				lcd_t.number1_low=decade_temp;
-				lcd_t.number1_high =decade_temp;
+				lcd_t.number1_low=ctl_t.gSet_temperature_value / 10 ;
+				lcd_t.number1_high =ctl_t.gSet_temperature_value / 10 ;
 
-				lcd_t.number2_low = unit_temp;
-				lcd_t.number2_high = unit_temp;
+				lcd_t.number2_low = ctl_t.gSet_temperature_value % 10; //
+				lcd_t.number2_high = ctl_t.gSet_temperature_value % 10; //
 				
 				lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
                 pro_t.temperature_set_flag=1;  //set temperature value flag
@@ -610,14 +486,14 @@ static void DEC_Key_Fun(void)
 
 		   case set_temperature:  //default tempearture value 
 	    
-			disp_t.disp_set_temp_value--;
-			if(disp_t.disp_set_temp_value<20) disp_t.disp_set_temp_value=40;
-	        if(disp_t.disp_set_temp_value >40)disp_t.disp_set_temp_value=40;
+			 ctl_t.gSet_temperature_value--;
+			if( ctl_t.gSet_temperature_value<20)  ctl_t.gSet_temperature_value=40;
+	        if( ctl_t.gSet_temperature_value >40) ctl_t.gSet_temperature_value=40;
 
 	
 
-	        decade_temp =  disp_t.disp_set_temp_value / 10;
-			unit_temp =  disp_t.disp_set_temp_value % 10; //
+	        decade_temp =   ctl_t.gSet_temperature_value / 10;
+			unit_temp =   ctl_t.gSet_temperature_value % 10; //
       
 			lcd_t.number1_low=decade_temp;
 			lcd_t.number1_high =decade_temp;

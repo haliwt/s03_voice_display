@@ -377,22 +377,22 @@ static int8_t display_works_minutes_default_fun(void)
 
 void Display_Voice_Set_Temp_Value(void)
 {
-    if(disp_t.disp_set_temp_value < 20){
-	    disp_t.disp_set_temp_value=20;
+    if( ctl_t.gSet_temperature_value < 20){
+	     ctl_t.gSet_temperature_value=20;
 	}
 	
-	if(disp_t.disp_set_temp_value > 40)disp_t.disp_set_temp_value= 20;
+	if( ctl_t.gSet_temperature_value > 40) ctl_t.gSet_temperature_value= 20;
 
 
 
-   // decade_temp =  disp_t.disp_set_temp_value / 10 ;
-	//unit_temp =  disp_t.disp_set_temp_value % 10; //
+   // decade_temp =   ctl_t.gSet_temperature_value / 10 ;
+	//unit_temp =   ctl_t.gSet_temperature_value % 10; //
     
-	lcd_t.number1_low=disp_t.disp_set_temp_value / 10 ;
-	lcd_t.number1_high =disp_t.disp_set_temp_value / 10 ;
+	lcd_t.number1_low= ctl_t.gSet_temperature_value / 10 ;
+	lcd_t.number1_high = ctl_t.gSet_temperature_value / 10 ;
 
-	lcd_t.number2_low = disp_t.disp_set_temp_value % 10; //
-	lcd_t.number2_high = disp_t.disp_set_temp_value % 10; //
+	lcd_t.number2_low =  ctl_t.gSet_temperature_value % 10; //
+	lcd_t.number2_high =  ctl_t.gSet_temperature_value % 10; //
 	
 	lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
     pro_t.temperature_set_flag=1;  //set temperature value flag

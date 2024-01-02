@@ -368,7 +368,7 @@ void Voice_Decoder_Handler(void)
 		   if(ret_temp_value >= 0){
 
               Voice_Buzzer_Sound();
-			  disp_t.disp_set_temp_value =(uint8_t)ret_temp_value;
+			   ctl_t.gSet_temperature_value =(uint8_t)ret_temp_value;
 			  Display_Voice_Set_Temp_Value();
 		     
 		   }

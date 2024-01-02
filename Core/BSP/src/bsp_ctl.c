@@ -235,7 +235,7 @@ static uint8_t humidity_default_fun(void)
 ************************************************************/
 static uint8_t temp_default_fun(void)
 {
-   return ctl_t.gReal_tem_value;
+   
 
 }
 

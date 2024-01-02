@@ -21,7 +21,6 @@ typedef struct{
    uint8_t disp_timer_time_seconds;
 
    //to wifi be set temperature value and set timer timing 
-   uint8_t disp_set_temp_value;
    uint8_t disp_set_timer_timing;
    
    //display works times 
@@ -31,6 +30,10 @@ typedef struct{
    uint8_t timer_timing_define_flag;
    uint8_t disp_timer_or_works_timing;
    uint8_t set_timer_timing_value_chaned_flag;
+
+   //display realy DHT11 of temperature value 
+
+   uint8_t disp_dht11_temp_value;
 
    //timer 
 
