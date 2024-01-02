@@ -465,7 +465,7 @@ KEYState_TypeDef VK36N4D_IC_StateRead(void)
   if(HAL_GPIO_ReadPin(VK36N4D_INT_GPIO_Port,VK36N4D_INT_Pin)==KEY_DOWN_LEVEL)
   {
     /* 延时一小段时间，消除抖动 */
-    HAL_Delay(5);
+    HAL_Delay(2);
     /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
    // if(HAL_GPIO_ReadPin(VK36N4D_INT_GPIO_Port,VK36N4D_INT_Pin)==KEY_DOWN_LEVEL)
     {
@@ -492,7 +492,7 @@ KEYState_TypeDef POWER_KEY_StateRead(void)
   if(HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)==KEY_DOWN_LEVEL)
   {
     /* 延时一小段时间，消除抖动 */
-    HAL_Delay(20);
+    HAL_Delay(10);
     /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
     if(HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)==KEY_DOWN_LEVEL)
     {
@@ -537,7 +537,7 @@ KEYState_TypeDef MODE_KEY_StateRead(void)
   if(HAL_GPIO_ReadPin(KEY_MODE_GPIO_Port,KEY_MODE_Pin)==KEY_DOWN_LEVEL)
   {
     /* 延时一小段时间，消除抖动 */
-    HAL_Delay(20);
+    HAL_Delay(10);
     /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
     if(HAL_GPIO_ReadPin(KEY_MODE_GPIO_Port,KEY_MODE_Pin)==KEY_DOWN_LEVEL)
     {
@@ -578,7 +578,7 @@ KEYState_TypeDef ADD_KEY_StateRead(void)
   if(HAL_GPIO_ReadPin(KEY_ADD_GPIO_Port,KEY_ADD_Pin)==KEY_DOWN_LEVEL)
   {
     /* 延时一小段时间，消除抖动 */
-    HAL_Delay(20);
+    HAL_Delay(10);
     /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
     if(HAL_GPIO_ReadPin(KEY_ADD_GPIO_Port,KEY_ADD_Pin)==KEY_DOWN_LEVEL)
     {
@@ -606,7 +606,7 @@ KEYState_TypeDef DEC_KEY_StateRead(void)
   if(HAL_GPIO_ReadPin(KEY_DEC_GPIO_Port,KEY_DEC_Pin)==KEY_DOWN_LEVEL)
   {
     /* 延时一小段时间，消除抖动 */
-    HAL_Delay(20);
+    HAL_Delay(10);
     /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
     if(HAL_GPIO_ReadPin(KEY_DEC_GPIO_Port,KEY_DEC_Pin)==KEY_DOWN_LEVEL)
     {
