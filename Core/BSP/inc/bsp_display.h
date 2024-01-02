@@ -30,6 +30,9 @@ typedef struct{
    uint8_t disp_seconds_times;
    uint8_t timer_timing_define_flag;
    uint8_t disp_timer_or_works_timing;
+   uint8_t set_timer_timing_value_chaned_flag;
+
+   //timer 
 
    uint8_t gTimer_disp_seconds_time;
    uint8_t gTimer_disp_hours_time;

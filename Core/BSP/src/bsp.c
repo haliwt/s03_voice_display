@@ -265,7 +265,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 
 	      }
 
-		  if(pro_t.gTimer_pro_disp_timer > 37){
+		  if(pro_t.gTimer_pro_disp_timer > 37){ //37s 
 		  	pro_t.gTimer_pro_disp_timer =0;
 		    Timing_Handler();
 
@@ -570,7 +570,8 @@ static void ADD_Key_Fun(void)
 			   case set_timer_timing:
 				    
 					pro_t.gTimer_key_timing =0;
-                 
+                    disp_t.set_timer_timing_value_chaned_flag++;
+			   		if(disp_t.set_timer_timing_value_chaned_flag > 254 ) disp_t.set_timer_timing_value_chaned_flag=0;
 					disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
 				    if(disp_t.disp_timer_time_hours > 24){ //if(pro_t.dispTime_minutes > 59){
 
@@ -648,7 +649,8 @@ static void DEC_Key_Fun(void)
 	    
 	
 				pro_t.gTimer_key_timing =0;
-           
+                disp_t.set_timer_timing_value_chaned_flag--;
+			    if(disp_t.set_timer_timing_value_chaned_flag==0)disp_t.set_timer_timing_value_chaned_flag=255;
 				disp_t.disp_timer_time_hours -- ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes - 1;
 				if(disp_t.disp_timer_time_hours < 0){//if(pro_t.dispTime_minutes < 0){
 
@@ -656,6 +658,7 @@ static void DEC_Key_Fun(void)
 					
 					
 				}
+				
 				   
                
 					temp_bit_2_hours = disp_t.disp_timer_time_hours /10 ;
@@ -844,6 +847,7 @@ void Mode_Key_Detected(void)
 		
 		  ctl_t.gAi_flag = timer_time;
 		  SendData_Set_Wifi(MODE_AI);
+		  pro_t.gTimer_pro_disp_timer = 40; //at once be changed ai or no_ai timing.
 		 //  Key_Sound();
 		 
 		
@@ -853,6 +857,7 @@ void Mode_Key_Detected(void)
 			  ctl_t.gAi_flag = works_time;
 			  SendData_Set_Wifi(MODE_TIMER);
 			//  Key_Sound();
+			 pro_t.gTimer_pro_disp_timer = 40;//at once be changed ai or no_ai timing.
           }
 
 
@@ -874,7 +879,7 @@ void ADD_Key_Detected(void)
 {
 	if(ADD_KEY_StateRead()==KEY_DOWN){
 
-		Key_Sound();
+		//Key_Sound();
 		ADD_Key_Fun();
     }
 
@@ -884,7 +889,7 @@ void DEC_Key_Detected(void)
 {
 	 if(DEC_KEY_StateRead()==KEY_DOWN){
 
-	 Key_Sound();
+	// Key_Sound();
 		 DEC_Key_Fun();
 	 }
 

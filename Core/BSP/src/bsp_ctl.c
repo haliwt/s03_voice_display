@@ -163,8 +163,10 @@ static uint8_t ptc_default_fun(void)
 ************************************************************/
 static uint8_t ai_default_fun(void)
 {
-	if(ctl_t.gAi_flag ==1) return 1;
-	else return 0;
+	if(ctl_t.gAi_flag ==works_time) return works_time;
+	else{ 
+		return timer_time;
+	}
 
 
 }

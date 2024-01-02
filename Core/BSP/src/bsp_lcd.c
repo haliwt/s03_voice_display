@@ -247,7 +247,8 @@ static void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat)
 *************************************************************************/ 
 void DisplayPanel_Ref_Handler(void)
 {
-    
+
+	static uint8_t disp_timer_deault;
 	TIM1723_Write_Cmd(0x00);
 	// TIM1723_Write_Cmd(0x40);
 	 TIM1723_Write_Cmd(0x44);
@@ -324,6 +325,7 @@ void DisplayPanel_Ref_Handler(void)
            TM1723_Write_Display_Data(0xC5,(WIFI_Symbol+lcdNumber3_Low[lcd_t.number3_low] + lcdNumber4_High[lcd_t.number4_high]) & 0xff); //Wifi
          //  TIM1723_Write_Cmd(LUM_VALUE);
 	 }
+	 
 	 /*T2 end and  set timer timing of led blink */
      //Humidity Icon "0xC9"-numbers "4-4B,4G,4C","5-5A,5F,5E,5D"
      if(pro_t.gTimer_mode_flag == 1 && pro_t.gPower_On == power_on  && ctl_t.ptc_warning ==0){ //digital -> 5,6,7,8 blink .
@@ -368,7 +370,8 @@ void DisplayPanel_Ref_Handler(void)
 		        pro_t.gTimer_mode_flag = 0; //return to default "ADD and DEC of key is temparture value"
 				disp_t.gTimer_disp_timer_timing=0;
 		   
-			if(disp_t.disp_timer_time_hours !=0){
+			if(disp_timer_deault!=disp_t.set_timer_timing_value_chaned_flag){
+				  disp_timer_deault = disp_t.set_timer_timing_value_chaned_flag;
 				  ctl_t.gSet_timer_value = disp_t.disp_timer_time_hours;
 			      disp_t.timer_timing_define_flag = timing_success; 
 				  ctl_t.gAi_flag = timer_time;
