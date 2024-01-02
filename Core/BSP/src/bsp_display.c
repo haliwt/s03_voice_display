@@ -49,14 +49,14 @@ static void Display_Works_Time_Handler(void)
 	   if(disp_t.gTimer_disp_minutes_time >59){ //minute
 
 			disp_t.gTimer_disp_minutes_time =0;
-			disp_t.disp_minutes_time++;
+			disp_t.disp_works_minutes_time++;
           
-            if(disp_t.disp_minutes_time > 59){
-				disp_t.disp_minutes_time=0;
-				disp_t.disp_hours_time ++;
+            if(disp_t.disp_works_minutes_time > 59){
+				disp_t.disp_works_minutes_time=0;
+				disp_t.disp_works_hours_time ++;
 			    
-				if(disp_t.disp_hours_time >23){
-					disp_t.disp_hours_time=0;
+				if(disp_t.disp_works_hours_time >23){
+					disp_t.disp_works_hours_time=0;
 
 				}
 
@@ -65,17 +65,17 @@ static void Display_Works_Time_Handler(void)
             
          
 	
-	lcd_t.number5_low=(disp_t.disp_hours_time ) /10;
-	lcd_t.number5_high =(disp_t.disp_hours_time) /10;
+	lcd_t.number5_low=(disp_t.disp_works_hours_time ) /10;
+	lcd_t.number5_high =(disp_t.disp_works_hours_time) /10;
 
-	lcd_t.number6_low = (disp_t.disp_hours_time) %10;;
-	lcd_t.number6_high = (disp_t.disp_hours_time ) %10;
+	lcd_t.number6_low = (disp_t.disp_works_hours_time) %10;;
+	lcd_t.number6_high = (disp_t.disp_works_hours_time ) %10;
 
-	lcd_t.number7_low = (disp_t.disp_minutes_time )/10;
-	lcd_t.number7_high = (disp_t.disp_minutes_time )/10;
+	lcd_t.number7_low = (disp_t.disp_works_minutes_time )/10;
+	lcd_t.number7_high = (disp_t.disp_works_minutes_time )/10;
 
-	lcd_t.number8_low = (disp_t.disp_minutes_time )%10;
-	lcd_t.number8_high = (disp_t.disp_minutes_time )%10;
+	lcd_t.number8_low = (disp_t.disp_works_minutes_time )%10;
+	lcd_t.number8_high = (disp_t.disp_works_minutes_time )%10;
 
 	
 }
@@ -137,16 +137,16 @@ static void Display_Timer_Time_Handler(void)
 	  if(disp_t.gTimer_disp_timer_timing  > 59){ //
         
   		 disp_t.gTimer_disp_timer_timing  =0;
-		 disp_t.disp_minutes_time--;
-	    if( disp_t.disp_minutes_time < 0){
+		 disp_t.disp_works_minutes_time--;
+	    if( disp_t.disp_works_minutes_time < 0){
 			
-			disp_t.disp_hours_time -- ;
-			disp_t.disp_minutes_time =59;
+			disp_t.disp_works_hours_time -- ;
+			disp_t.disp_works_minutes_time =59;
 
-			if( disp_t.disp_hours_time < 0 ){
+			if( disp_t.disp_works_hours_time < 0 ){
 
-			disp_t.disp_hours_time =0;
-			disp_t.disp_minutes_time =0;
+			disp_t.disp_works_hours_time =0;
+			disp_t.disp_works_minutes_time =0;
 			//run_t.display_set_timer_timing=beijing_time;
 			disp_t.timer_timing_define_flag = works_time;
 	
@@ -160,17 +160,17 @@ static void Display_Timer_Time_Handler(void)
 	  }
 
             
-	    lcd_t.number5_low=(disp_t.disp_hours_time  ) /10;
-		lcd_t.number5_high =(disp_t.disp_hours_time ) /10;
+	    lcd_t.number5_low=(disp_t.disp_works_hours_time  ) /10;
+		lcd_t.number5_high =(disp_t.disp_works_hours_time ) /10;
 
-		lcd_t.number6_low = (disp_t.disp_hours_time  ) %10;;
-		lcd_t.number6_high = (disp_t.disp_hours_time  ) %10;
+		lcd_t.number6_low = (disp_t.disp_works_hours_time  ) %10;;
+		lcd_t.number6_high = (disp_t.disp_works_hours_time  ) %10;
 
-		lcd_t.number7_low = ( disp_t.disp_minutes_time )/10;
-		lcd_t.number7_high = ( disp_t.disp_minutes_time)/10;
+		lcd_t.number7_low = ( disp_t.disp_works_minutes_time )/10;
+		lcd_t.number7_high = ( disp_t.disp_works_minutes_time)/10;
 
-		lcd_t.number8_low = (disp_t.disp_minutes_time)%10;
-		lcd_t.number8_high = ( disp_t.disp_minutes_time )%10;
+		lcd_t.number8_low = (disp_t.disp_works_minutes_time)%10;
+		lcd_t.number8_high = ( disp_t.disp_works_minutes_time )%10;
 
 	
 
@@ -192,10 +192,10 @@ void Display_Power_On_Works_Time(void)
 
 		
 
-	    m = (disp_t.disp_hours_time/10) ;
-		n=	(disp_t.disp_hours_time%10); 
-		p = (disp_t.disp_minutes_time/10);
-		q=  (disp_t.disp_minutes_time%10);
+	    m = (disp_t.disp_works_hours_time/10) ;
+		n=	(disp_t.disp_works_hours_time%10); 
+		p = (disp_t.disp_works_minutes_time/10);
+		q=  (disp_t.disp_works_minutes_time%10);
 
         //hours
 		 lcd_t.number5_high = m;
@@ -272,14 +272,14 @@ static void Works_Time_Continue(void)
 	 if(disp_t.gTimer_disp_minutes_time >59){ //minute
 
 			disp_t.gTimer_disp_minutes_time =0;
-			disp_t.disp_minutes_time++;
+			disp_t.disp_works_minutes_time++;
           
-            if(disp_t.disp_minutes_time > 59){
-				disp_t.disp_minutes_time=0;
-				disp_t.disp_hours_time ++;
+            if(disp_t.disp_works_minutes_time > 59){
+				disp_t.disp_works_minutes_time=0;
+				disp_t.disp_works_hours_time ++;
 			    
-				if(disp_t.disp_hours_time >23){
-					disp_t.disp_hours_time=0;
+				if(disp_t.disp_works_hours_time >23){
+					disp_t.disp_works_hours_time=0;
 
 				}
 

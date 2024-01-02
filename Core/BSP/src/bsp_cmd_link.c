@@ -265,7 +265,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			  case WIFI_BEIJING_TIME:
 			 	
 			  	 
-                   disp_t.disp_hours_time  = inputBuf[0];
+                   disp_t.disp_works_hours_time  = inputBuf[0];
 				
 					 state=0;
 		              pro_t.decodeFlag=1;

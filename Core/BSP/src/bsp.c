@@ -351,31 +351,28 @@ static void Power_On_Fun(void)
 
      pro_t.temperature_set_flag = 0;
 
-	 disp_t.timer_timing_define_flag = works_time;
-     disp_t.gTimer_disp_timer_timing=0; //works times  clear zero.
-
-
-	 //timer timing
+	  //timer timing
 	 ctl_t.gSet_timer_hours =0;
 	 ctl_t.gSet_timer_minutes =0;
 
       //display work time is begin form "0"
-	
-	 disp_t.disp_hours_time =0;
-	 disp_t.disp_minutes_time=0;
+     disp_t.timer_timing_define_flag = works_time;
+     disp_t.gTimer_disp_timer_timing=0; //works times  clear zero.
+	 disp_t.disp_works_hours_time =0;
+	 disp_t.disp_works_minutes_time=0;
     
 	 
-	 lcd_t.number5_low=(disp_t.disp_hours_time ) /10;
-     lcd_t.number5_high =(disp_t.disp_hours_time) /10;
+	 lcd_t.number5_low=(disp_t.disp_works_hours_time ) /10;
+     lcd_t.number5_high =(disp_t.disp_works_hours_time) /10;
 
-	 lcd_t.number6_low = (disp_t.disp_hours_time ) %10;;
-	 lcd_t.number6_high = (disp_t.disp_hours_time ) %10;
+	 lcd_t.number6_low = (disp_t.disp_works_hours_time ) %10;;
+	 lcd_t.number6_high = (disp_t.disp_works_hours_time ) %10;
      
-     lcd_t.number7_low = (disp_t.disp_minutes_time )/10;
-	 lcd_t.number7_high = (disp_t.disp_minutes_time )/10;
+     lcd_t.number7_low = (disp_t.disp_works_minutes_time )/10;
+	 lcd_t.number7_high = (disp_t.disp_works_minutes_time )/10;
 
-	 lcd_t.number8_low = (disp_t.disp_minutes_time )%10;
-	 lcd_t.number8_high = (disp_t.disp_minutes_time )%10;
+	 lcd_t.number8_low = (disp_t.disp_works_minutes_time )%10;
+	 lcd_t.number8_high = (disp_t.disp_works_minutes_time )%10;
 
 
 }

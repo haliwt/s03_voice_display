@@ -95,19 +95,19 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
          if(power_on_off_state() ==1){
            if(ai_state()==works_time){
 		   	
-			 lcd_t.number5_low=disp_t.disp_hours_time/10;
-	         lcd_t.number5_high =disp_t.disp_hours_time /10;
+			 lcd_t.number5_low=disp_t.disp_works_hours_time/10;
+	         lcd_t.number5_high =disp_t.disp_works_hours_time /10;
         
-			 lcd_t.number6_low = disp_t.disp_hours_time %10;
-			 lcd_t.number6_high = disp_t.disp_hours_time %10;
+			 lcd_t.number6_low = disp_t.disp_works_hours_time %10;
+			 lcd_t.number6_high = disp_t.disp_works_hours_time %10;
 	        
 
 
-			lcd_t.number7_low = disp_t.disp_minutes_time/10;
-			lcd_t.number7_high = disp_t.disp_minutes_time/10;
+			lcd_t.number7_low = disp_t.disp_works_minutes_time/10;
+			lcd_t.number7_high = disp_t.disp_works_minutes_time/10;
             
-			lcd_t.number8_low = disp_t.disp_minutes_time%10;
-			lcd_t.number8_high = disp_t.disp_minutes_time%10;
+			lcd_t.number8_low = disp_t.disp_works_minutes_time%10;
+			lcd_t.number8_high = disp_t.disp_works_minutes_time%10;
             
 	        DisplayPanel_Ref_Handler();
 
