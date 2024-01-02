@@ -501,7 +501,7 @@ static void DEC_Key_Fun(void)
 			lcd_t.number2_low = unit_temp;
 			lcd_t.number2_high = unit_temp;
 
-			 lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led"
+			lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led"
 			pro_t.temperature_set_flag=1;  //set temperature value flag
 			DisplayPanel_Ref_Handler();
 		    break;

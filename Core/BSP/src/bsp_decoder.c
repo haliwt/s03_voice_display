@@ -35,7 +35,7 @@ void Decode_Function(void)
 void Receive_MainBoard_Data_Handler(uint8_t cmd)
 {
    
-	static uint8_t hum1,hum2,temp1,temp2; 
+	static uint8_t hum1,hum2;
 	
     switch(cmd){
 
@@ -55,7 +55,8 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 
             lcd_t.number2_high =ctl_t.gSet_temperature_value %10;  //temperature_unit;
             lcd_t.number2_low = ctl_t.gSet_temperature_value%10;//temperature_unit;
-
+			 lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
+              pro_t.temperature_set_flag=1;  //set temperature value flag
 	      }
 
 	 break;
@@ -83,8 +84,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 		 
 		 lcd_t.number4_high = hum2;
 		 lcd_t.number4_low = hum2;
-
-		 DisplayPanel_Ref_Handler();
+		DisplayPanel_Ref_Handler();
         }
 
       break;
@@ -151,7 +151,8 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 			lcd_t.number2_low = ctl_t.gSet_temperature_value %10;//temperature_unit;
 
 
-			lcd_t.gTimer_numbers_one_two_blink=0; //temperature of digital is blink.is "1,2"
+			lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
+             pro_t.temperature_set_flag=1;  //set temperature value flag
 		}
 
 
