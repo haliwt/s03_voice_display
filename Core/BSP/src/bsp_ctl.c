@@ -12,16 +12,9 @@ uint8_t (*fan_speed_state)(void);
 uint8_t (*plasma_state)(void);
 uint8_t (*bug_state)(void);
 uint8_t (*humidity_value)(void);
-uint8_t (*temperature_value)(void);
 
 uint8_t (*smartphone_set_timer_timing)(void);
 uint8_t (*smartphone_set_temp_value)(void);
-
-
-
-
-
-
 
 static uint8_t wifi_default_fun(void);
 static uint8_t ptc_default_fun(void);
@@ -31,16 +24,10 @@ static uint8_t plasma_default_fun(void);
 static uint8_t bug_default_fun(void);
 
 static uint8_t humidity_default_fun(void);
-static uint8_t temp_default_fun(void);
+
 
 static uint8_t smartphone_set_timer_default_fun(void);
 static uint8_t smartphone_set_temp_default_fun(void);
-
-
-
-
-
-
 
 /**********************************************************************************************************
 *	函 数 名: void bsp_ctlint(void)
@@ -64,7 +51,7 @@ void bsp_ctlint(void)
 	Bug_Handler(bug_default_fun);
 	
 	Humidity_Handler(humidity_default_fun);
-    Temp_Handler(temp_default_fun);
+   
 
 	Smartphone_Set_Timer_Handler(smartphone_set_timer_default_fun);
     Smartphone_Set_Temp_Handler(smartphone_set_temp_default_fun);
@@ -225,19 +212,6 @@ static uint8_t humidity_default_fun(void)
 {
 	 return  ctl_t.gReal_humidity_value ;
 }
-/************************************************************
-	*
-	*	函 数 名: static uint8_t ai_default_fun(void)
-	*	功能说明: 
-	*	形    参: NO
-	*	返 回 值: 1-bug    on. 0- bug off 
-	*
-************************************************************/
-static uint8_t temp_default_fun(void)
-{
-   
-
-}
 
 
 
@@ -249,13 +223,6 @@ static uint8_t smartphone_set_temp_default_fun()
 {
     return ctl_t.gSet_temperature_value;
 }
-
-
-
-
-
-
-
 
 /************************************************************
 	*
@@ -296,7 +263,7 @@ void Humidity_Handler(uint8_t(*humi_handler)(void))
 }
 void Temp_Handler(uint8_t(*temp_handler)(void))
 {
-   temperature_value = temp_handler;
+   disp_dht11_temperature_value = temp_handler;
 }
 
 void Smartphone_Set_Timer_Handler(uint8_t(*set_timer_timing)(void))

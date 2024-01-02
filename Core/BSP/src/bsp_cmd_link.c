@@ -165,18 +165,17 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				state=0; 
 			break;
 		case 2://#2
-			if(inputBuf[0]=='D' || inputBuf[0]=='W'   || inputBuf[0]=='P' ||inputBuf[0] =='C' || inputBuf[0] == 'B' \
+			if(inputBuf[0]=='D' || inputBuf[0]=='W'   ||inputBuf[0] =='C' || inputBuf[0] == 'B' \
 			 ||inputBuf[0] == 'S' || inputBuf[0]=='T'||inputBuf[0]=='E'|| inputBuf[0] =='N'|| inputBuf[0] =='M') //'D'->data , 'W' ->wifi
 			{
 				
 				if(inputBuf[0]=='D') decoder_t.single_data=PANEL_DATA; //receive data is single data
                 else if(inputBuf[0]=='W') decoder_t.single_data = WIFI_INFO; //wifi data
-                else if(inputBuf[0]=='P') decoder_t.single_data = WIFI_REAL_TEMP;//temperature 
 				else if(inputBuf[0]=='C') decoder_t.single_data = WIFI_CMD; //command 
 				else if(inputBuf[0]=='B') decoder_t.single_data = WIFI_BEIJING_TIME;
 				else if(inputBuf[0]=='S') decoder_t.single_data = WIFI_WIND_SPEED;
-				else if(inputBuf[0]=='T') decoder_t.single_data = WIFI_SET_TIMER_TIMING;
-				else if(inputBuf[0]=='E') decoder_t.single_data = WIFI_SET_TEMPERATURE;
+				else if(inputBuf[0]=='T') decoder_t.single_data = PHONE_SET_TIMER_TIMING;
+				else if(inputBuf[0]=='E') decoder_t.single_data = PHONE_SET_TEMPERATURE;
 				else if(inputBuf[0]=='M') decoder_t.single_data = WIFI_SET_GMT_MINUTE;
 				else if(inputBuf[0]=='N') decoder_t.single_data = WIFI_SET_GMT_SECOND;
 			    state=3;
@@ -224,13 +223,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
              
             break;
 
-            case WIFI_REAL_TEMP ://3 //wifi modify temperature of value
-                 ctl_t.gSet_temperature_value =inputBuf[0]; 
-                 state=0;
-                 pro_t.decodeFlag=1;
-
-            break;
-
             case WIFI_CMD://5
                  decoder_t.d_cmd[0] =inputBuf[0];
                  state=0;
@@ -247,14 +239,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
              break;
 			
 
-             case WIFI_SET_TIMER_TIMING:
+             case PHONE_SET_TIMER_TIMING:
              		ctl_t.gSet_timer_hours  = inputBuf[0];
              		 state=0;
                     pro_t.decodeFlag=1; 
 
              break;
 
-			 case WIFI_SET_TEMPERATURE:
+			 case PHONE_SET_TEMPERATURE:
 			     ctl_t.gSet_temperature_value=inputBuf[0]; 
                  state=0;
                  pro_t.decodeFlag=1;
@@ -275,10 +267,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 			 case  WIFI_SET_GMT_MINUTE:
 			 	
-			 	  ctl_t.gSet_timer_minutes = inputBuf[0];
+			 	   disp_t.disp_works_hours_time = inputBuf[0];
 				  //pro_t.dispTime_minutes = inputBuf[0];
 
-				  //pro_t.single_data = WIFI_BEIJING_TIME;
+				   decoder_t.single_data = WIFI_BEIJING_TIME;
 					state=0;
 		           pro_t.decodeFlag=1;
 			 		
@@ -286,13 +278,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 			 break;
 
-			 case WIFI_SET_GMT_SECOND:
-				
-				disp_t.disp_seconds_times = inputBuf[0]+1;
-		
-				 pro_t.decodeFlag=1;
-				state=0;
-			 break;
+//			 case WIFI_SET_GMT_SECOND:
+//				
+//				disp_t.disp_seconds_times = inputBuf[0]+1;
+//		
+//				 pro_t.decodeFlag=1;
+//				state=0;
+//			 break;
 
          	}
 
@@ -316,7 +308,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
             case WIFI_BEIJING_TIME:
 		      
-			        ctl_t.gSet_timer_minutes = inputBuf[0];
+			        disp_t.disp_works_minutes_time = inputBuf[0];
 					state=0;
 		           pro_t.decodeFlag=1;
 	

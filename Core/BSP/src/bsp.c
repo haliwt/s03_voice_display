@@ -130,6 +130,10 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 		     Display_Panel_Action_Handler();
 			 
           }
+
+		  //display dht11 real temperature and humidity value
+
+		  
 	
 
 		  if(pro_t.gTimer_pro_disp_timer > 37){ //37s 
@@ -573,14 +577,14 @@ static void Ptc_Temperature_Compare_Value(void)
                pro_t.gTimer_pro_temp_delay =0;
 		 
 		  
-		  if(smartphone_set_temp_value() <= temperature_value()|| temperature_value() >40){//envirment temperature
+		  if(smartphone_set_temp_value() <= disp_dht11_temperature_value()|| disp_dht11_temperature_value() >40){//envirment temperature
 	  
 				ctl_t.gPtc_flag = 0 ;//run_t.gDry = 0;
 			    SendData_Set_Command(DRY_OFF_NO_BUZZER);
                  
 
             }
-			else if((smartphone_set_temp_value() -3) > temperature_value()||  temperature_value() <38){
+			else if((smartphone_set_temp_value() -3) > disp_dht11_temperature_value()||  disp_dht11_temperature_value() <38){
 	  
 		         ctl_t.gPtc_flag = 1;//run_t.gDry = 1;
 			     SendData_Set_Command(DRY_ON_NO_BUZZER);
@@ -598,14 +602,14 @@ static void Ptc_Temperature_Compare_Value(void)
 
             if(smartphone_set_temp_value() >19 && smartphone_set_temp_value() < 41){
            
-               if(temperature_value() >40 || smartphone_set_temp_value() <= temperature_value()){//envirment temperature
+               if(disp_dht11_temperature_value() >40 || smartphone_set_temp_value() <= disp_dht11_temperature_value()){//envirment temperature
                
                  ctl_t.gPtc_flag = 0;
                  SendData_Set_Command(DRY_OFF_NO_BUZZER);
                 
            
                }
-               else if(temperature_value() <38 || (smartphone_set_temp_value() -2) > temperature_value() ){
+               else if(disp_dht11_temperature_value() <38 || (smartphone_set_temp_value() -2) > disp_dht11_temperature_value() ){
                
                   ctl_t.gPtc_flag = 1;
                   SendData_Set_Command(DRY_ON_NO_BUZZER);
@@ -616,14 +620,14 @@ static void Ptc_Temperature_Compare_Value(void)
 
             }
             else{
-                 if(temperature_value() >40){//envirment temperature
+                 if(disp_dht11_temperature_value() >40){//envirment temperature
                
                  ctl_t.gPtc_flag  = 0;
                  SendData_Set_Command(DRY_OFF_NO_BUZZER);
                 
            
                }
-               else if(temperature_value() <38){
+               else if(disp_dht11_temperature_value() <38){
                
                   ctl_t.gPtc_flag = 1;
                   SendData_Set_Command(DRY_ON_NO_BUZZER);

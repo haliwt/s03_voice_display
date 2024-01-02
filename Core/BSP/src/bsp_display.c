@@ -4,12 +4,16 @@
 DISP_T disp_t;
 
 
+uint8_t (*disp_dht11_temperature_value)(void);
+
 int8_t (*display_works_hours_value)(void);
 int8_t (*display_works_minutes_value)(void);
 
 int8_t (*display_timer_hours_value)(void);
 int8_t (*display_timer_minutes_value)(void);
 
+
+static uint8_t disp_dht11_default_fun(void);
 static int8_t display_works_hours_default_fun(void);
 static int8_t display_works_minutes_default_fun(void);
 
@@ -32,7 +36,7 @@ void Disp_Init(void)
     disp_t.timer_timing_define_flag = works_time;
 	Display_Works_Hours_Handler(display_works_hours_default_fun);
     Display_Works_Minutes_Handler(display_works_minutes_default_fun);
-
+    Display_Temp_Dht11_Value_Handler(disp_dht11_default_fun);
 
   
 
@@ -326,6 +330,21 @@ static void Timer_Times_Counter_Display(void)
  }
 }
 
+
+/************************************************************
+	*
+	*	函 数 名: static uint8_t disp_dht11_default_fun(void);
+	*	功能说明: 
+	*	形    参: NO
+	*	返 回 值: 1-bug    on. 0- bug off 
+	*
+************************************************************/
+static uint8_t disp_dht11_default_fun(void)
+{
+      return disp_t.disp_dht11_temp_value;
+
+}
+
 /***************************************************************
 	 * 
 	 * Function Name:static uint8_t display_works_hours_default_fun(void)
@@ -408,6 +427,14 @@ void Display_Voice_Set_Temp_Value(void)
 	 * Return Ref:
 	 * 
  **************************************************************/
+
+void Display_Temp_Dht11_Value_Handler(uint8_t (*disp_dht11_handler)(void))
+{
+
+   disp_dht11_temperature_value = disp_dht11_handler;
+
+}
+
 
 void Display_Works_Hours_Handler(int8_t(*disp_hours_handler)(void))
 {

@@ -49,6 +49,7 @@ typedef struct{
 
 extern DISP_T disp_t;
 
+extern uint8_t (*disp_dht11_temperature_value)(void);
 
 extern int8_t (*display_works_hours_value)(void);
 extern int8_t (*display_works_minutes_value)(void);
@@ -65,7 +66,7 @@ void Display_Power_On_Works_Time(void);
 void Display_Works_Or_Timer_times_Handler(void);
 
 
-
+void Display_Temp_Dht11_Value_Handler(uint8_t (*disp_dht11_handler)(void));
 void Display_Works_Hours_Handler(int8_t(*disp_hours_handler)(void));
 void Display_Works_Minutes_Handler(int8_t (*disp_minutes_handler)(void));
 

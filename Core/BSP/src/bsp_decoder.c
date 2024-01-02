@@ -45,21 +45,21 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 	 break;
 
 	 
-	 case WIFI_REAL_TEMP: //4//set temperature value
-	       if(power_on_off_state() ==power_on){
-		   	   
-     
-            lcd_t.number1_high = ctl_t.gSet_temperature_value/10 ;//temperature_decade;
-            lcd_t.number1_low = ctl_t.gSet_temperature_value /10 ;//temperature_decade;
-
-
-            lcd_t.number2_high =ctl_t.gSet_temperature_value %10;  //temperature_unit;
-            lcd_t.number2_low = ctl_t.gSet_temperature_value%10;//temperature_unit;
-			 lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
-              pro_t.temperature_set_flag=1;  //set temperature value flag
-	      }
-
-	 break;
+//	 case WIFI_REAL_TEMP: //4//set temperature value
+//	       if(power_on_off_state() ==power_on){
+//		   	   
+//     
+//            lcd_t.number1_high = ctl_t.gSet_temperature_value/10 ;//temperature_decade;
+//            lcd_t.number1_low = ctl_t.gSet_temperature_value /10 ;//temperature_decade;
+//
+//
+//            lcd_t.number2_high =ctl_t.gSet_temperature_value %10;  //temperature_unit;
+//            lcd_t.number2_low = ctl_t.gSet_temperature_value%10;//temperature_unit;
+//			 lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
+//              pro_t.temperature_set_flag=1;  //set temperature value flag
+//	      }
+//
+//	 break;
 
 	 case PANEL_DATA://1
 	   
@@ -67,8 +67,8 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
         hum1 =  humidity_value()/10 ;  //Humidity 
         hum2 =  humidity_value()%10;
         
-        //temp1 = temperature_value()/10 ;  // temperature
-        //temp2 = temperature_value()%10;
+        //temp1 = disp_dht11_temperature_value()/10 ;  // temperature
+        //temp2 = disp_dht11_temperature_value()%10;
        
          //temperature 
 		 lcd_t.number1_high = disp_t.disp_dht11_temp_value /10;
@@ -117,7 +117,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
  
       break;
 
-      case WIFI_SET_TIMER_TIMING://wifi set timer_timing 
+      case PHONE_SET_TIMER_TIMING://wifi set timer_timing 
 
         
 		lcd_t.number5_low=(ctl_t.gSet_timer_hours) /10;
@@ -136,7 +136,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
             
        break;
 
-	  case WIFI_SET_TEMPERATURE://11
+	  case PHONE_SET_TEMPERATURE://11
 
 		if(power_on_off_state()  ==1){
 

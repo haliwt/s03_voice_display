@@ -102,7 +102,7 @@ extern uint8_t (*fan_speed_state)(void);
 extern uint8_t (*plasma_state)(void);
 extern uint8_t (*bug_tate)(void);
 extern uint8_t (*humidity_value)(void);
-extern uint8_t (*temperature_value)(void);
+extern uint8_t (*disp_dht11_temperature_value)(void);
 
 extern uint8_t (*smartphone_set_timer_timing)(void);
 extern uint8_t (*smartphone_set_temp_value)(void);
