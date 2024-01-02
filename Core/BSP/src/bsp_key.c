@@ -465,9 +465,9 @@ KEYState_TypeDef VK36N4D_IC_StateRead(void)
   if(HAL_GPIO_ReadPin(VK36N4D_INT_GPIO_Port,VK36N4D_INT_Pin)==KEY_DOWN_LEVEL)
   {
     /* 延时一小段时间，消除抖动 */
-    HAL_Delay(8);
+    HAL_Delay(5);
     /* 延时时间后再来判断按键状态，如果还是按下状态说明按键确实被按下 */
-    if(HAL_GPIO_ReadPin(VK36N4D_INT_GPIO_Port,VK36N4D_INT_Pin)==KEY_DOWN_LEVEL)
+   // if(HAL_GPIO_ReadPin(VK36N4D_INT_GPIO_Port,VK36N4D_INT_Pin)==KEY_DOWN_LEVEL)
     {
       /* 等待按键弹开才退出按键扫描函数 */
      // while(HAL_GPIO_ReadPin(KEY_DEC_GPIO_Port,KEY_DEC_Pin)==KEY_DOWN_LEVEL);      
