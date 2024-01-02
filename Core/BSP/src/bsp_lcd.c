@@ -371,10 +371,9 @@ void DisplayPanel_Ref_Handler(void)
 		   
 			if(disp_timer_deault!=disp_t.set_timer_timing_value_chaned_flag){
 				  disp_timer_deault = disp_t.set_timer_timing_value_chaned_flag;
-				//  ctl_t.gSet_timer_value = disp_t.disp_timer_time_hours;
 			      disp_t.timer_timing_define_flag = timing_success; 
 				  ctl_t.gAi_flag = timer_time;
-				  ctl_t.set_timer_minutes = 0;// disp_t.disp_timer_time_minutes = 0;
+				  ctl_t.gSet_timer_minutes = 0;// disp_t.disp_timer_time_minutes = 0;
 				  ctl_t.gTimer_ctl_timer_time=0;
 				  pro_t.gTimer_pro_disp_timer=40;// at once be changed "timer timing value"
 				 

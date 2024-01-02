@@ -81,8 +81,8 @@ typedef struct {
    uint8_t gSet_temperature_value_flag ;
    uint8_t gTimer_ctl_timer_time;
     //timer timing 
-   int8_t gSet_timer_value;
-   int8_t set_timer_minutes;
+   int8_t gSet_timer_hours;
+   int8_t gSet_timer_minutes;
    
  
  

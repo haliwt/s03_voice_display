@@ -175,7 +175,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				else if(inputBuf[0]=='C') decoder_t.single_data = WIFI_CMD; //command 
 				else if(inputBuf[0]=='B') decoder_t.single_data = WIFI_BEIJING_TIME;
 				else if(inputBuf[0]=='S') decoder_t.single_data = WIFI_WIND_SPEED;
-				else if(inputBuf[0]=='T') decoder_t.single_data = WIFI_SET_TIMING;
+				else if(inputBuf[0]=='T') decoder_t.single_data = WIFI_SET_TIMER_TIMING;
 				else if(inputBuf[0]=='E') decoder_t.single_data = WIFI_SET_TEMPERATURE;
 				else if(inputBuf[0]=='M') decoder_t.single_data = WIFI_SET_GMT_MINUTE;
 				else if(inputBuf[0]=='N') decoder_t.single_data = WIFI_SET_GMT_SECOND;
@@ -247,8 +247,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
              break;
 			
 
-             case WIFI_SET_TIMING:
-             		ctl_t.gSet_timer_value  = inputBuf[0];
+             case WIFI_SET_TIMER_TIMING:
+             		ctl_t.gSet_timer_hours  = inputBuf[0];
              		 state=0;
                     pro_t.decodeFlag=1; 
 
@@ -275,7 +275,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 			 case  WIFI_SET_GMT_MINUTE:
 			 	
-			 	  disp_t.disp_minutes_time = inputBuf[0];
+			 	  ctl_t.gSet_timer_minutes = inputBuf[0];
 				  //pro_t.dispTime_minutes = inputBuf[0];
 
 				  //pro_t.single_data = WIFI_BEIJING_TIME;
@@ -317,7 +317,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
             case WIFI_BEIJING_TIME:
 		      
-			       disp_t.disp_minutes_time = inputBuf[0];
+			        ctl_t.gSet_timer_minutes = inputBuf[0];
 					state=0;
 		           pro_t.decodeFlag=1;
 	

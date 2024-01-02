@@ -243,7 +243,7 @@ static uint8_t temp_default_fun(void)
 
 static uint8_t smartphone_set_timer_default_fun(void)
 {
-     return ctl_t.gSet_timer_value;
+     return ctl_t.gSet_timer_hours;
 }
 static uint8_t smartphone_set_temp_default_fun()
 {

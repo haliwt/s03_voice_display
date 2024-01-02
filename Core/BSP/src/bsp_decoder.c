@@ -119,22 +119,22 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
  
       break;
 
-      case WIFI_SET_TIMING://10
+      case WIFI_SET_TIMER_TIMING://wifi set timer_timing 
 
         
-		lcd_t.number5_low=(disp_t.disp_timer_time_hours ) /10;
-		lcd_t.number5_high =(disp_t.disp_timer_time_hours ) /10;
+		lcd_t.number5_low=(ctl_t.gSet_timer_hours) /10;
+		lcd_t.number5_high =(ctl_t.gSet_timer_hours ) /10;
 
-		lcd_t.number6_low = (disp_t.disp_timer_time_hours  ) %10;;
-		lcd_t.number6_high = (disp_t.disp_timer_time_hours ) %10;
+		lcd_t.number6_low = (ctl_t.gSet_timer_hours ) %10;;
+		lcd_t.number6_high = (ctl_t.gSet_timer_hours ) %10;
 
 
 
-		lcd_t.number7_low = disp_t.disp_timer_time_minutes /10 ;
-		lcd_t.number7_high = disp_t.disp_timer_time_minutes /10 ;
+		lcd_t.number7_low = ctl_t.gSet_timer_minutes /10 ;
+		lcd_t.number7_high = ctl_t.gSet_timer_minutes /10 ;
 
-		lcd_t.number8_low = disp_t.disp_timer_time_minutes % 10;
-		lcd_t.number8_high = disp_t.disp_timer_time_minutes %10;
+		lcd_t.number8_low = ctl_t.gSet_timer_minutes % 10;
+		lcd_t.number8_high = ctl_t.gSet_timer_minutes %10;
             
        break;
 

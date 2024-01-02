@@ -385,7 +385,7 @@ void Voice_Decoder_Handler(void)
 	     ret_timer_value = voice_set_timer_data(v_t.RxBuf[4],v_t.RxBuf[6]);
 		 if(ret_temp_value > 0){
 
-		    ctl_t.gSet_timer_value =(uint8_t)ret_temp_value;
+		    ctl_t.gSet_timer_hours =(uint8_t)ret_temp_value;
 			Mode_Long_Key_Fun();
 
               

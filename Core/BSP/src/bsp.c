@@ -345,21 +345,21 @@ static void Power_On_Fun(void)
    fan_runContinue= 2;
 	
 	ctl_t.gSet_temperature_value =0; //run_t.temperature_set_flag = 0; //WT.EDIT 2023.01.31
-    ctl_t.gSet_timer_value = 0; //run_t.setup_temperature_value=0; // //WT.EDIT 2023.01.31
+    ctl_t.gSet_timer_hours = 0; //run_t.setup_temperature_value=0; // //WT.EDIT 2023.01.31
     ctl_t.gFan_speed_value =100; //run_t.disp_wind_speed_grade =100;
 	
 
      pro_t.temperature_set_flag = 0;
 
-	 disp_t.disp_timer_time_hours =0;
-	 disp_t.disp_timer_time_minutes =0;
-
-
 	 disp_t.timer_timing_define_flag = works_time;
-	
+     disp_t.gTimer_disp_timer_timing=0; //works times  clear zero.
 
-	 
-    //display work time is begin form "0"
+
+	 //timer timing
+	 ctl_t.gSet_timer_hours =0;
+	 ctl_t.gSet_timer_minutes =0;
+
+      //display work time is begin form "0"
 	
 	 disp_t.disp_hours_time =0;
 	 disp_t.disp_minutes_time=0;
@@ -394,10 +394,9 @@ void Power_Off_Fun(void)
 	pro_t.wifi_led_fast_blink_flag=0;
 	pro_t.gTimer_mode_flag = 0;
 
-	disp_t.disp_timer_time_hours =0;
-	disp_t.disp_timer_time_minutes =0;
 
-	ctl_t.gSet_timer_value =0;
+
+	ctl_t.gSet_timer_hours =0;
 
 	
 
@@ -559,16 +558,16 @@ static void ADD_Key_Fun(void)
                     disp_t.set_timer_timing_value_chaned_flag++;
 			   		if(disp_t.set_timer_timing_value_chaned_flag > 254 ) disp_t.set_timer_timing_value_chaned_flag=0;
 					
-					ctl_t.gSet_timer_value ++ ;//disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
-				    if(ctl_t.gSet_timer_value  > 24){ //if(pro_t.dispTime_minutes > 59){
+					ctl_t.gSet_timer_hours ++ ;//disp_t.disp_timer_time_hours++ ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes + 60;
+				    if(ctl_t.gSet_timer_hours  > 24){ //if(pro_t.dispTime_minutes > 59){
 
-		                 ctl_t.gSet_timer_value =0;//pro_t.dispTime_hours =0;
+		                 ctl_t.gSet_timer_hours =0;//pro_t.dispTime_hours =0;
 		                
 
 					}
 				
-                    temp_bit_2_hours = ctl_t.gSet_timer_value  /10 ;
-					temp_bit_1_hours = ctl_t.gSet_timer_value  %10;
+                    temp_bit_2_hours = ctl_t.gSet_timer_hours  /10 ;
+					temp_bit_1_hours = ctl_t.gSet_timer_hours  %10;
                  
 					temp_bit_2_minute =0;
 					temp_bit_1_minute =0;
@@ -641,15 +640,15 @@ static void DEC_Key_Fun(void)
                 disp_t.set_timer_timing_value_chaned_flag--;
 			    if(disp_t.set_timer_timing_value_chaned_flag==0)disp_t.set_timer_timing_value_chaned_flag=255;
 				
-				ctl_t.gSet_timer_value --;//disp_t.disp_timer_time_hours -- ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes - 1;
-				if(ctl_t.gSet_timer_value  < 0){//if(pro_t.dispTime_minutes < 0){
+				ctl_t.gSet_timer_hours --;//disp_t.disp_timer_time_hours -- ;//pro_t.dispTime_minutes = pro_t.dispTime_minutes - 1;
+				if(ctl_t.gSet_timer_hours  < 0){//if(pro_t.dispTime_minutes < 0){
 
-				    ctl_t.gSet_timer_value  =24;//pro_t.dispTime_hours --;
+				    ctl_t.gSet_timer_hours  =24;//pro_t.dispTime_hours --;
 					
 					
 				}
-				temp_bit_2_hours = ctl_t.gSet_timer_value  /10 ;
-				temp_bit_1_hours = ctl_t.gSet_timer_value   %10;
+				temp_bit_2_hours = ctl_t.gSet_timer_hours  /10 ;
+				temp_bit_1_hours = ctl_t.gSet_timer_hours  %10;
 
 				temp_bit_2_minute=0;
 				temp_bit_1_minute=0;

@@ -17,16 +17,16 @@ typedef enum TIMING_T{
 typedef struct{
 
    //works timer timng normal 
-   int8_t disp_timer_time_hours ;
-   int8_t disp_timer_time_minutes;
+  
    uint8_t disp_timer_time_seconds;
 
    //to wifi be set temperature value and set timer timing 
    uint8_t disp_set_temp_value;
    uint8_t disp_set_timer_timing;
+   
    //display works times 
-   uint8_t disp_hours_time;
-   uint8_t disp_minutes_time;
+   int8_t disp_hours_time;
+   int8_t disp_minutes_time;
    uint8_t disp_seconds_times;
    uint8_t timer_timing_define_flag;
    uint8_t disp_timer_or_works_timing;

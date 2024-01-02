@@ -13,10 +13,6 @@ int8_t (*display_timer_minutes_value)(void);
 static int8_t display_works_hours_default_fun(void);
 static int8_t display_works_minutes_default_fun(void);
 
-
-static int8_t display_timer_hours_default_fun(void);
-
-
 static void Display_Works_Time_Handler(void);
 static void Display_Timer_Time_Handler(void);
 static void Timer_Times_Counter_Display(void);
@@ -37,7 +33,7 @@ void Disp_Init(void)
 	Display_Works_Hours_Handler(display_works_hours_default_fun);
     Display_Works_Minutes_Handler(display_works_minutes_default_fun);
 
-    Display_Timer_Hours_Handler(display_timer_hours_default_fun);
+
   
 
 }
@@ -99,15 +95,15 @@ static void Display_Timer_Time_Handler(void)
 	    if( ctl_t.gTimer_ctl_timer_time> 59){ //
 
 		 	 ctl_t.gTimer_ctl_timer_time  =0;
-			 ctl_t.set_timer_minutes--;
+			 ctl_t.gSet_timer_minutes--;
 			 pro_t.gTimer_pro_disp_timer=40; //at once be changed display current numbers.
 			 
-		     if(ctl_t.set_timer_minutes < 0){
-			 	ctl_t.set_timer_minutes =59;
-				ctl_t.gSet_timer_value --;
+		     if(ctl_t.gSet_timer_minutes < 0){
+			 	ctl_t.gSet_timer_minutes =59;
+				ctl_t.gSet_timer_hours --;
 			 
-				if(ctl_t.gSet_timer_value <0 ){
-					ctl_t.set_timer_minutes=0;
+				if(ctl_t.gSet_timer_hours <0 ){
+					ctl_t.gSet_timer_minutes=0;
 
 					pro_t.long_key_flag =0;
 					pro_t.gKey_command_tag = power_off_fan_pro;
@@ -121,17 +117,17 @@ static void Display_Timer_Time_Handler(void)
 		     }
 	   	}
 
-		 lcd_t.number5_low=(ctl_t.gSet_timer_value  ) /10;
-		 lcd_t.number5_high =(ctl_t.gSet_timer_value ) /10;
+		 lcd_t.number5_low=(ctl_t.gSet_timer_hours  ) /10;
+		 lcd_t.number5_high =(ctl_t.gSet_timer_hours ) /10;
 		 
-		 lcd_t.number6_low = (ctl_t.gSet_timer_value ) %10;;
-		 lcd_t.number6_high = (ctl_t.gSet_timer_value) %10;
+		 lcd_t.number6_low = (ctl_t.gSet_timer_hours ) %10;;
+		 lcd_t.number6_high = (ctl_t.gSet_timer_hours) %10;
 		 //minutes 
-		 lcd_t.number7_low = ( ctl_t.set_timer_minutes)/10;
-		 lcd_t.number7_high = (ctl_t.set_timer_minutes)/10;
+		 lcd_t.number7_low = ( ctl_t.gSet_timer_minutes)/10;
+		 lcd_t.number7_high = (ctl_t.gSet_timer_minutes)/10;
 		 
-		 lcd_t.number8_low = ( ctl_t.set_timer_minutes)%10;
-		 lcd_t.number8_high = ( ctl_t.set_timer_minutes )%10;
+		 lcd_t.number8_low = ( ctl_t.gSet_timer_minutes)%10;
+		 lcd_t.number8_high = ( ctl_t.gSet_timer_minutes )%10;
 		    
 	   break;
 
@@ -141,16 +137,16 @@ static void Display_Timer_Time_Handler(void)
 	  if(disp_t.gTimer_disp_timer_timing  > 59){ //
         
   		 disp_t.gTimer_disp_timer_timing  =0;
-		 disp_t.disp_timer_time_minutes--;
-	    if( disp_t.disp_timer_time_minutes < 0){
+		 disp_t.disp_minutes_time--;
+	    if( disp_t.disp_minutes_time < 0){
 			
-			disp_t.disp_timer_time_hours -- ;
-			disp_t.disp_timer_time_minutes =59;
+			disp_t.disp_hours_time -- ;
+			disp_t.disp_minutes_time =59;
 
-			if( disp_t.disp_timer_time_hours < 0 ){
+			if( disp_t.disp_hours_time < 0 ){
 
-			disp_t.disp_timer_time_hours =0;
-			disp_t.disp_timer_time_minutes =0;
+			disp_t.disp_hours_time =0;
+			disp_t.disp_minutes_time =0;
 			//run_t.display_set_timer_timing=beijing_time;
 			disp_t.timer_timing_define_flag = works_time;
 	
@@ -164,17 +160,17 @@ static void Display_Timer_Time_Handler(void)
 	  }
 
             
-	    lcd_t.number5_low=(disp_t.disp_timer_time_hours  ) /10;
-		lcd_t.number5_high =(disp_t.disp_timer_time_hours ) /10;
+	    lcd_t.number5_low=(disp_t.disp_hours_time  ) /10;
+		lcd_t.number5_high =(disp_t.disp_hours_time ) /10;
 
-		lcd_t.number6_low = (disp_t.disp_timer_time_hours  ) %10;;
-		lcd_t.number6_high = (disp_t.disp_timer_time_hours  ) %10;
+		lcd_t.number6_low = (disp_t.disp_hours_time  ) %10;;
+		lcd_t.number6_high = (disp_t.disp_hours_time  ) %10;
 
-		lcd_t.number7_low = ( disp_t.disp_timer_time_minutes )/10;
-		lcd_t.number7_high = ( disp_t.disp_timer_time_minutes)/10;
+		lcd_t.number7_low = ( disp_t.disp_minutes_time )/10;
+		lcd_t.number7_high = ( disp_t.disp_minutes_time)/10;
 
-		lcd_t.number8_low = ( disp_t.disp_timer_time_minutes)%10;
-		lcd_t.number8_high = ( disp_t.disp_timer_time_minutes )%10;
+		lcd_t.number8_low = (disp_t.disp_minutes_time)%10;
+		lcd_t.number8_high = ( disp_t.disp_minutes_time )%10;
 
 	
 
@@ -309,13 +305,13 @@ static void Timer_Times_Counter_Display(void)
 	if(ctl_t.gTimer_ctl_timer_time  > 59){ //
         
   		 ctl_t.gTimer_ctl_timer_time  =0;
-		 ctl_t.set_timer_minutes -- ;//disp_t.disp_timer_time_minutes--;
-	    if( ctl_t.set_timer_minutes  < 0){
+		 ctl_t.gSet_timer_minutes -- ;//disp_t.disp_timer_time_minutes--;
+	    if( ctl_t.gSet_timer_minutes  < 0){
 		   
-		     ctl_t.gSet_timer_value --;
-			 ctl_t.set_timer_minutes =59;//disp_t.disp_timer_time_minutes =59;
+		     ctl_t.gSet_timer_hours --;
+			 ctl_t.gSet_timer_minutes =59;//disp_t.disp_timer_time_minutes =59;
            
-			if(ctl_t.gSet_timer_value < 0){//if( disp_t.disp_timer_time_hours < 0 ){
+			if(ctl_t.gSet_timer_hours < 0){//if( disp_t.disp_timer_time_hours < 0 ){
 
 	            pro_t.gKey_command_tag = power_off_fan_pro;
 				pro_t.gPower_On = power_off;   
@@ -378,11 +374,6 @@ static int8_t display_works_minutes_default_fun(void)
 	 * Return Ref:
 	 * 
  **************************************************************/
-static int8_t display_timer_hours_default_fun(void)
-{
-     return  disp_t.disp_timer_time_hours;
-
-}
 
 void Display_Voice_Set_Temp_Value(void)
 {
