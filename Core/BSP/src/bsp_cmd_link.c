@@ -279,7 +279,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			 case BEIJING_SECOND_TIME:
 				
 	
-				disp_t.gTimer_disp_minutes_time = inputBuf[0];
+				disp_t.gTimer_disp_minutes_time = inputBuf[0]+1;
 		
 				// pro_t.decodeFlag=1;
 				state=0;

@@ -128,7 +128,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
           }
 
 		  //display dht11 real temperature and humidity value
-		if(pro_t.gTimer_pro_disp_timer > 37){ //37s 
+		if(pro_t.gTimer_pro_disp_timer > 3){ //37s 
 		  	pro_t.gTimer_pro_disp_timer =0;
 		    Display_Works_Or_Timer_times_Handler();
 
