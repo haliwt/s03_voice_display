@@ -98,11 +98,14 @@ int main(void)
   delay_init(24);
   bsp_ctlint();
   Key_Init();
+  bsp_InitUart();
   Disp_Init();
   Voice_Init();
   HAL_TIM_Base_Start_IT(&htim17);
   HAL_UART_Receive_IT(&huart1,inputBuf,1);
-  HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
+  
+ //HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
+  HAL_UART_Receive_IT(&huart2,rxBuf,1);//UART receive data interrupt 1 byte
   pro_t.gKey_command_tag = power_off_fan_pro;
 
   Feed_Dog();
@@ -122,11 +125,12 @@ int main(void)
           Decode_Function();
                 
      }
+	    Voice_Decoder_Handler();
 	    Power_Key_Detected();
 		Mode_Key_Detected();
 		ADD_Key_Detected();
 		DEC_Key_Detected();
-	   if(VK36N4D_IC_StateRead()==KEY_UP && POWER_KEY_VALUE()==KEY_UP && MODE_KEY_VALUE()==KEY_UP ){
+	   if(VK36N4D_IC_StateRead()==KEY_UP && POWER_KEY_VALUE()==KEY_UP && MODE_KEY_VALUE()==KEY_UP){
 	       Display_Process_Handler();
 	   }
 	 

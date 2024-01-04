@@ -35,6 +35,8 @@
 #define ENABLE_INT()	__set_PRIMASK(0)	/* ?????? */
 #define DISABLE_INT()	__set_PRIMASK(1)	/* ?????? */
 
+#define NORMAL_USART2       0
+
 typedef enum{
 
   set_temperature,
@@ -95,7 +97,11 @@ typedef struct{
 	//wifi
 	uint8_t wifi_led_fast_blink_flag;
 
-  uint8_t gTimer_pro_feed_dog;
+	//usart 2 voice 
+	uint8_t v_usart2_rx_numbers;
+	uint8_t v_usart2_rx_flag;
+
+  	uint8_t gTimer_pro_feed_dog;
 	uint8_t gTimer_pro_temp ;
 	uint8_t gTimer_pro_temp_delay ;
 	uint8_t gTimer_wifi_connect_counter;

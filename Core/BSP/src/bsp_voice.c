@@ -319,7 +319,8 @@ static uint8_t v_hello_21h(void)
 	  if(v_t.RxBuf[4]==0x01 && v_t.RxBuf[6]==0x21){
 
            v_t.voice_enable = 1;
-		   Voice_Buzzer_Sound();
+		   //ice_Buzzer_Sound();
+		   SendData_Buzzer();
 		   v_t.rxCounter=0;
 	  }
 	  else{
@@ -358,7 +359,7 @@ void Voice_Decoder_Handler(void)
     if(v_t.RxBuf[7] == 0xFB){
       v_t.rx_data_enable =0;
       if(v_t.RxBuf[4] < 0x0B){
-	  	 Voice_Buzzer_Sound();
+	  	  SendData_Buzzer();
 		 voice_ctl_fun(v_t.RxBuf[4],v_t.RxBuf[6]);
 	
 	  } //voice set temperature value 
@@ -367,7 +368,7 @@ void Voice_Decoder_Handler(void)
            ret_temp_value = voice_set_temp_data(v_t.RxBuf[4],v_t.RxBuf[6]);
 		   if(ret_temp_value >= 0){
 
-              Voice_Buzzer_Sound();
+               SendData_Buzzer(); 
 			   ctl_t.gSet_temperature_value =(uint8_t)ret_temp_value;
 			  Display_Voice_Set_Temp_Value();
 		     
@@ -378,7 +379,6 @@ void Voice_Decoder_Handler(void)
 
 		   }
 
-	
 	  } //voice set timer timing value 
 	  else if(v_t.RxBuf[4] > 0x1F){
 

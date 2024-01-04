@@ -118,11 +118,7 @@ void Receive_MainBoard_Data_Handler(uint8_t cmd)
 	     // }
          }
 
-	 
-		    
-        
- 
-      break;
+	  break;
 
       case PHONE_SET_TIMER_TIMING://wifi set timer_timing 
 

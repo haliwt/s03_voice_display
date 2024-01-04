@@ -76,7 +76,7 @@ void bsp_Idle(void)
 */
 void Display_Process_Handler(void)
 {
-    Voice_Decoder_Handler();
+    //Voice_Decoder_Handler();
 	DispPocess_Command_Handler(pro_t.gKey_command_tag);
 	USART1_Cmd_Error_Handler();
 	

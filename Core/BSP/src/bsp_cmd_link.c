@@ -147,7 +147,7 @@ void SendData_Time_Data(uint8_t tdata)
 *******************************************************************************/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    static uint8_t us2, us2_rx_flag ;
+    
 	if(huart==&huart1) // Motor Board receive data (filter)
 	{
 		switch(state)
@@ -320,26 +320,34 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		}
       HAL_UART_Receive_IT(&huart1,inputBuf,1);//UART receive data interrupt 1 byte
 	}
-
+    #if NORMAL_USART2
 	//Voice USART 2 
 	if(huart==&huart2) // Motor Board receive data (filter)
 	{
-//      if(voice_inputBuf[0]==0xA5){
-//        us2_rx_flag =1;
-//		us2=0;
-//	  }
-//	  if(us2_rx_flag ==1){
-      voice_outputBuf[us2]=voice_inputBuf[0];
-	  us2++;
-	  if(us2 == 16)us2=0;
-
-	  
+      if(voice_inputBuf[0]==0xA5){
+        pro_t.v_usart2_rx_flag =1;
+		pro_t.v_usart2_rx_numbers =0;
+	  }
+	  if(pro_t.v_usart2_rx_flag  ==1){
+	      voice_outputBuf[pro_t.v_usart2_rx_numbers]=voice_inputBuf[0];
+		  pro_t.v_usart2_rx_numbers++;
+          if(pro_t.v_usart2_rx_numbers==8)pro_t.v_usart2_rx_flag=2;
+		 
+      }
 
 	  
 	 HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
 
+	  
+	__HAL_UART_CLEAR_NEFLAG(&huart2);
+	__HAL_UART_CLEAR_FEFLAG(&huart2);
+	__HAL_UART_CLEAR_OREFLAG(&huart2);
+	__HAL_UART_CLEAR_OREFLAG(&huart2);
+	__HAL_UART_CLEAR_TXFECF(&huart2);
 
 	}
+
+	#endif 
     
 }
 /********************************************************************************
@@ -353,23 +361,19 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 void USART1_Cmd_Error_Handler(void)
 {
     uint32_t temp;
-	static uint8_t power_error;
+	if(pro_t.gTimer_usart_error > 9 ){
+		pro_t.gTimer_usart_error=0;
+		__HAL_UART_CLEAR_NEFLAG(&huart1);
+		__HAL_UART_CLEAR_FEFLAG(&huart1);
+		__HAL_UART_CLEAR_OREFLAG(&huart1);
+		__HAL_UART_CLEAR_OREFLAG(&huart1);
+		__HAL_UART_CLEAR_TXFECF(&huart1);
 
+		temp = USART1->RDR;
 
-        if(pro_t.gTimer_usart_error > 9 ){
-			power_error++;
-			pro_t.gTimer_usart_error=0;
-			  __HAL_UART_CLEAR_OREFLAG(&huart1);
-	        
-	          temp = USART1->RDR;
-	     
-	     
-			  UART_Start_Receive_IT(&huart1,inputBuf,1);
+		UART_Start_Receive_IT(&huart1,inputBuf,1);
 			
-	          
-         }
-        
-
+	}
 }
 /********************************************************************************
 **

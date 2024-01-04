@@ -97,7 +97,7 @@ void bsp_InitUart(void)
 
 	//InitHardUart();		/* 配置串口的硬件参数(波特率等) */
 
-	RS485_InitTXE();	/* 配置RS485芯片的发送使能硬件，配置为推挽输出 */
+	//RS485_InitTXE();	/* 配置RS485芯片的发送使能硬件，配置为推挽输出 */
 }
 
 /*
@@ -744,7 +744,7 @@ static void UartIRQ_2(UART_T *_pUart)
 			rx_voice_data(rxBuf[0]);
 		}
 	}
-
+    HAL_UART_Receive_IT(&huart2,rxBuf,1);
 	/* 处理发送缓冲区空中断 */
 	if ( ((isrflags & USART_ISR_TXE_TXFNF) != RESET) && (cr1its & USART_CR1_TXEIE_TXFNFIE ) != RESET)
 	{

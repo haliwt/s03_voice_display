@@ -193,10 +193,7 @@ void Display_Power_On_Works_Time(void)
 {
      static uint8_t m,n,p,q;
     if(pro_t.gPower_On==power_on){
-
-		
-
-	    m = (disp_t.disp_works_hours_time/10) ;
+		m = (disp_t.disp_works_hours_time/10) ;
 		n=	(disp_t.disp_works_hours_time%10); 
 		p = (disp_t.disp_works_minutes_time/10);
 		q=  (disp_t.disp_works_minutes_time%10);
@@ -216,13 +213,8 @@ void Display_Power_On_Works_Time(void)
 		 lcd_t.number8_low = q;
 
 		// DisplayPanel_Ref_Handler();
-		
-
-   }
-
-		   
+	}
 }
-
 /************************************************************************
 	*
 	*Function Name:void Display_Works_Or_Timer_times_Handler(void)

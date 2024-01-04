@@ -3,7 +3,7 @@
 
 
 #define	UART1_FIFO_EN	0
-#define	UART2_FIFO_EN	0
+#define	UART2_FIFO_EN	1
 
 
 /* PB2 控制RS485芯片的发送使能 */
@@ -16,6 +16,9 @@
 
 #define RS485_RX_EN()	RS485_TXEN_GPIO_PORT->BSRR = ((uint32_t)RS485_TXEN_PIN << 16U)
 #define RS485_TX_EN()	RS485_TXEN_GPIO_PORT->BSRR = RS485_TXEN_PIN
+
+extern uint8_t rxBuf[1];
+
 
 /* 定义端口号 */
 typedef enum
@@ -61,6 +64,8 @@ typedef struct
 	void (*ReciveNew)(uint8_t _byte);	/* 串口收到数据的回调函数指针 */
 	uint8_t Sending;			/* 正在发送中 */
 }UART_T;
+
+
 
 void bsp_InitUart(void);
 void comSendBuf(COM_PORT_E _ucPort, uint8_t *_ucaBuf, uint16_t _usLen);

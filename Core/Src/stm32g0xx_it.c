@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32g0xx_it.h"
+#include "bsp.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -208,7 +209,7 @@ void USART1_IRQHandler(void)
 ///**
 //  * @brief This function handles USART2 global interrupt / USART2 wake-up interrupt through EXTI line 26.
 //  */
-
+#if NORMAL_USART2
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
@@ -220,7 +221,7 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 1 */
 }
 
-
+#endif 
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
