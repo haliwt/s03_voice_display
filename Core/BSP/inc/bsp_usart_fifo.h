@@ -17,7 +17,7 @@
 #define RS485_RX_EN()	RS485_TXEN_GPIO_PORT->BSRR = ((uint32_t)RS485_TXEN_PIN << 16U)
 #define RS485_TX_EN()	RS485_TXEN_GPIO_PORT->BSRR = RS485_TXEN_PIN
 
-extern uint8_t rxBuf[1];
+extern uint8_t rxBuf[8];
 
 
 /* 定义端口号 */

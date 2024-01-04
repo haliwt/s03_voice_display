@@ -80,7 +80,8 @@ static void UartIRQ_1(UART_T *_pUart);
 
 
 void RS485_InitTXE(void);
-uint8_t rxBuf[1];
+uint8_t rxBuf[8];
+uint8_t v_rx_data[8];
 
 /*
 *********************************************************************************************************
@@ -714,6 +715,8 @@ uint8_t UartTxEmpty(COM_PORT_E _ucPort)
 */
 static void UartIRQ_2(UART_T *_pUart)
 {
+ 
+
 	uint32_t isrflags   = READ_REG(_pUart->uart->ISR);
 	uint32_t cr1its     = READ_REG(_pUart->uart->CR1);
 	uint32_t cr3its     = READ_REG(_pUart->uart->CR3);
@@ -735,16 +738,28 @@ static void UartIRQ_2(UART_T *_pUart)
 //			_pUart->usRxCount++;
 //		}
 
-		rxBuf[0] = USART2->RDR;
+		rxBuf[_pUart->usRxWrite] = USART2->RDR;
+		if(rxBuf[0] == 0xA5){
+            _pUart->usRxCount=1;
+
+		} 
+		if(_pUart->usRxCount ==0)_pUart->usRxWrite =0;
 
 		/* 回调函数,通知应用程序收到新数据,一般是发送1个消息或者设置一个标记 */
 		//if (_pUart->usRxWrite == _pUart->usRxRead)
 		//if (_pUart->usRxCount == 1)
+		if(_pUart->usRxCount== 1)
 		{
-			rx_voice_data(rxBuf[0]);
+		   
+		  v_rx_data[_pUart->usRxWrite]=rxBuf[_pUart->usRxWrite];
+		   _pUart->usRxWrite ++;
+		   if(_pUart->usRxWrite ==8){
+		    	_pUart->usRxCount=0;
+				_pUart->usRxWrite=0;
+		   }
 		}
 	}
-    HAL_UART_Receive_IT(&huart2,rxBuf,1);
+    HAL_UART_Receive_IT(&huart2,rxBuf,8);
 	/* 处理发送缓冲区空中断 */
 	if ( ((isrflags & USART_ISR_TXE_TXFNF) != RESET) && (cr1its & USART_CR1_TXEIE_TXFNFIE ) != RESET)
 	{
