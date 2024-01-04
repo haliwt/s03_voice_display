@@ -1,23 +1,16 @@
 #ifndef _BSP_USART_FIFO_H_
 #define _BSP_USART_FIFO_H_
-
+#include "main.h"
 
 #define	UART1_FIFO_EN	0
 #define	UART2_FIFO_EN	1
 
 
-/* PB2 控制RS485芯片的发送使能 */
-#define RS485_TXEN_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
-#define RS485_TXEN_GPIO_PORT              GPIOB
-#define RS485_TXEN_PIN                    GPIO_PIN_2
 
-//#define RS485_RX_EN()	RS485_TXEN_GPIO_PORT->BSRRH = RS485_TXEN_PIN
-//#define RS485_TX_EN()	RS485_TXEN_GPIO_PORT->BSRRL = RS485_TXEN_PIN
-
-#define RS485_RX_EN()	RS485_TXEN_GPIO_PORT->BSRR = ((uint32_t)RS485_TXEN_PIN << 16U)
-#define RS485_TX_EN()	RS485_TXEN_GPIO_PORT->BSRR = RS485_TXEN_PIN
 
 extern uint8_t rxBuf[8];
+extern uint8_t v_rx_data[8];
+
 
 
 /* 定义端口号 */
@@ -86,5 +79,5 @@ uint8_t UartTxEmpty(COM_PORT_E _ucPort);
 
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+
 

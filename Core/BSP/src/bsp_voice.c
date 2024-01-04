@@ -1,5 +1,6 @@
 #include "bsp_voice.h"
 #include "bsp.h"
+#include <string.h>
 
 
 #define HELLO     							0x01 
@@ -307,34 +308,19 @@ static uint8_t v_hello_21h(void)
 			21 开机序列号
 			FB 结束标志位
 	*/
-	if(v_t.rxCounter != 8)
-	{
-		v_t.rx_data_enable =0;			/* 数据值域错误 */
-		return 0;
-	}
-
-    if(v_t.RxBuf[7] == 0xFB){
-      v_t.rx_data_enable =0;
+	
+    
+    if(v_t.rx_voice_data_flag== 1){
+	    memcpy(v_t.RxBuf,v_rx_data,8);
 
 	  if(v_t.RxBuf[4]==0x01 && v_t.RxBuf[6]==0x21){
 
            v_t.voice_enable = 1;
-		   //ice_Buzzer_Sound();
 		   SendData_Buzzer();
-		   v_t.rxCounter=0;
-	  }
-	  else{
-	  	  v_t.voice_enable = 0;
-		  v_t.rxCounter=0;
+		 
 	  }
 
 	}
-	else{
-      v_t.rxCounter=0;
-	  v_t.rx_data_enable =0;
-
-	}
-    
 	return v_t.voice_enable ;
 }
 /***********************************************************
@@ -348,7 +334,12 @@ static uint8_t v_hello_21h(void)
 void Voice_Decoder_Handler(void)
 {
     int8_t ret_temp_value,ret_timer_value;
-    if(hello_word_state() ==1){
+
+	if(v_t.voice_enable ==0){
+	    hello_word_state();
+     }
+	
+    if(v_t.voice_enable  ==1){
       
     if(v_t.rxCounter != 8){
 		v_t.rx_data_enable =0;			/* 数据值域错误 */
@@ -714,7 +705,7 @@ static int8_t BinarySearch_Timer(const uint8_t *pta,uint8_t key,uint8_t n)
 	  }
 	  else if(pta[mid]> key){
 
-	      right = right -1;
+	      right = right -1; //在左边查找
 
 	  }
 	  else if(pta[mid] < key){

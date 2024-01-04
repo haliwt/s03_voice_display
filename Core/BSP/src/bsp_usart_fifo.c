@@ -299,28 +299,6 @@ void comSetBaud(COM_PORT_E _ucPort, uint32_t _BaudRate)
 
 /* 如果是RS485通信，请按如下格式编写函数， 我们仅举了 USART3作为RS485的例子 */
 
-/*
-*********************************************************************************************************
-*	函 数 名: RS485_InitTXE
-*	功能说明: 配置RS485发送使能口线 TXE
-*	形    参: 无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-void RS485_InitTXE(void)
-{
-	GPIO_InitTypeDef gpio_init;
-	
-	/* 打开GPIO时钟 */
-	RS485_TXEN_GPIO_CLK_ENABLE();
-	
-	/* 配置引脚为推挽输出 */
-	gpio_init.Mode = GPIO_MODE_OUTPUT_PP;			/* 推挽输出 */
-	gpio_init.Pull = GPIO_NOPULL;					/* 上下拉电阻不使能 */
-	gpio_init.Speed = GPIO_SPEED_FREQ_VERY_HIGH;	/* GPIO速度等级 */
-	gpio_init.Pin = RS485_TXEN_PIN;
-	HAL_GPIO_Init(RS485_TXEN_GPIO_PORT, &gpio_init);	
-}
 
 /*
 *********************************************************************************************************
@@ -336,33 +314,8 @@ void RS485_SetBaud(uint32_t _baud)
 	comSetBaud(COM2, _baud);
 }
 
-/*
-*********************************************************************************************************
-*	函 数 名: RS485_SendBefor
-*	功能说明: 发送数据前的准备工作。对于RS485通信，请设置RS485芯片为发送状态，
-*			  并修改 UartVarInit()中的函数指针等于本函数名，比如 g_tUart2.SendBefor = RS485_SendBefor
-*	形    参: 无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-void RS485_SendBefor(void)
-{
-	RS485_TX_EN();	/* 切换RS485收发芯片为发送模式 */
-}
 
-/*
-*********************************************************************************************************
-*	函 数 名: RS485_SendOver
-*	功能说明: 发送一串数据结束后的善后处理。对于RS485通信，请设置RS485芯片为接收状态，
-*			  并修改 UartVarInit()中的函数指针等于本函数名，比如 g_tUart2.SendOver = RS485_SendOver
-*	形    参: 无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-void RS485_SendOver(void)
-{
-	RS485_RX_EN();	/* 切换RS485收发芯片为接收模式 */
-}
+
 
 /*
 *********************************************************************************************************
@@ -378,32 +331,7 @@ void RS485_SendBuf(uint8_t *_ucaBuf, uint16_t _usLen)
 	comSendBuf(COM2, _ucaBuf, _usLen);
 }
 
-/*
-*********************************************************************************************************
-*	函 数 名: RS485_SendStr
-*	功能说明: 向485总线发送一个字符串，0结束。
-*	形    参: _pBuf 字符串，0结束
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-void RS485_SendStr(char *_pBuf)
-{
-	//RS485_SendBuf((uint8_t *)_pBuf, strlen(_pBuf));
-}
 
-/*
-*********************************************************************************************************
-*	函 数 名: RS485_ReciveNew
-*	功能说明: 接收到新的数据
-*	形    参: _byte 接收到的新数据
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-////extern void MODS_ReciveNew(uint8_t _byte);
-//void RS485_ReciveNew(uint8_t _byte)
-//{
-//	MODS_ReciveNew(_byte);
-//}
 
 /*
 *********************************************************************************************************
@@ -493,99 +421,7 @@ void bsp_SetUartParam(USART_TypeDef *Instance,  uint32_t BaudRate, uint32_t Pari
 	
 }
 
-/*
-*********************************************************************************************************
-*	函 数 名: InitHardUart
-*	功能说明: 配置串口的硬件参数（波特率，数据位，停止位，起始位，校验位，中断使能）适合于STM32-H7开发板
-*	形    参: 无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-#if 0
-static void InitHardUart(void)
-{
-	GPIO_InitTypeDef  GPIO_InitStruct;
-	RCC_PeriphCLKInitTypeDef RCC_PeriphClkInit;
-	
-	/* 
-       下面这个配置可以注释掉，预留下来是为了方便以后选择其它时钟使用 
-       默认情况下，USART1和USART6选择的PCLK2，时钟100MHz。
-       USART2，USART3，UART4，UART5，UART6，UART7和UART8选择的时钟是PLCK1，时钟100MHz。
-    */
-	RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART16;
-	RCC_PeriphClkInit.Usart16ClockSelection = RCC_USART16CLKSOURCE_D2PCLK2;
-	HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit);	
 
-#if UART1_FIFO_EN == 1		/* 串口1 */
-	/* 使能 GPIO TX/RX 时钟 */
-	USART1_TX_GPIO_CLK_ENABLE();
-	USART1_RX_GPIO_CLK_ENABLE();
-	
-	/* 使能 USARTx 时钟 */
-	USART1_CLK_ENABLE();	
-
-	/* 配置TX引脚 */
-	GPIO_InitStruct.Pin       = USART1_TX_PIN;
-	GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull      = GPIO_PULLUP;
-	GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
-	GPIO_InitStruct.Alternate = USART1_TX_AF;
-	HAL_GPIO_Init(USART1_TX_GPIO_PORT, &GPIO_InitStruct);	
-	
-	/* 配置RX引脚 */
-	GPIO_InitStruct.Pin = USART1_RX_PIN;
-	GPIO_InitStruct.Alternate = USART1_RX_AF;
-	HAL_GPIO_Init(USART1_RX_GPIO_PORT, &GPIO_InitStruct);
-
-	/* 配置NVIC the NVIC for UART */   
-	HAL_NVIC_SetPriority(USART1_IRQn, 4, 0);
-	HAL_NVIC_EnableIRQ(USART1_IRQn);
-  
-	/* 配置波特率、奇偶校验 */
-	bsp_SetUartParam(USART1,  UART1_BAUD, UART_PARITY_NONE, UART_MODE_TX_RX);
-
-	SET_BIT(USART1->ICR, USART_ICR_TCCF);	/* 清除TC发送完成标志 */
-	SET_BIT(USART1->RQR, USART_RQR_RXFRQ);  /* 清除RXNE接收标志 */
-	// USART_CR1_PEIE | USART_CR1_RXNEIE
-	SET_BIT(USART1->CR1, USART_CR1_RXNEIE);	/* 使能PE. RX接受中断 */
-#endif
-
-#if UART2_FIFO_EN == 1		/* 串口2 */
-	/* 使能 GPIO TX/RX 时钟 */
-	USART2_TX_GPIO_CLK_ENABLE();
-	USART2_RX_GPIO_CLK_ENABLE();
-	
-	/* 使能 USARTx 时钟 */
-	USART2_CLK_ENABLE();	
-
-	/* 配置TX引脚 */
-	GPIO_InitStruct.Pin       = USART2_TX_PIN;
-	GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull      = GPIO_PULLUP;
-	GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
-	GPIO_InitStruct.Alternate = USART2_TX_AF;
-	HAL_GPIO_Init(USART2_TX_GPIO_PORT, &GPIO_InitStruct);	
-	
-	/* 配置RX引脚 */
-	GPIO_InitStruct.Pin = USART2_RX_PIN;
-	GPIO_InitStruct.Alternate = USART2_RX_AF;
-	HAL_GPIO_Init(USART2_RX_GPIO_PORT, &GPIO_InitStruct);
-
-	/* 配置NVIC the NVIC for UART */   
-	HAL_NVIC_SetPriority(USART2_IRQn, 4, 2);
-	HAL_NVIC_EnableIRQ(USART2_IRQn);
-  
-	/* 配置波特率、奇偶校验 */
-	bsp_SetUartParam(USART2,  UART2_BAUD, UART_PARITY_NONE, UART_MODE_RX);	// UART_MODE_TX_RX
-
-	SET_BIT(USART2->ICR, USART_ICR_TCCF);	/* 清除TC发送完成标志 */
-	SET_BIT(USART2->RQR, USART_RQR_RXFRQ);/* 清除RXNE接收标志 */
-	SET_BIT(USART2->CR1, USART_CR1_RXNEIE);	/* 使能PE. RX接受中断 */
-#endif
-
-
-}
-#endif 
 /*
 *********************************************************************************************************
 *	函 数 名: UartSend
@@ -756,6 +592,7 @@ static void UartIRQ_2(UART_T *_pUart)
 		   if(_pUart->usRxWrite ==8){
 		    	_pUart->usRxCount=0;
 				_pUart->usRxWrite=0;
+				v_t.rx_voice_data_flag = 1;
 		   }
 		}
 	}
