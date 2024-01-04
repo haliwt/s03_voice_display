@@ -592,6 +592,7 @@ static void UartIRQ_2(UART_T *_pUart)
 		   if(_pUart->usRxWrite ==8){
 		    	_pUart->usRxCount=0;
 				_pUart->usRxWrite=0;
+				v_t.rxCounter++;
 				v_t.rx_voice_data_flag = 1;
 		   }
 		}
