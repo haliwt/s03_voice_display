@@ -329,9 +329,18 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	}
     #if NORMAL_USART2
 	//Voice USART 2 
-	if(huart==&huart2){ // Motor Board receive data (filter)
-	
-	  v_rx_data[v_t.rxCounter]=voice_inputBuf[v_t.rxCounter];
+	if(huart==&huart2) // Motor Board receive data (filter)
+	{
+      if(voice_inputBuf[0]==0xA5){
+        pro_t.v_usart2_rx_flag =1;
+		pro_t.v_usart2_rx_numbers =0;
+	  }
+	  if(pro_t.v_usart2_rx_flag  ==1){
+	      voice_outputBuf[pro_t.v_usart2_rx_numbers]=voice_inputBuf[0];
+		  pro_t.v_usart2_rx_numbers++;
+          if(pro_t.v_usart2_rx_numbers==8)pro_t.v_usart2_rx_flag=2;
+		 
+      }
 
       v_t.rxCounter++;
 	

@@ -127,7 +127,8 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 		     Display_Panel_Action_Handler();
 			 
           }
-		  else{
+		  
+		  if(pro_t.gTimer_pro_ms < 20){
 
 			Voice_Decoder_Handler();
 
