@@ -5,7 +5,7 @@
 #define	UART1_FIFO_EN	0
 #define	UART2_FIFO_EN	0
 
-#define NORMAL_USART2       1
+#define NORMAL_USART2    1
 
 
 

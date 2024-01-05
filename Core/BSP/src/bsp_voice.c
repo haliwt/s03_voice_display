@@ -201,10 +201,11 @@ static uint8_t v_hello_21h(void)
 ***********************************************************/
 void Voice_Decoder_Handler(void)
 {
-    if(v_t.rxCounter == 8){
-	    v_t.rxCounter =0;
+   
 
 	if(voice_inputBuf[0]==0xA5){
+
+	voice_inputBuf[0]=0xff;
 
 	key= voice_inputBuf[4] + voice_inputBuf[6];
 
@@ -236,15 +237,10 @@ void Voice_Decoder_Handler(void)
 	}
 	}
 	else{
-		v_t.rxCounter =0;
-
+		voice_inputBuf[0]=0xff;
 	   }
 
-    }
-	else{
-		v_t.rxCounter =0;
-
-	}
+ 
 	
 }
 

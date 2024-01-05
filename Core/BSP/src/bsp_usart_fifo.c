@@ -552,7 +552,7 @@ uint8_t UartTxEmpty(COM_PORT_E _ucPort)
 static void UartIRQ_2(UART_T *_pUart)
 {
  
-    
+    uint8_t ch;
 	uint32_t isrflags   = READ_REG(_pUart->uart->ISR);
 	uint32_t cr1its     = READ_REG(_pUart->uart->CR1);
 	uint32_t cr3its     = READ_REG(_pUart->uart->CR3);
@@ -577,7 +577,11 @@ static void UartIRQ_2(UART_T *_pUart)
 //		}
 
 		//v_t.RxBuf[]=voice_inputBuf[v_t.rxCounter]
+		//ch = READ_REG(_pUart->uart->RDR);
+		v_t.RxBuf[v_t.rxCounter]=voice_inputBuf[0];
+	
 		v_t.rxCounter++;
+		
 		#if 0
 		if(rxBuf[0] == 0xA5){
             _pUart->usRxCount=1;
@@ -602,7 +606,7 @@ static void UartIRQ_2(UART_T *_pUart)
 		}
 		#endif 
 	}
-    HAL_UART_Receive_IT(&huart2,voice_inputBuf,8);
+    HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);
 //	/* 处理发送缓冲区空中断 */
 //	if ( ((isrflags & USART_ISR_TXE_TXFNF) != RESET) && (cr1its & USART_CR1_TXEIE_TXFNFIE ) != RESET)
 //	{

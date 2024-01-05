@@ -61,7 +61,7 @@ void bsp_Idle(void)
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
 	//TOUCH_CapScan();
 	
-   
+   Voice_Decoder_Handler();
 
 }
 
@@ -128,11 +128,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 			 
           }
 		  
-		  if(pro_t.gTimer_pro_ms < 20){
-
-			Voice_Decoder_Handler();
-
-		  }
+		
 
 		  //display dht11 real temperature and humidity value
 		if(pro_t.gTimer_pro_disp_timer > 3){ //37s 
