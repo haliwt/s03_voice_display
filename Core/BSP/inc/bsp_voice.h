@@ -20,12 +20,12 @@ typedef enum{
 
 typedef struct{
 
-    uint8_t voice_enable;
+    uint8_t voice_sound_enable;
 	uint8_t voice_ctl_flag;
 	uint8_t RxBuf[RX_BUF_SIZE];
-	uint8_t rx_data_enable;
+	uint8_t rx_voice_data_enable;
 	uint8_t rxCounter;
-	uint8_t rx_voice_data_flag;
+	uint8_t voice_to_buzzer_flag ;
 
 	//voice ctl display function "icon" 
 	uint8_t voice_ptc_flag;

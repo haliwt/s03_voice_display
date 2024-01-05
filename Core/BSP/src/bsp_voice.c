@@ -95,7 +95,7 @@ static uint8_t const voice_sound_data[55]={
 
 
 
-static uint8_t v_hello_21h(void);
+
 
 static int8_t BinarySearch_Voice_Data(const uint8_t *pta,uint8_t key);
 
@@ -122,7 +122,7 @@ void Voice_Init(void)
 	 v_t.voice_ptc_flag = 1;
 
 	
-	Voice_Hello_Word_Handler(v_hello_21h);
+	
 
 
 }
@@ -142,55 +142,7 @@ void Rx_Voice_Data_Handler(void(*rx_voice_handler)(uint8_t data))
    rx_voice_data = rx_voice_handler;
 
 }
-/*
-*********************************************************************************************************
-*	函 数 名: static uint8_t v_hello_21h(void)
-*	功能说明: 语音唤醒词
-*	形    参: 无
-*	返 回 值: 无
-*********************************************************************************************************/
-static uint8_t v_hello_21h(void)
-{
-	/*
-	  协议：
-		语音IC发送:
-			A5 头文件
-			FA 协议一
-			00 协议二
-			81 协议三
-			00 协议四
-			01 唤醒词 --功能码 “你好，小优”
-			00 默认
-			21 开机序列号
-			FB 结束标志位
-	*/
-	
-    if(v_t.voice_enable == 0){
-	 
-		    memcpy(v_t.RxBuf,v_rx_data,8);
 
-		  if(v_t.RxBuf[4]==0x01 && v_t.RxBuf[6]==0x21){
-
-	           v_t.voice_enable = 1;
-			   SendData_Buzzer();
-			 
-		  }
-
-		
-    }
-	else{
-	 if(v_t.rx_voice_data_flag== 1){
-	      if(v_t.RxBuf[4]==0x01 && v_t.RxBuf[6]==0x21){
-		
-			v_t.voice_enable = 1;
-			SendData_Buzzer();
-					
-		}
-	 }
-
-	}
-	return v_t.voice_enable ;
-}
 /***********************************************************
  *  *
     *Function Name: void Voice_Decoder_Handler(void);
@@ -203,26 +155,27 @@ void Voice_Decoder_Handler(void)
 {
    
 
-if(v_t.rx_data_enable ==1){
+if(v_t.rx_voice_data_enable ==1){
 
-	v_t.rx_data_enable =0;
+	v_t.rx_voice_data_enable =0;
 	
-	
-
 	key= v_t.RxBuf[0] + v_t.RxBuf[1];
 
 	result = BinarySearch_Voice_Data(voice_sound_data,key);
 	
 	if(result ==0){
-		v_t.voice_enable =1;
-		 SendData_Buzzer();
+		v_t.voice_sound_enable =1;
+		v_t.voice_to_buzzer_flag =1;
+		// SendData_Buzzer();
 	    
 	}
 
 	
-	if(v_t.voice_enable ==1){
+	if(v_t.voice_sound_enable ==1){
        if(result ==1){
 	   	if(pro_t.gPower_On == power_on){
+			
+			v_t.voice_to_buzzer_flag =1;
 
             
         }
@@ -244,7 +197,7 @@ if(v_t.rx_data_enable ==1){
 
 	}
 
-    if(v_t.voice_enable ==1 && pro_t.gPower_On == power_on){
+    if(v_t.voice_sound_enable ==1 && pro_t.gPower_On == power_on){
 
 	if(result >1 && result < 10){ //command 
 	   
@@ -288,27 +241,27 @@ static void voice_cmd_fun(uint8_t cmd)
 {
 	
 	switch(cmd){
-	case voice_power_on:
-        if(pro_t.gPower_On == power_on){
-
-
-        }
-		else{
-			
-			pro_t.gKey_command_tag = run_update_data;
-			pro_t.gPower_On = power_on;   
-			pro_t.run_process_step=0;
-			pro_t.long_key_flag =0;
-			pro_t.run_process_step=0;
-			SendData_PowerOnOff(1);
-			Power_On_Fun();
-			LCD_Backlight_On();
-		}
-
-	break;
+//	case voice_power_on:
+//        if(pro_t.gPower_On == power_on){
+//
+//
+//        }
+//		else{
+//			
+//			pro_t.gKey_command_tag = run_update_data;
+//			pro_t.gPower_On = power_on;   
+//			pro_t.run_process_step=0;
+//			pro_t.long_key_flag =0;
+//			pro_t.run_process_step=0;
+//			SendData_PowerOnOff(1);
+//			Power_On_Fun();
+//			LCD_Backlight_On();
+//		}
+//
+//	break;
 	case voice_power_off:
 		if(pro_t.gPower_On == power_off){
-
+			v_t.voice_to_buzzer_flag =1;
 
 		}
 		else{
@@ -324,9 +277,16 @@ static void voice_cmd_fun(uint8_t cmd)
 	break;
 
 	case voice_link_wifi:
+		 SendData_Set_Wifi(0x01);
+
+	    //Key_Sound();
+        pro_t.wifi_led_fast_blink_flag=1;
+	
 	break;
 
 	case voice_open_ptc:
+		
+		
 	break;
 
 	case voice_close_ptc:
@@ -357,7 +317,19 @@ static void voice_cmd_fun(uint8_t cmd)
 *************************************************************************************/
 static void  voice_set_temperature_value(uint8_t value)
 {
+		value = 10+value;
+		v_t.voice_to_buzzer_flag =1;
 		ctl_t.gSet_temperature_value = value;
+
+		lcd_t.number1_low=ctl_t.gSet_temperature_value / 10 ;
+		lcd_t.number1_high =ctl_t.gSet_temperature_value / 10 ;
+
+		lcd_t.number2_low = ctl_t.gSet_temperature_value % 10; //
+		lcd_t.number2_high = ctl_t.gSet_temperature_value % 10; //
+		
+		lcd_t.gTimer_numbers_one_two_blink=0;//display temperature of blink "led" timer timing
+        pro_t.temperature_set_flag=1;  //set temperature value flag
+        DisplayPanel_Ref_Handler();
 
 }
 /***********************************************************
@@ -370,8 +342,29 @@ static void  voice_set_temperature_value(uint8_t value)
 ***********************************************************/
 static void voice_set_timer_timing_value(uint8_t time)
 {
-      ctl_t.gSet_timer_hours= time /10;
+       time = time - 30;
+	  pro_t.gTimer_mode_flag= set_timer_timing;
+	  
+	  pro_t.gTimer_key_timing =0;
+	  v_t.voice_to_buzzer_flag =1;
+     
+	  
+	  ctl_t.gSet_timer_hours= time /10;
 	  ctl_t.gSet_timer_minutes = time %10;
+
+	  lcd_t.number5_low=ctl_t.gSet_timer_hours;
+		lcd_t.number5_high =ctl_t.gSet_timer_hours;
+
+		lcd_t.number6_low = ctl_t.gSet_timer_hours;
+		lcd_t.number6_high = ctl_t.gSet_timer_hours;
+
+		lcd_t.number7_low=0;
+		lcd_t.number7_high =0;
+
+		lcd_t.number8_low = 0;
+		lcd_t.number8_high = 0;
+		DisplayPanel_Ref_Handler();
+		
 
 }
 /***********************************************************

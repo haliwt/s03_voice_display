@@ -120,13 +120,9 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	bsp_Idle();
-	if(pro_t.decodeFlag ==1){
-		  pro_t.decodeFlag =0;
-          Decode_Function();
-                
-     }
+	
 		
-	  Power_Key_Detected();
+	    Power_Key_Detected();
 		Mode_Key_Detected();
 		ADD_Key_Detected();
 		DEC_Key_Detected();

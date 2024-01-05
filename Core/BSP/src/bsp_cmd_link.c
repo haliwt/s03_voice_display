@@ -407,7 +407,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	   case 7:
 	      if(voice_inputBuf[0]==0xFB) //hex : 41 -'A'	-fixed master
 		   {
-               v_t.rx_data_enable = 1;
+               v_t.rx_voice_data_enable = 1;
 			   state_uart2=0; 
 
 		  }

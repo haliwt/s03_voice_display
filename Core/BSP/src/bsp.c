@@ -62,6 +62,11 @@ void bsp_Idle(void)
 	//TOUCH_CapScan();
 	
    Voice_Decoder_Handler();
+   if(pro_t.decodeFlag ==1){
+	  pro_t.decodeFlag =0;
+      Decode_Function();
+                
+   }
 
 }
 
@@ -79,6 +84,10 @@ void Display_Process_Handler(void)
   
 	DispPocess_Command_Handler(pro_t.gKey_command_tag);
 	//USART1_Cmd_Error_Handler();
+	 if(v_t.voice_to_buzzer_flag ==1){
+	  v_t.voice_to_buzzer_flag =0;
+      SendData_Buzzer();
+	}
 	
 	
 }
@@ -694,7 +703,7 @@ void Power_Key_Detected(void)
 
         SendData_Set_Wifi(0x01);
 
-	    Key_Sound();
+	    //Key_Sound();
         pro_t.wifi_led_fast_blink_flag=1;
 		//pro_t.long_key_flag =0;
 
