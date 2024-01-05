@@ -331,23 +331,27 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	//Voice USART 2 
 	if(huart==&huart2){ // Motor Board receive data (filter)
 	
-      if(voice_inputBuf[pro_t.v_usart2_rx_numbers]==0xA5){
-        pro_t.v_usart2_rx_flag =1;
-		pro_t.v_usart2_rx_numbers =0;
-	  }
-	  if( pro_t.v_usart2_rx_flag==0)pro_t.v_usart2_rx_numbers =0;
+	  v_rx_data[v_t.rxCounter]=voice_inputBuf[v_t.rxCounter];
 
-	  
-	  if(pro_t.v_usart2_rx_flag  ==1){
-	      v_rx_data[pro_t.v_usart2_rx_numbers]=voice_inputBuf[pro_t.v_usart2_rx_numbers];
-		  pro_t.v_usart2_rx_numbers++;
-          if(pro_t.v_usart2_rx_numbers==8){
-		  	pro_t.v_usart2_rx_flag=2;
-		   v_t.rx_voice_data_flag = 1;
-
-          }
-		 
-      }
+      v_t.rxCounter++;
+	
+//	  if(voice_inputBuf[v_t.rxCounter]==0xA5){
+//        pro_t.v_usart2_rx_flag =1;
+//		v_t.rxCounter =0;
+//	  }
+//	  if( pro_t.v_usart2_rx_flag==0)v_t.rxCounter =0;
+//
+//	  
+//	  if(pro_t.v_usart2_rx_flag  ==1){
+//	      v_rx_data[v_t.rxCounter]=voice_inputBuf[v_t.rxCounter];
+//		  v_t.rxCounter++;
+//          if(v_t.rxCounter==8){
+//		  	pro_t.v_usart2_rx_flag=2;
+//		   v_t.rx_voice_data_flag = 1;
+//
+//          }
+//		 
+//      }
 
 	HAL_UART_Receive_IT(&huart2,voice_inputBuf,8);//UART receive data interrupt 1 byte
 

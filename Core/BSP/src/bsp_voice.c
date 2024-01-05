@@ -103,6 +103,10 @@ static void voice_cmd_fun(uint8_t cmd);
 static void  voice_set_temperature_value(uint8_t value);
 static void voice_set_timer_timing_value(uint8_t time);
 
+uint8_t key;
+int8_t result;
+
+
 /***********************************************************
  *  *
     *Function Name: void voice_Init(void)
@@ -197,48 +201,51 @@ static uint8_t v_hello_21h(void)
 ***********************************************************/
 void Voice_Decoder_Handler(void)
 {
-      uint8_t key;
-      uint8_t result;
-//	 if(hell_flag !=v_t.rxCounter){
-//        hell_flag =v_t.rxCounter;
-//	 	hello_word_state();
-//
-//	 }
-//	
-	v_t.rx_voice_data_flag=0;
-  //  memcpy(v_t.RxBuf,v_rx_data,8);
-	  
-    //key= v_t.RxBuf[4] + v_t.RxBuf[6];
-	key= v_rx_data[4] + v_rx_data[6];
+    if(v_t.rxCounter == 8){
+	    v_t.rxCounter =0;
+
+	if(voice_inputBuf[0]==0xA5){
+
+	key= voice_inputBuf[4] + voice_inputBuf[6];
 
 	result = BinarySearch_Voice_Data(voice_sound_data,key);
-	#if 1
+	
 	if(result ==0){
 		v_t.voice_enable =1;
-		// SendData_Buzzer();
-	    return ; 
+		 SendData_Buzzer();
+	   
 
 	}
 	else if(result >0 && result < 9){ //command 
 	    if(v_t.voice_enable ==1)
 		  voice_cmd_fun(result);
-		 return ; 
+		
 
 	}
 	else if(result > 8 && result < 30){ //set temperature value 
 		 if(v_t.voice_enable ==1)
             voice_set_temperature_value(result);
-		  return ; 
+		
 
 	}
 	else if(result > 29 && result <54){ //set timer timing value 
 		if(v_t.voice_enable ==1)
 		voice_set_timer_timing_value(result);
-		 return ; 
+		
 
 	}
-	#endif 
+	}
+	else{
+		v_t.rxCounter =0;
 
+	   }
+
+    }
+	else{
+		v_t.rxCounter =0;
+
+	}
+	
 }
 
 /***********************************************************************************
@@ -348,11 +355,11 @@ static int8_t BinarySearch_Voice_Data(const uint8_t *pta,uint8_t key)
    left = 0;
    right = n-1;
 
-   while(left<= right){
+   while(left<right || left == right){
 
       mid = (left + right )/2;
 
-      if(mid == key){
+      if(pta[mid] == key){
          return mid;
 	  }
 	  else if(pta[mid]> key){

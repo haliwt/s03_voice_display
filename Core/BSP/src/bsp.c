@@ -61,7 +61,7 @@ void bsp_Idle(void)
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
 	//TOUCH_CapScan();
 	
-
+   
 
 }
 
@@ -76,20 +76,10 @@ void bsp_Idle(void)
 */
 void Display_Process_Handler(void)
 {
-    if(v_t.rx_voice_data_flag== 1){
-		 
-		  pro_t.v_usart2_rx_flag=0;
-	      pro_t.run_process_step=5;
-		  pro_t.gTime_pro_run_voice_time =0;
-		  voice_enable_flag=1;
-	       Voice_Decoder_Handler();
-		    v_t.rx_voice_data_flag=0;
-
-	}
-	else{
-		DispPocess_Command_Handler(pro_t.gKey_command_tag);
-		//USART1_Cmd_Error_Handler();
-	}
+  
+	DispPocess_Command_Handler(pro_t.gKey_command_tag);
+	//USART1_Cmd_Error_Handler();
+	
 	
 }
 /******************************************************************************
@@ -137,6 +127,11 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 		     Display_Panel_Action_Handler();
 			 
           }
+		  else{
+
+			Voice_Decoder_Handler();
+
+		  }
 
 		  //display dht11 real temperature and humidity value
 		if(pro_t.gTimer_pro_disp_timer > 3){ //37s 

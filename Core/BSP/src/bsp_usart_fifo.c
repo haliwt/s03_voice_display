@@ -576,7 +576,9 @@ static void UartIRQ_2(UART_T *_pUart)
 //			_pUart->usRxCount++;
 //		}
 
-		rxBuf[_pUart->usRxWrite] = USART2->RDR;
+		//v_t.RxBuf[]=voice_inputBuf[v_t.rxCounter]
+		v_t.rxCounter++;
+		#if 0
 		if(rxBuf[0] == 0xA5){
             _pUart->usRxCount=1;
 
@@ -598,8 +600,9 @@ static void UartIRQ_2(UART_T *_pUart)
 				v_t.rx_voice_data_flag = 1;
 		   }
 		}
+		#endif 
 	}
-    HAL_UART_Receive_IT(&huart2,rxBuf,8);
+    HAL_UART_Receive_IT(&huart2,voice_inputBuf,8);
 //	/* 处理发送缓冲区空中断 */
 //	if ( ((isrflags & USART_ISR_TXE_TXFNF) != RESET) && (cr1its & USART_CR1_TXEIE_TXFNFIE ) != RESET)
 //	{
