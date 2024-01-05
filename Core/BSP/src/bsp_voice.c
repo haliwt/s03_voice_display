@@ -342,28 +342,35 @@ static void  voice_set_temperature_value(uint8_t value)
 ***********************************************************/
 static void voice_set_timer_timing_value(uint8_t time)
 {
-       time = time - 30;
+
+       uint8_t  temp_bit_1_hours,temp_bit_2_hours,temp_bit_2_minute,temp_bit_1_minute;
+	  ctl_t.gSet_timer_hours = time - 30;
 	  pro_t.gTimer_mode_flag= 1;//set_timer_timing;
 	  ctl_t.gAi_flag =timer_time;
+	  SendData_Set_Wifi(MODE_TIMER);
+	  disp_t.set_timer_timing_value_chaned_flag++; //
 	  
 	  pro_t.gTimer_key_timing =0;
 	  v_t.voice_to_buzzer_flag =1;
      
 	  
-	  ctl_t.gSet_timer_hours= time /10;
-	  ctl_t.gSet_timer_minutes = time %10;
+	    temp_bit_2_hours = ctl_t.gSet_timer_hours  /10 ;
+		temp_bit_1_hours = ctl_t.gSet_timer_hours  %10;
+     
+		temp_bit_2_minute =0;
+		temp_bit_1_minute =0;
+        
+		lcd_t.number5_low=temp_bit_2_hours;
+		lcd_t.number5_high =temp_bit_2_hours;
 
-	  lcd_t.number5_low=ctl_t.gSet_timer_hours;
-		lcd_t.number5_high =ctl_t.gSet_timer_hours;
+		lcd_t.number6_low = temp_bit_1_hours;
+		lcd_t.number6_high = temp_bit_1_hours;
 
-		lcd_t.number6_low = ctl_t.gSet_timer_hours;
-		lcd_t.number6_high = ctl_t.gSet_timer_hours;
+		lcd_t.number7_low=temp_bit_2_minute;
+		lcd_t.number7_high =temp_bit_2_minute;
 
-		lcd_t.number7_low=0;
-		lcd_t.number7_high =0;
-
-		lcd_t.number8_low = 0;
-		lcd_t.number8_high = 0;
+		lcd_t.number8_low = temp_bit_1_minute;
+		lcd_t.number8_high = temp_bit_1_minute;
 		DisplayPanel_Ref_Handler();
 		
 
