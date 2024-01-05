@@ -203,13 +203,13 @@ void Voice_Decoder_Handler(void)
 {
    
 
-if(voice_inputBuf[0]==0xA5){
+if(v_t.rx_data_enable ==1){
 
+	v_t.rx_data_enable =0;
 	
-	memcpy(v_t.RxBuf,voice_inputBuf,8);
-	voice_inputBuf[0]=0xff;
+	
 
-	key= v_t.RxBuf[4] + v_t.RxBuf[6];
+	key= v_t.RxBuf[0] + v_t.RxBuf[1];
 
 	result = BinarySearch_Voice_Data(voice_sound_data,key);
 	

@@ -8,8 +8,9 @@ volatile static uint8_t transOngoingFlag; //interrupt Transmit flag bit , 1---st
 uint8_t outputBuf[8];
 static uint8_t transferSize;
 static uint8_t state;
+uint8_t state_uart2;
 uint8_t inputBuf[MAX_BUFFER_SIZE];
-uint8_t voice_inputBuf[MAX_BUFFER_SIZE];
+uint8_t voice_inputBuf[1];
 uint8_t voice_outputBuf[16];
 
 
@@ -331,37 +332,90 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	//Voice USART 2 
 	if(huart==&huart2) // Motor Board receive data (filter)
 	{
-//      if(voice_inputBuf[0]==0xA5){
-//        pro_t.v_usart2_rx_flag =1;
-//		pro_t.v_usart2_rx_numbers =0;
-//	  }
-//	  if(pro_t.v_usart2_rx_flag  ==1){
-//	      voice_outputBuf[pro_t.v_usart2_rx_numbers]=voice_inputBuf[0];
-//		  pro_t.v_usart2_rx_numbers++;
-//          if(pro_t.v_usart2_rx_numbers==8)pro_t.v_usart2_rx_flag=2;
-//		 
-//      }
-     
-	
-//	  if(voice_inputBuf[v_t.rxCounter]==0xA5){
-//        pro_t.v_usart2_rx_flag =1;
-//		v_t.rxCounter =0;
-//	  }
-//	  if( pro_t.v_usart2_rx_flag==0)v_t.rxCounter =0;
-//
-//	  
-//	  if(pro_t.v_usart2_rx_flag  ==1){
-//	      v_rx_data[v_t.rxCounter]=voice_inputBuf[v_t.rxCounter];
-//		  v_t.rxCounter++;
-//          if(v_t.rxCounter==8){
-//		  	pro_t.v_usart2_rx_flag=2;
-//		   v_t.rx_voice_data_flag = 1;
-//
-//          }
-//		 
-//      }
+		switch(state_uart2)
+		{
+		case 0:  //#0
+			if(voice_inputBuf[0]==0xA5)  //hex :4D - "M" -fixed mainboard
+				state_uart2=1; //=1
+			break;
+		case 1: //#1
+			if(voice_inputBuf[0]==0xFA) //hex : 41 -'A'  -fixed master
+			{
+				state_uart2=2; 
+			}
+			else
+				state_uart2=0; 
+			break;
 
-	HAL_UART_Receive_IT(&huart2,voice_inputBuf,8);//UART receive data interrupt 1 byte
+	   case 2:
+	      if(voice_inputBuf[0]==0) //hex : 41 -'A'	-fixed master
+		   {
+			   state_uart2=3; 
+		   }
+		   else
+			  state_uart2=0; 
+
+
+	   break;
+
+	   case 3:
+	      if(voice_inputBuf[0]==0x81) //hex : 41 -'A'	-fixed master
+		   {
+			   state_uart2=4; 
+		   }
+		   else
+			  state_uart2=0; 
+
+
+	   break;
+
+	   case 4:
+	      if(voice_inputBuf[0] >0 && voice_inputBuf[0] < 0x38) //hex : 41 -'A'	-fixed master
+		   {
+               v_t.RxBuf[0]=voice_inputBuf[0];
+			   state_uart2=5; 
+		   }
+		   else
+			  state_uart2=0; 
+
+
+	   break;
+
+	   case 5:
+	      if(voice_inputBuf[0]==0x00) //hex : 41 -'A'	-fixed master
+		   {
+			   state_uart2=6; 
+		   }
+		   else
+			  state_uart2=0; 
+
+
+	   break;
+
+	   case 6:
+	      if(voice_inputBuf[0] >0x20 && voice_inputBuf[0] < 0x58) //hex : 41 -'A'	-fixed master
+		   {
+               v_t.RxBuf[1]=voice_inputBuf[0];
+			   state_uart2=7; 
+		   }
+		   else
+			  state_uart2=0; 
+
+
+	   break;
+
+	   case 7:
+	      if(voice_inputBuf[0]==0xFB) //hex : 41 -'A'	-fixed master
+		   {
+               v_t.rx_data_enable = 1;
+			   state_uart2=0; 
+
+		  }
+		  
+
+     break;
+	  }
+	HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
 
 	  
 	__HAL_UART_CLEAR_NEFLAG(&huart2);
