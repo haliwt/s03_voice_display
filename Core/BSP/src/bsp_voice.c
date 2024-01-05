@@ -203,44 +203,76 @@ void Voice_Decoder_Handler(void)
 {
    
 
-	if(voice_inputBuf[0]==0xA5){
+if(voice_inputBuf[0]==0xA5){
 
-	//voice_inputBuf[0]=0xff;
+	
+	memcpy(v_t.RxBuf,voice_inputBuf,8);
+	voice_inputBuf[0]=0xff;
 
-	key= voice_inputBuf[4] + voice_inputBuf[6];
+	key= v_t.RxBuf[4] + v_t.RxBuf[6];
 
 	result = BinarySearch_Voice_Data(voice_sound_data,key);
 	
 	if(result ==0){
 		v_t.voice_enable =1;
 		 SendData_Buzzer();
+	    
 	}
-	else if(result >0 && result < 10){ //command 
-	    if(v_t.voice_enable ==1)
+
+	
+	if(v_t.voice_enable ==1){
+       if(result ==1){
+	   	if(pro_t.gPower_On == power_on){
+
+            
+        }
+		else{
+			
+			pro_t.gKey_command_tag = run_update_data;
+			pro_t.gPower_On = power_on;   
+			pro_t.run_process_step=0;
+			pro_t.long_key_flag =0;
+			pro_t.run_process_step=0;
+			SendData_PowerOnOff(1);
+			Power_On_Fun();
+			LCD_Backlight_On();
+			
+		}
+		
+		
+	}
+
+	}
+
+    if(v_t.voice_enable ==1 && pro_t.gPower_On == power_on){
+
+	if(result >1 && result < 10){ //command 
+	   
 		  voice_cmd_fun(result);
+		 
 		
 
 	}
 	else if(result > 9 && result < 31){ //set temperature value 
-		 if(v_t.voice_enable ==1)
+		 
             voice_set_temperature_value(result);
+			
 		
 
 	}
 	else if(result > 30 && result <55){ //set timer timing value 
-		if(v_t.voice_enable ==1)
+		
 		voice_set_timer_timing_value(result);
 		
+		
 
+	 }
+    }
+
+	
 	}
-
-	voice_inputBuf[0]=0xff;
-	}
-	else{
-		voice_inputBuf[0]=0xff;
-	   }
-
- 
+	
+    
 	
 }
 
