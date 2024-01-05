@@ -89,10 +89,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		pro_t.gTimer_usart_error++;
 		pro_t.gTimer_pro_disp_timer ++;
 		ctl_t.gTimer_ctl_timer_time ++ ;
+		pro_t.gTime_pro_run_voice_time++;
 		
-	    if(disp_t.gTimer_disp_seconds_time >59){//60s ->1 minute 
-	      disp_t.gTimer_disp_seconds_time=0;
-		}
+
+	     
+		
 
 	}
 	

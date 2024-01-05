@@ -35,7 +35,7 @@
 #define ENABLE_INT()	__set_PRIMASK(0)	/* ?????? */
 #define DISABLE_INT()	__set_PRIMASK(1)	/* ?????? */
 
-#define NORMAL_USART2       0
+
 
 typedef enum{
 
@@ -74,6 +74,7 @@ typedef struct{
    uint8_t gKey_value;
    uint8_t gPower_On;
    uint8_t long_key_flag;
+   uint8_t run_process_step;
   
    uint8_t ack_wifi_led;
    uint8_t ack_power_on_sig;
@@ -112,6 +113,7 @@ typedef struct{
 	uint8_t gTimer_pro_ms;
 	uint8_t gTimer_pro_disp_timer ;
 	uint8_t gTimer_pro_disp_ms;
+	uint8_t gTime_pro_run_voice_time;
 	
 
 }PRO_T;
@@ -120,6 +122,8 @@ typedef struct{
 extern PRO_T pro_t;
 
 void bsp_Idle(void);
+void Power_On_Fun(void);
+
 void Key_Handler(uint8_t keyvalue);
 void Display_Process_Handler(void);
 

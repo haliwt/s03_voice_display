@@ -9,7 +9,7 @@ PRO_T pro_t;
 
 
 static void DispPocess_Command_Handler(uint8_t flag_key);
-static void Power_On_Fun(void);
+
 
 static void power_off_fan_run(void);
 
@@ -32,7 +32,7 @@ uint8_t fun_key_counter,display_keep_temp_value;
 uint8_t  disp_keep_temp_value ;
 uint8_t fan_runContinue;
 uint8_t wifi_link_flag;
-uint8_t run_process_step;
+uint8_t  voice_enable_flag;
 
 
 /*
@@ -76,9 +76,20 @@ void bsp_Idle(void)
 */
 void Display_Process_Handler(void)
 {
-    //Voice_Decoder_Handler();
-	DispPocess_Command_Handler(pro_t.gKey_command_tag);
-	USART1_Cmd_Error_Handler();
+    if(v_t.rx_voice_data_flag== 1){
+		 
+		  pro_t.v_usart2_rx_flag=0;
+	      pro_t.run_process_step=5;
+		  pro_t.gTime_pro_run_voice_time =0;
+		  voice_enable_flag=1;
+	       Voice_Decoder_Handler();
+		    v_t.rx_voice_data_flag=0;
+
+	}
+	else{
+		DispPocess_Command_Handler(pro_t.gKey_command_tag);
+		//USART1_Cmd_Error_Handler();
+	}
 	
 }
 /******************************************************************************
@@ -103,7 +114,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
    case  run_update_data:
       
       
-      switch(run_process_step){
+      switch(pro_t.run_process_step){
 
 
 	 case 0:
@@ -111,7 +122,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 
 			pro_t.ack_power_on_sig=0; 
 			Lcd_PowerOn_Fun();
-			run_process_step=1;
+			pro_t.run_process_step=1;
 			Display_Power_On_Works_Time();
 
 
@@ -137,10 +148,10 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 		  Ptc_Temperature_Compare_Value();
 		  
 	      if(wifi_link_flag ==1){
-			  run_process_step=4;
+			  pro_t.run_process_step=4;
           }
 		  else
-            run_process_step=2;
+            pro_t.run_process_step=2;
 		 
 	     
 		
@@ -150,20 +161,20 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 	
 
 	 case 2: //set timer times pro
-     run_process_step=3;
-	 if(pro_t.gTimer_pro_disp_ms > 3){ //40ms
+    
+	 if(pro_t.gTimer_pro_disp_ms > 3 && voice_enable_flag==0){ //40ms
 			pro_t.gTimer_pro_disp_ms=0;
 			DisplayPanel_Ref_Handler();
        }
 	   
 
-	   run_process_step=3;
+	   pro_t.run_process_step=3;
 
 
 	 break;
 
 	 case 3:
-       run_process_step=1;
+      
 	  if(pro_t.set_timer_flag==1){ //
 		  pro_t.set_timer_flag++;
              
@@ -171,7 +182,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 		  
       }
 
-	  run_process_step=1;
+	  pro_t.run_process_step=1;
       break;
 
 	 case 4:
@@ -190,7 +201,19 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 
         }
 
-	 run_process_step=2;
+	 pro_t.run_process_step=2;
+
+	 break;
+
+	 case 5:
+	 	if(pro_t.gTime_pro_run_voice_time > 1){
+			pro_t.gTime_pro_run_voice_time =0;
+			voice_enable_flag=0;
+			pro_t.run_process_step=1;
+
+               
+
+		}
 
 	 break;
     }
@@ -215,7 +238,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 	*Return Ref:No
 	*
 ************************************************************************/
-static void Power_On_Fun(void)
+void Power_On_Fun(void)
 {
    
   
@@ -649,9 +672,8 @@ void Power_Key_Detected(void)
 	      if(power_flag ==1){
 		  	 pro_t.gKey_command_tag = run_update_data;
 			 pro_t.gPower_On = power_on;   
-			run_process_step=0;
             pro_t.long_key_flag =0;
-           
+            pro_t.run_process_step=0;
 			SendData_PowerOnOff(1);
 		    Power_On_Fun();
 			LCD_Backlight_On();
@@ -668,7 +690,7 @@ void Power_Key_Detected(void)
 	           Power_Off_Fun();
 			   LCD_Backlight_Off();
 		      // Key_Sound();
-			   run_process_step=0xff;
+			   pro_t.run_process_step=0xff;
 			  
 			  
            }

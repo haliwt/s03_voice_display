@@ -552,10 +552,12 @@ uint8_t UartTxEmpty(COM_PORT_E _ucPort)
 static void UartIRQ_2(UART_T *_pUart)
 {
  
-
+    
 	uint32_t isrflags   = READ_REG(_pUart->uart->ISR);
 	uint32_t cr1its     = READ_REG(_pUart->uart->CR1);
 	uint32_t cr3its     = READ_REG(_pUart->uart->CR3);
+
+	 // Motor Board receive data (filter)
 	
 	/* 处理接收中断  */
 	if ((isrflags & USART_ISR_RXNE_RXFNE) != RESET)
@@ -598,68 +600,68 @@ static void UartIRQ_2(UART_T *_pUart)
 		}
 	}
     HAL_UART_Receive_IT(&huart2,rxBuf,8);
-	/* 处理发送缓冲区空中断 */
-	if ( ((isrflags & USART_ISR_TXE_TXFNF) != RESET) && (cr1its & USART_CR1_TXEIE_TXFNFIE ) != RESET)
-	{
-		//if (_pUart->usTxRead == _pUart->usTxWrite)
-		if (_pUart->usTxCount == 0)
-		{
-			/* 发送缓冲区的数据已取完时， 禁止发送缓冲区空中断 （注意：此时最后1个数据还未真正发送完毕）*/
-			//USART_ITConfig(_pUart->uart, USART_IT_TXE, DISABLE);
-			CLEAR_BIT(_pUart->uart->CR1, USART_CR1_TXEIE_TXFNFIE );
-
-			/* 使能数据发送完毕中断 */
-			//USART_ITConfig(_pUart->uart, USART_IT_TC, ENABLE);
-			SET_BIT(_pUart->uart->CR1, USART_CR1_TCIE);
-		}
-		else
-		{
-			_pUart->Sending = 1;
-			
-			/* 从发送FIFO取1个字节写入串口发送数据寄存器 */
-			//USART_SendData(_pUart->uart, _pUart->pTxBuf[_pUart->usTxRead]);
-			_pUart->uart->TDR = _pUart->pTxBuf[_pUart->usTxRead];
-			if (++_pUart->usTxRead >= _pUart->usTxBufSize)
-			{
-				_pUart->usTxRead = 0;
-			}
-			_pUart->usTxCount--;
-		}
-
-	}
-	/* 数据bit位全部发送完毕的中断 */
-	if (((isrflags & USART_ISR_TC) != RESET) && ((cr1its & USART_CR1_TCIE) != RESET))
-	{
-		//if (_pUart->usTxRead == _pUart->usTxWrite)
-		if (_pUart->usTxCount == 0)
-		{
-			/* 如果发送FIFO的数据全部发送完毕，禁止数据发送完毕中断 */
-			//USART_ITConfig(_pUart->uart, USART_IT_TC, DISABLE);
-			CLEAR_BIT(_pUart->uart->CR1, USART_CR1_TCIE);
-
-			/* 回调函数, 一般用来处理RS485通信，将RS485芯片设置为接收模式，避免抢占总线 */
-			if (_pUart->SendOver)
-			{
-				_pUart->SendOver();
-			}
-			
-			_pUart->Sending = 0;
-		}
-		else
-		{
-			/* 正常情况下，不会进入此分支 */
-
-			/* 如果发送FIFO的数据还未完毕，则从发送FIFO取1个数据写入发送数据寄存器 */
-			//USART_SendData(_pUart->uart, _pUart->pTxBuf[_pUart->usTxRead]);
-			_pUart->uart->TDR = _pUart->pTxBuf[_pUart->usTxRead];
-			if (++_pUart->usTxRead >= _pUart->usTxBufSize)
-			{
-				_pUart->usTxRead = 0;
-			}
-			_pUart->usTxCount--;
-		}
-	}
-	
+//	/* 处理发送缓冲区空中断 */
+//	if ( ((isrflags & USART_ISR_TXE_TXFNF) != RESET) && (cr1its & USART_CR1_TXEIE_TXFNFIE ) != RESET)
+//	{
+//		//if (_pUart->usTxRead == _pUart->usTxWrite)
+//		if (_pUart->usTxCount == 0)
+//		{
+//			/* 发送缓冲区的数据已取完时， 禁止发送缓冲区空中断 （注意：此时最后1个数据还未真正发送完毕）*/
+//			//USART_ITConfig(_pUart->uart, USART_IT_TXE, DISABLE);
+//			CLEAR_BIT(_pUart->uart->CR1, USART_CR1_TXEIE_TXFNFIE );
+//
+//			/* 使能数据发送完毕中断 */
+//			//USART_ITConfig(_pUart->uart, USART_IT_TC, ENABLE);
+//			SET_BIT(_pUart->uart->CR1, USART_CR1_TCIE);
+//		}
+//		else
+//		{
+//			_pUart->Sending = 1;
+//			
+//			/* 从发送FIFO取1个字节写入串口发送数据寄存器 */
+//			//USART_SendData(_pUart->uart, _pUart->pTxBuf[_pUart->usTxRead]);
+//			_pUart->uart->TDR = _pUart->pTxBuf[_pUart->usTxRead];
+//			if (++_pUart->usTxRead >= _pUart->usTxBufSize)
+//			{
+//				_pUart->usTxRead = 0;
+//			}
+//			_pUart->usTxCount--;
+//		}
+//
+//	}
+//	/* 数据bit位全部发送完毕的中断 */
+//	if (((isrflags & USART_ISR_TC) != RESET) && ((cr1its & USART_CR1_TCIE) != RESET))
+//	{
+//		//if (_pUart->usTxRead == _pUart->usTxWrite)
+//		if (_pUart->usTxCount == 0)
+//		{
+//			/* 如果发送FIFO的数据全部发送完毕，禁止数据发送完毕中断 */
+//			//USART_ITConfig(_pUart->uart, USART_IT_TC, DISABLE);
+//			CLEAR_BIT(_pUart->uart->CR1, USART_CR1_TCIE);
+//
+//			/* 回调函数, 一般用来处理RS485通信，将RS485芯片设置为接收模式，避免抢占总线 */
+//			if (_pUart->SendOver)
+//			{
+//				_pUart->SendOver();
+//			}
+//			
+//			_pUart->Sending = 0;
+//		}
+//		else
+//		{
+//			/* 正常情况下，不会进入此分支 */
+//
+//			/* 如果发送FIFO的数据还未完毕，则从发送FIFO取1个数据写入发送数据寄存器 */
+//			//USART_SendData(_pUart->uart, _pUart->pTxBuf[_pUart->usTxRead]);
+//			_pUart->uart->TDR = _pUart->pTxBuf[_pUart->usTxRead];
+//			if (++_pUart->usTxRead >= _pUart->usTxBufSize)
+//			{
+//				_pUart->usTxRead = 0;
+//			}
+//			_pUart->usTxCount--;
+//		}
+//	}
+//	
 	/* 清除中断标志 */
 	SET_BIT(_pUart->uart->ICR, UART_CLEAR_PEF);
 	SET_BIT(_pUart->uart->ICR, UART_CLEAR_FEF);
@@ -685,8 +687,8 @@ static void UartIRQ_2(UART_T *_pUart)
 //  *            @arg UART_CLEAR_CMF: Character Match Clear Flag
 //  *            @arg.UART_CLEAR_WUF:  Wake Up from stop mode Clear Flag
 //  *            @arg UART_CLEAR_TXFECF: TXFIFO empty Clear Flag	
-}
 
+}
 /*
 *********************************************************************************************************
 *	函 数 名: USART1_IRQHandler  USART2_IRQHandler USART3_IRQHandler UART4_IRQHandler UART5_IRQHandler等

@@ -39,7 +39,7 @@ typedef struct{
 
    //timer 
 
-   uint8_t gTimer_disp_seconds_time;
+ 
    uint8_t gTimer_disp_hours_time;
    uint8_t gTimer_disp_minutes_time;
    uint8_t gTimer_disp_timer_timing;

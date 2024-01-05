@@ -31,7 +31,7 @@ enum Signal{
 
 
 extern uint8_t inputBuf[MAX_BUFFER_SIZE];
-extern uint8_t voice_inputBuf[1];
+extern uint8_t voice_inputBuf[MAX_BUFFER_SIZE];
 extern uint8_t outputBuf[8];
 
 

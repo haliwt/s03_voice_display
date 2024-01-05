@@ -4,6 +4,19 @@
 
 #define  RX_BUF_SIZE  10
 
+typedef enum{
+	voice_power_on,
+	voice_power_off,
+	voice_link_wifi,
+	voice_open_ptc,
+	voice_close_ptc,
+	voice_open_plasma,
+	voice_close_plasma,
+	voice_open_rat,
+	voice_close_rat,
+}voice_cmd;
+
+
 
 typedef struct{
 
@@ -29,17 +42,11 @@ extern voice_sound_t v_t;
 
 
 
-extern void (*rx_voice_data)(uint8_t data);
+
 extern uint8_t (*hello_word_state)(void);
-
-extern uint8_t (*voice_ptc_state)(void);
-extern uint8_t (*voice_plasma_state)(void);
-extern uint8_t (*voice_bug_state)(void);
-
 
 void Voice_Init(void);
 
-void Rx_Voice_Data_Handler(void(*rx_voice_handler)(uint8_t data));
 void Voice_Hello_Word_Handler(uint8_t(*hell_handler)(void));
 
 void Voice_Decoder_Handler(void);

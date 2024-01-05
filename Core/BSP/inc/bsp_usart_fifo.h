@@ -3,7 +3,10 @@
 #include "main.h"
 
 #define	UART1_FIFO_EN	0
-#define	UART2_FIFO_EN	1
+#define	UART2_FIFO_EN	0
+
+#define NORMAL_USART2       1
+
 
 
 

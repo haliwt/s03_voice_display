@@ -9,7 +9,7 @@ uint8_t outputBuf[8];
 static uint8_t transferSize;
 static uint8_t state;
 uint8_t inputBuf[MAX_BUFFER_SIZE];
-uint8_t voice_inputBuf[1];
+uint8_t voice_inputBuf[MAX_BUFFER_SIZE];
 uint8_t voice_outputBuf[16];
 
 
@@ -319,24 +319,37 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 		}
       HAL_UART_Receive_IT(&huart1,inputBuf,1);//UART receive data interrupt 1 byte
+
+	__HAL_UART_CLEAR_NEFLAG(&huart1);
+	__HAL_UART_CLEAR_FEFLAG(&huart1);
+	__HAL_UART_CLEAR_OREFLAG(&huart1);
+	__HAL_UART_CLEAR_OREFLAG(&huart1);
+	__HAL_UART_CLEAR_TXFECF(&huart1);
+
 	}
     #if NORMAL_USART2
 	//Voice USART 2 
-	if(huart==&huart2) // Motor Board receive data (filter)
-	{
-      if(voice_inputBuf[0]==0xA5){
+	if(huart==&huart2){ // Motor Board receive data (filter)
+	
+      if(voice_inputBuf[pro_t.v_usart2_rx_numbers]==0xA5){
         pro_t.v_usart2_rx_flag =1;
 		pro_t.v_usart2_rx_numbers =0;
 	  }
+	  if( pro_t.v_usart2_rx_flag==0)pro_t.v_usart2_rx_numbers =0;
+
+	  
 	  if(pro_t.v_usart2_rx_flag  ==1){
-	      voice_outputBuf[pro_t.v_usart2_rx_numbers]=voice_inputBuf[0];
+	      v_rx_data[pro_t.v_usart2_rx_numbers]=voice_inputBuf[pro_t.v_usart2_rx_numbers];
 		  pro_t.v_usart2_rx_numbers++;
-          if(pro_t.v_usart2_rx_numbers==8)pro_t.v_usart2_rx_flag=2;
+          if(pro_t.v_usart2_rx_numbers==8){
+		  	pro_t.v_usart2_rx_flag=2;
+		   v_t.rx_voice_data_flag = 1;
+
+          }
 		 
       }
 
-	  
-	 HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
+	HAL_UART_Receive_IT(&huart2,voice_inputBuf,8);//UART receive data interrupt 1 byte
 
 	  
 	__HAL_UART_CLEAR_NEFLAG(&huart2);
