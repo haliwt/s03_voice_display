@@ -5,15 +5,15 @@
 #define  RX_BUF_SIZE  10
 
 typedef enum{
-	voice_power_on,
-	voice_power_off,
-	voice_link_wifi,
-	voice_open_ptc,
-	voice_close_ptc,
-	voice_open_plasma,
-	voice_close_plasma,
-	voice_open_rat,
-	voice_close_rat,
+	voice_power_on=0x01,
+	voice_power_off=0x02,
+	voice_link_wifi=0x03,
+	voice_open_ptc=0x04,
+	voice_close_ptc=0x05,
+	voice_open_plasma=0x06,
+	voice_close_plasma=0x07,
+	voice_open_rat=0x08,
+	voice_close_rat=0x09,
 }voice_cmd;
 
 

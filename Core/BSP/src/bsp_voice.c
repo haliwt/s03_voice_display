@@ -44,7 +44,7 @@ void (*rx_voice_data)(uint8_t data);
 uint8_t (*hello_word_state)(void);
 
 uint8_t key;
-int8_t result;
+int8_t result = 0xff;
 #if 0
 
 static uint8_t const voice_ctl_value[9]={
@@ -205,7 +205,7 @@ void Voice_Decoder_Handler(void)
 
 	if(voice_inputBuf[0]==0xA5){
 
-	voice_inputBuf[0]=0xff;
+	//voice_inputBuf[0]=0xff;
 
 	key= voice_inputBuf[4] + voice_inputBuf[6];
 
@@ -214,27 +214,27 @@ void Voice_Decoder_Handler(void)
 	if(result ==0){
 		v_t.voice_enable =1;
 		 SendData_Buzzer();
-	   
-
 	}
-	else if(result >0 && result < 9){ //command 
+	else if(result >0 && result < 10){ //command 
 	    if(v_t.voice_enable ==1)
 		  voice_cmd_fun(result);
 		
 
 	}
-	else if(result > 8 && result < 30){ //set temperature value 
+	else if(result > 9 && result < 31){ //set temperature value 
 		 if(v_t.voice_enable ==1)
             voice_set_temperature_value(result);
 		
 
 	}
-	else if(result > 29 && result <54){ //set timer timing value 
+	else if(result > 30 && result <55){ //set timer timing value 
 		if(v_t.voice_enable ==1)
 		voice_set_timer_timing_value(result);
 		
 
 	}
+
+	voice_inputBuf[0]=0xff;
 	}
 	else{
 		voice_inputBuf[0]=0xff;
@@ -257,7 +257,12 @@ static void voice_cmd_fun(uint8_t cmd)
 	
 	switch(cmd){
 	case voice_power_on:
-        if(pro_t.gPower_On == power_off){
+        if(pro_t.gPower_On == power_on){
+
+
+        }
+		else{
+			
 			pro_t.gKey_command_tag = run_update_data;
 			pro_t.gPower_On = power_on;   
 			pro_t.run_process_step=0;
@@ -270,7 +275,11 @@ static void voice_cmd_fun(uint8_t cmd)
 
 	break;
 	case voice_power_off:
-		if(pro_t.gPower_On == power_on){
+		if(pro_t.gPower_On == power_off){
+
+
+		}
+		else{
 			pro_t.long_key_flag =0;
 			pro_t.gKey_command_tag = power_off_fan_pro;
 			pro_t.gPower_On = power_off;   
