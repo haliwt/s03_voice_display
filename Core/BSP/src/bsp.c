@@ -206,15 +206,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 
 	 break;
 
-	 case 5:
-	 	if(pro_t.gTime_pro_run_voice_time > 1){
-			pro_t.gTime_pro_run_voice_time =0;
-			voice_enable_flag=0;
-			pro_t.run_process_step=1;
 
-               
-
-		}
 
 	 break;
     }

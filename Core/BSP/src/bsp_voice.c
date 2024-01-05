@@ -343,7 +343,8 @@ static void  voice_set_temperature_value(uint8_t value)
 static void voice_set_timer_timing_value(uint8_t time)
 {
        time = time - 30;
-	  pro_t.gTimer_mode_flag= set_timer_timing;
+	  pro_t.gTimer_mode_flag= 1;//set_timer_timing;
+	  ctl_t.gAi_flag =timer_time;
 	  
 	  pro_t.gTimer_key_timing =0;
 	  v_t.voice_to_buzzer_flag =1;
