@@ -28,8 +28,8 @@ void SendData_PowerOnOff(uint8_t index)
 	
    //crc=0x55;
 	outputBuf[0]='T'; //4D //Touch Key
-	outputBuf[1]='K'; //58
-	outputBuf[2]='P'; //4C	// 'P' power
+	outputBuf[1]='K'; //TK->Touch Key
+	outputBuf[2]='P'; // 'P' power
 	outputBuf[3]=index; //53	// 'S' select light command, 'C' close all light command
 	
     transferSize=4;

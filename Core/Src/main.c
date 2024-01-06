@@ -11,7 +11,7 @@
   * Version:1.0
   * 
   * 
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * 
   *
   ******************************************************************************
   */

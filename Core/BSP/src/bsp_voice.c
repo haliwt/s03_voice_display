@@ -285,21 +285,34 @@ static void voice_cmd_fun(uint8_t cmd)
 	break;
 
 	case voice_open_ptc:
-		
-		
-	break;
+
+	 SendData_Set_Command(DRY_ON);
+	 ctl_t.gPtc_flag =1;
+   
+    break;
 
 	case voice_close_ptc:
+		 SendData_Set_Command(DRY_OFF);
+		 ctl_t.gPlasma_flag=1;
 	break;
 
 	case voice_open_plasma:
+		 SendData_Set_Command(PLASMA_ON )
+		 ctl_t.gPlasma_flag=0;
+  
 	break;
    case voice_close_plasma:
+   	 SendData_Set_Command(PLASMA_OFF)
+	 ctl_t.gPlasma_flag=0;
 	break;
 
 	case voice_open_rat:
+		 SendData_Set_Command(BUG_ON)
+		 ctl_t.gBug_flag=1;
 	break;
 	case voice_close_rat:
+		 SendData_Set_Command(BUG_OFF)
+		 ctl_t.gBug_flag=0;
 	break;
 	
 
