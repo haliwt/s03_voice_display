@@ -202,6 +202,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                   }
 				  else if(inputBuf[0]==0x52){ //answer signal 
 				        pro_t.ack_wifi_led =1;
+						pro_t.wifi_led_fast_blink_flag=1;
                     
 				  }
                   else if(inputBuf[0]==0x54){

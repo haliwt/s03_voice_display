@@ -581,6 +581,12 @@ static void Ptc_Temperature_Compare_Value(void)
       switch(ctl_t.gSet_temperature_value_flag){
 
       case 1:
+	  	//send temp value to smart phone 
+	  	if(ctl_t.set_temp_has_been_flag==1){
+			ctl_t.set_temp_has_been_flag =0;
+			SendData_Temp_Data(ctl_t.gSet_temperature_value);
+
+		}
 	    if(pro_t.gTimer_pro_temp_delay> 61 && ctl_t.ptc_warning==0){
                pro_t.gTimer_pro_temp_delay =0;
 		 

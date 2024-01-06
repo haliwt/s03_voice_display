@@ -14,8 +14,8 @@ typedef enum{
 	 PLASMA_ON = 0x20,
 	 PLASMA_OFF = 0x21,
 
-   BUG_ON = 0x30,
-   BUG_OFF = 0x31,
+   	BUG_ON = 0x30,
+   	BUG_OFF = 0x31,
 
 	 FAN_ON =0x10,
 	 FAN_OFF = 0x11,
@@ -68,6 +68,7 @@ typedef struct {
    uint8_t gFan_speed_value;
   
    uint8_t gReal_humidity_value;
+   uint8_t set_temp_has_been_flag;
 
   
    

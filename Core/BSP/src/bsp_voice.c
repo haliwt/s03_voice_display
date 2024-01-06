@@ -277,10 +277,9 @@ static void voice_cmd_fun(uint8_t cmd)
 	break;
 
 	case voice_link_wifi:
-		 SendData_Set_Wifi(0x01);
+		SendData_Set_Wifi(0x01);
 
-	    //Key_Sound();
-        pro_t.wifi_led_fast_blink_flag=1;
+      //  pro_t.wifi_led_fast_blink_flag=1;
 	
 	break;
 
@@ -293,25 +292,25 @@ static void voice_cmd_fun(uint8_t cmd)
 
 	case voice_close_ptc:
 		 SendData_Set_Command(DRY_OFF);
-		 ctl_t.gPlasma_flag=1;
+		 ctl_t.gPtc_flag =0;
 	break;
 
 	case voice_open_plasma:
-		 SendData_Set_Command(PLASMA_ON )
-		 ctl_t.gPlasma_flag=0;
+		 SendData_Set_Command(PLASMA_ON );
+		 ctl_t.gPlasma_flag=1;
   
 	break;
    case voice_close_plasma:
-   	 SendData_Set_Command(PLASMA_OFF)
+   	 SendData_Set_Command(PLASMA_OFF);
 	 ctl_t.gPlasma_flag=0;
 	break;
 
 	case voice_open_rat:
-		 SendData_Set_Command(BUG_ON)
+		 SendData_Set_Command(BUG_ON);
 		 ctl_t.gBug_flag=1;
 	break;
 	case voice_close_rat:
-		 SendData_Set_Command(BUG_OFF)
+		 SendData_Set_Command(BUG_OFF);
 		 ctl_t.gBug_flag=0;
 	break;
 	

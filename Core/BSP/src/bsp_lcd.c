@@ -1232,7 +1232,7 @@ static void LCD_DisplayNumber_OneTwo_Icon_Handler(void)
 				 pro_t.temperature_set_flag = 0;
 				
 				 ctl_t.gSet_temperature_value_flag = 1;
-				 
+				 ctl_t.set_temp_has_been_flag= 1;
 				 pro_t.gTimer_pro_temp_delay =62; //at once run "Ptc_Temperature_Compare_Value()"
 				 
 			    
