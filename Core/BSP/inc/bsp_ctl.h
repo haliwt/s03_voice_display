@@ -8,6 +8,9 @@ typedef enum{
 	 DRY_ON = 0x40,
 	 DRY_OFF = 0x41,
 
+	 VOICE_DRY_ON = 0x60,
+	 VOICE_DRY_OFF = 0x61,
+
 	 DRY_ON_NO_BUZZER = 0x90,
 	 DRY_OFF_NO_BUZZER = 0x91,
 

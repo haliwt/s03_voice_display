@@ -293,7 +293,7 @@ static void voice_cmd_fun(uint8_t cmd)
         SendData_Buzzer();
 	 }
 	 else{
-		 SendData_Set_Command(DRY_ON);
+		 SendData_Set_Command(VOICE_DRY_ON);
 		 ctl_t.gPtc_flag =1;
 
 	 }
@@ -306,7 +306,7 @@ static void voice_cmd_fun(uint8_t cmd)
 
 		 }
 		 else{
-			 SendData_Set_Command(DRY_OFF);
+			 SendData_Set_Command(VOICE_DRY_OFF);
 			 ctl_t.gPtc_flag =0;
 		 }
 	break;
