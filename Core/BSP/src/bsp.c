@@ -33,6 +33,7 @@ uint8_t  disp_keep_temp_value ;
 uint8_t fan_runContinue;
 uint8_t wifi_link_flag;
 uint8_t  voice_enable_flag;
+uint8_t power_off_first_flag;
 
 
 /*
@@ -118,25 +119,26 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 
 	 case 0:
 		//if(pro_t.ack_power_on_sig ==1){
-
+            pro_t.key_power_be_pressed_flag =0;
 			pro_t.ack_power_on_sig=0; 
 			Lcd_PowerOn_Fun();
 			pro_t.run_process_step=1;
 			Display_Power_On_Works_Time();
+		//	SendData_Set_Wifi(WIFI_LINK_STATE);
 
 
 	 break;
 
 	 case 1:  //display works time + "temperature value " + "humidity value"
-	      
-         pro_t.long_key_flag =0;
-	      if(pro_t.gTimer_pro_ms > 20){ //200ms
-			 pro_t.gTimer_pro_ms =0;
-
-		     Display_Panel_Action_Handler();
-			 
-          }
-		  
+	     pro_t.key_power_be_pressed_flag =0;
+//         pro_t.long_key_flag =0;
+//	      if(pro_t.gTimer_pro_ms > 20){ //200ms
+//			 pro_t.gTimer_pro_ms =0;
+//
+//		     Display_Panel_Action_Handler();
+//			 
+//          }
+//		  
 		
 
 		  //display dht11 real temperature and humidity value
@@ -240,6 +242,7 @@ void Power_On_Fun(void)
    ctl_t.gPlasma_flag = 1;
    ctl_t.gBug_flag =1;
    fan_runContinue= 2;
+   power_off_first_flag=1;
 	
 	ctl_t.gSet_temperature_value =0; //run_t.temperature_set_flag = 0; //WT.EDIT 2023.01.31
     ctl_t.gSet_timer_hours = 0; //run_t.setup_temperature_value=0; // //WT.EDIT 2023.01.31
@@ -282,6 +285,11 @@ void Power_Off_Fun(void)
      
 	SendData_PowerOnOff(0);
 
+   ctl_t.gPtc_flag = 0;
+   ctl_t.gAi_flag = 0;
+   ctl_t.gPlasma_flag = 0;
+   ctl_t.gBug_flag =0;
+
 	pro_t.temperature_set_flag = 0;
 
     pro_t.wifi_led_fast_blink_flag=0;
@@ -302,16 +310,15 @@ void Power_Off_Fun(void)
 void power_off_fan_run(void)
 {
 	
-
-	if(pro_t.ack_power_off_sig ==0){
-        SendData_PowerOnOff(0);
-	
-
+   
+	if(power_off_first_flag !=0){
+		if(pro_t.ack_power_off_sig ==0){
+	        SendData_PowerOnOff(0);
+		}
 	}
-
 	Breath_Led();
 	
-	if(fan_runContinue == 1){
+	if(fan_runContinue == 1 && power_off_first_flag!=0){
 	if(pro_t.gTimer_pro_fan < 61){
 		LED_MODEL_OFF();
 		POWER_ON_LED();
@@ -668,7 +675,7 @@ void Power_Key_Detected(void)
    
 	if(POWER_KEY_StateRead()==KEY_DOWN && pro_t.long_key_flag ==0){
 
-	    
+	      pro_t.key_power_be_pressed_flag =1;
 
 	      if( pro_t.gPower_On == power_off){
 		  	 pro_t.gKey_command_tag = run_update_data;

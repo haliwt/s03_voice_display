@@ -107,7 +107,7 @@ int main(void)
   HAL_UART_Receive_IT(&huart2,voice_inputBuf,1);//UART receive data interrupt 1 byte
  // HAL_UART_Receive_IT(&huart2,rxBuf,8);//UART receive data interrupt 1 byte
   pro_t.gKey_command_tag = power_off_fan_pro;
-
+  pro_t.gPower_On = power_off;
   Feed_Dog();
  // HAL_UART_Receive_IT(&huart2, g_tModS.rs485_RxInputBuf,10);
   /* USER CODE END 2 */
@@ -123,9 +123,11 @@ int main(void)
 	
 		
 	    Power_Key_Detected();
-		Mode_Key_Detected();
-		ADD_Key_Detected();
-		DEC_Key_Detected();
+		if(pro_t.key_power_be_pressed_flag ==0){
+			Mode_Key_Detected();
+			ADD_Key_Detected();
+			DEC_Key_Detected();
+		}
 	   if(VK36N4D_IC_StateRead()==KEY_UP && POWER_KEY_VALUE()==KEY_UP && MODE_KEY_VALUE()==KEY_UP){
 	       Display_Process_Handler();
 	   }

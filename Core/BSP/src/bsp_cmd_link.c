@@ -217,6 +217,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 					  pro_t.ack_power_off_sig =1;
 
                   }
+		
                   
                  
                    pro_t.decodeFlag=0; 

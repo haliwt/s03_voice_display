@@ -64,16 +64,16 @@ void Display_Panel_Action_Handler(void)
    if(v_t.voice_ctl_flag  == 1){
        v_t.voice_ctl_flag  = 0;
 
-       if( ptc_state() ==1 && v_t.voice_ptc_flag ==0){
+       if(ptc_state() ==1 && v_t.voice_ptc_flag ==0){
 
 	         ctl_t.gPtc_flag = 0;
-			 SendData_Set_Command(DRY_OFF_NO_BUZZER);
+			 
 			 
 		}
 	   else if(ptc_state() ==0 && v_t.voice_ptc_flag ==1){
 
 	    ctl_t.gPtc_flag = 1;
-	    SendData_Set_Command(DRY_ON_NO_BUZZER);
+	   
 
 
 	   }
@@ -81,7 +81,7 @@ void Display_Panel_Action_Handler(void)
 	   if(plasma_state() == 1 && v_t.voice_plasma_flag ==0){
 
             ctl_t.gPlasma_flag = 0;
-			SendData_Set_Command(PLASMA_OFF);
+			
 
 
 	   }
@@ -89,22 +89,24 @@ void Display_Panel_Action_Handler(void)
 
 			
 		   ctl_t.gPlasma_flag = 1;
-		   SendData_Set_Command(PLASMA_ON);
+		  
 
 
 	   }
 
 	  if(bug_state() == 1 && v_t.voice_bug_flag ==0){
 	  	  ctl_t.gBug_flag =0;
-		   SendData_Set_Command(BUG_OFF);
+		  
 
 
 	  }
 	  else if(bug_state() == 0 && v_t.voice_bug_flag ==1){
 		  ctl_t.gBug_flag =1;
-		  SendData_Set_Command(BUG_ON);
+		  
 
 	  }
+
+	  
 
    }
 

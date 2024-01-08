@@ -277,7 +277,11 @@ static void voice_cmd_fun(uint8_t cmd)
 	break;
 
 	case voice_link_wifi:
-		SendData_Set_Wifi(0x01);
+		if(wifi_state()==0)
+		  SendData_Set_Wifi(0x01);
+		else{
+          SendData_Buzzer();
+		}
 
       //  pro_t.wifi_led_fast_blink_flag=1;
 	
@@ -285,33 +289,68 @@ static void voice_cmd_fun(uint8_t cmd)
 
 	case voice_open_ptc:
 
-	 SendData_Set_Command(DRY_ON);
-	 ctl_t.gPtc_flag =1;
+     if(ptc_state()==1){
+        SendData_Buzzer();
+	 }
+	 else{
+		 SendData_Set_Command(DRY_ON);
+		 ctl_t.gPtc_flag =1;
+
+	 }
    
     break;
 
 	case voice_close_ptc:
-		 SendData_Set_Command(DRY_OFF);
-		 ctl_t.gPtc_flag =0;
+		 if(ptc_state == 0){
+             SendData_Buzzer();
+
+		 }
+		 else{
+			 SendData_Set_Command(DRY_OFF);
+			 ctl_t.gPtc_flag =0;
+		 }
 	break;
 
 	case voice_open_plasma:
+		 if(plasma_state()==1){
+			SendData_Buzzer();
+		}
+		else{
 		 SendData_Set_Command(PLASMA_ON );
 		 ctl_t.gPlasma_flag=1;
+		}
   
 	break;
    case voice_close_plasma:
+   	 if(plasma_state()==0){
+		 SendData_Buzzer();
+
+	 }
+	 else{
    	 SendData_Set_Command(PLASMA_OFF);
 	 ctl_t.gPlasma_flag=0;
+	 }
 	break;
 
 	case voice_open_rat:
-		 SendData_Set_Command(BUG_ON);
-		 ctl_t.gBug_flag=1;
+		 if(ctl_t.gBug_flag==1){
+			SendData_Buzzer();
+
+         }
+		 else{
+			 SendData_Set_Command(BUG_ON);
+			 ctl_t.gBug_flag=1;
+		 }
 	break;
 	case voice_close_rat:
+		if(ctl_t.gBug_flag==0){
+			SendData_Buzzer();
+
+		}
+		else{
 		 SendData_Set_Command(BUG_OFF);
 		 ctl_t.gBug_flag=0;
+		}
 	break;
 	
 

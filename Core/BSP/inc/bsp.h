@@ -68,6 +68,14 @@ typedef enum{
 
 }process_state;
 
+typedef enum{
+
+ link_net =0x01,
+ ask_link_state,
+
+
+}wifi_cmd;
+
 typedef struct{
 
   //key
@@ -75,6 +83,7 @@ typedef struct{
    uint8_t gPower_On;
    uint8_t long_key_flag;
    uint8_t run_process_step;
+   uint8_t key_power_be_pressed_flag ;
   
    uint8_t ack_wifi_led;
    uint8_t ack_power_on_sig;
