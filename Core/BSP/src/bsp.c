@@ -123,6 +123,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
             pro_t.key_power_be_pressed_flag =0;
 			pro_t.ack_power_on_sig=0; 
 			Lcd_PowerOn_Fun();
+		
 			pro_t.run_process_step=1;
 			Display_Power_On_Works_Time();
 		//	SendData_Set_Wifi(WIFI_LINK_STATE);
@@ -324,6 +325,7 @@ void power_off_fan_run(void)
 	if(fan_runContinue == 1 && power_off_first_flag!=0){
 	if(pro_t.gTimer_pro_fan < 61){
 		LCD_Backlight_On();
+		LED_MODEL_UP_DOWN_OFF();   
 		LCD_Display_Wind_Icon_Handler();
 	}
 	else {
@@ -699,6 +701,7 @@ void Power_Key_Detected(void)
 			   pro_t.gPower_On = power_off;   
 	           SendData_PowerOnOff(0);
 			   KEY_POWER_OFF_LED();
+			   
 	           Power_Off_Fun();
 			   LCD_Backlight_Off();
 		    

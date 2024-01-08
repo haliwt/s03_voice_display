@@ -61,7 +61,7 @@ void Breath_Led(void)
 void Lcd_PowerOn_Fun(void)
 {
     KEY_POWER_ON_LED()	;//key of led turn On
-    LED_MODEL_ON();
+    LED_MODEL_UP_DOWN_ON();
 	LCD_BACK_LIGHT_ON();
 	
 
@@ -72,7 +72,7 @@ void Lcd_PowerOff_Fun(void)
 {
 
 	KEY_POWER_OFF_LED()  ;
-	LED_MODEL_OFF();
+	LED_MODEL_UP_DOWN_OFF();
 	LCD_BACK_LIGHT_OFF();
     TIM1723_Write_Cmd(0x80);//(0x94);//(0x9B);;
 
