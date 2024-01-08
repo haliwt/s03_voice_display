@@ -679,9 +679,10 @@ void Power_Key_Detected(void)
    
 	if(POWER_KEY_StateRead()==KEY_DOWN && pro_t.long_key_flag ==0){
 
-	      pro_t.key_power_be_pressed_flag =1;
+	    
 
 	      if( pro_t.gPower_On == power_off){
+		  	  pro_t.key_power_be_pressed_flag =1;
 		  	 pro_t.gKey_command_tag = run_update_data;
 			 pro_t.gPower_On = power_on;   
             pro_t.long_key_flag =0;
@@ -695,7 +696,7 @@ void Power_Key_Detected(void)
 
 		  }
 		  else{
-
+                pro_t.key_power_be_pressed_flag =1;
 	           pro_t.long_key_flag =0;
 			   pro_t.gKey_command_tag = power_off_fan_pro;
 			   pro_t.gPower_On = power_off;   
@@ -715,12 +716,13 @@ void Power_Key_Detected(void)
 
 	if(POWER_KEY_StateRead()==KEY_POWER_LONG_DOWN && pro_t.long_key_flag ==1){
 
-        SendData_Set_Wifi(0x01);
+        //SendData_Set_Wifi(0x01);
+         pro_t.key_power_be_pressed_flag =0;
 
 	    //Key_Sound();
        // pro_t.wifi_led_fast_blink_flag=1;
-		//pro_t.long_key_flag =0;
-
+		pro_t.long_key_flag =0;
+        K1=0;
 
 	}
 

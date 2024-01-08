@@ -502,8 +502,10 @@ KEYState_TypeDef POWER_KEY_StateRead(void)
          K1++;
 		 if(pro_t.gPower_On == power_on){
 
-		    if(K1 > 900000){
+		    if(K1 > 4000000){
                 K1=0;
+				
+				SendData_Set_Wifi(0x01);
 				pro_t.long_key_flag =1;
 				return KEY_POWER_LONG_DOWN;
 
@@ -514,12 +516,25 @@ KEYState_TypeDef POWER_KEY_StateRead(void)
 
 	  };      
        /* 按键扫描完毕，确定按键被按下，返回按键被按下状态 */
-	  K1=0;
-      return KEY_DOWN;
+	 
+	  if(K1 > 400000 && pro_t.gPower_On == power_on){
+	  	 K1 =0;
+		  SendData_Set_Wifi(0x01);
+		  pro_t.long_key_flag =1;
+		 return KEY_POWER_LONG_DOWN;
+
+
+	  }
+	  else{
+	  	K1=0;
+         return KEY_DOWN;
+
+	  }
     }
   }
   /* 按键没被按下，返回没被按下状态 */
-  K1=0;
+ 
+
   return KEY_UP;
 }
 
@@ -546,7 +561,7 @@ KEYState_TypeDef MODE_KEY_StateRead(void)
 		 K2++;
 		 if(pro_t.gPower_On == power_on){
 
-		    if(K2 > 900000){
+		    if(K2 > 90000){
                 K2=0;
 				pro_t.long_key_flag =1;
 				return KEY_MODE_LONG_DOWN;

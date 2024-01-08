@@ -42,6 +42,8 @@
 #define KEY2_PRES	0x04
 #define WKUP_PRES   0x08
 
+extern uint32_t  K1;
+
 
 
 #define HIGH_LEVEL                   1  /* 根据原理图设计，KEY1按下时引脚为低电平，所以这里设置为0 */

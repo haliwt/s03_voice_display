@@ -127,7 +127,8 @@ int main(void)
 			Mode_Key_Detected();
 			ADD_Key_Detected();
 			DEC_Key_Detected();
-		}
+		
+         }
 	   if(VK36N4D_IC_StateRead()==KEY_UP && POWER_KEY_VALUE()==KEY_UP && MODE_KEY_VALUE()==KEY_UP){
 	       Display_Process_Handler();
 	   }
