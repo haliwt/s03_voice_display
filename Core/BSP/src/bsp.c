@@ -665,12 +665,12 @@ static void Ptc_Temperature_Compare_Value(void)
 
 void Power_Key_Detected(void)
 {
-    static uint8_t power_flag;
+   
 	if(POWER_KEY_StateRead()==KEY_DOWN && pro_t.long_key_flag ==0){
 
-	       power_flag = power_flag ^ 0x01;
+	    
 
-	      if(power_flag ==1){
+	      if( pro_t.gPower_On == power_off){
 		  	 pro_t.gKey_command_tag = run_update_data;
 			 pro_t.gPower_On = power_on;   
             pro_t.long_key_flag =0;
@@ -678,7 +678,7 @@ void Power_Key_Detected(void)
 			SendData_PowerOnOff(1);
 		    Power_On_Fun();
 			LCD_Backlight_On();
-			//Key_Sound();
+		
 
 
 		  }
@@ -690,7 +690,7 @@ void Power_Key_Detected(void)
 	           SendData_PowerOnOff(0);
 	           Power_Off_Fun();
 			   LCD_Backlight_Off();
-		      // Key_Sound();
+		    
 			   pro_t.run_process_step=0xff;
 			  
 			  
@@ -704,7 +704,7 @@ void Power_Key_Detected(void)
         SendData_Set_Wifi(0x01);
 
 	    //Key_Sound();
-        pro_t.wifi_led_fast_blink_flag=1;
+       // pro_t.wifi_led_fast_blink_flag=1;
 		//pro_t.long_key_flag =0;
 
 
