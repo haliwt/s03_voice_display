@@ -500,9 +500,10 @@ KEYState_TypeDef POWER_KEY_StateRead(void)
       while(HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port,KEY_POWER_Pin)==KEY_DOWN_LEVEL){
 
          K1++;
+		 Feed_Dog();
 		 if(pro_t.gPower_On == power_on){
 
-		    if(K1 > 4000000){
+		    if(K1 > 400000){
                 K1=0;
 				
 				SendData_Set_Wifi(0x01);
@@ -517,7 +518,7 @@ KEYState_TypeDef POWER_KEY_StateRead(void)
 	  };      
        /* 按键扫描完毕，确定按键被按下，返回按键被按下状态 */
 	 
-	  if(K1 > 400000 && pro_t.gPower_On == power_on){
+	  if(K1 > 400000 && pro_t.gPower_On == power_on && pro_t.long_key_flag ==0){
 	  	 K1 =0;
 		  SendData_Set_Wifi(0x01);
 		  pro_t.long_key_flag =1;
