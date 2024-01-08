@@ -1255,7 +1255,9 @@ static void LCD_DisplayNumber_OneTwo_Icon_Handler(void)
 
 void LCD_Display_Wind_Icon_Handler(void)
 {
-	 TIM1723_Write_Cmd(0x00);
+
+     ctl_t.gFan_speed_value=30;
+	  TIM1723_Write_Cmd(0x00);
 	 TIM1723_Write_Cmd(0x40);
 	 TIM1723_Write_Cmd(0x44);
 
