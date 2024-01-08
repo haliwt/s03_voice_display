@@ -2,17 +2,17 @@
 #define __BSP_LED_H_
 #include "main.h"
 
-extern IWDG_HandleTypeDef IWDG_Handler;
-
-#define POWER_ON_LED()             HAL_GPIO_WritePin(LED_INFO_POWER_GPIO_Port, LED_INFO_POWER_Pin,GPIO_PIN_SET)
-#define POWER_OFF_LED()            HAL_GPIO_WritePin(LED_INFO_POWER_GPIO_Port, LED_INFO_POWER_Pin,GPIO_PIN_RESET)
 
 
-#define LED_MODEL_ON()				HAL_GPIO_WritePin(LED_INFO_MODE_GPIO_Port , LED_INFO_MODE_Pin,GPIO_PIN_SET)
-#define LED_MODEL_OFF()             HAL_GPIO_WritePin(LED_INFO_MODE_GPIO_Port , LED_INFO_MODE_Pin,GPIO_PIN_RESET)
+#define KEY_POWER_ON_LED()             HAL_GPIO_WritePin(LED_KEY_POWER_GPIO_Port, LED_KEY_POWER_Pin,GPIO_PIN_SET)
+#define KEY_POWER_OFF_LED()            HAL_GPIO_WritePin(LED_KEY_POWER_GPIO_Port, LED_KEY_POWER_Pin,GPIO_PIN_RESET)
 
 
-#define POWER_TOGGLE()            HAL_GPIO_TogglePin(LED_INFO_POWER_GPIO_Port, LED_INFO_POWER_Pin)
+#define LED_MODEL_ON()				HAL_GPIO_WritePin(LED_KEY_TIM_GPIO_Port , LED_KEY_TIM_Pin,GPIO_PIN_SET)
+#define LED_MODEL_OFF()             HAL_GPIO_WritePin(LED_KEY_TIM_GPIO_Port , LED_KEY_TIM_Pin,GPIO_PIN_RESET)
+
+
+#define POWER_TOGGLE()            HAL_GPIO_TogglePin(LED_KEY_POWER_GPIO_Port, LED_KEY_POWER_Pin)
 
 
 

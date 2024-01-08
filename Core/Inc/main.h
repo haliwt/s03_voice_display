@@ -58,11 +58,14 @@ void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
 //keyf of led 
-#define LED_INFO_MODE_Pin 					GPIO_PIN_0
-#define LED_INFO_MODE_GPIO_Port 			GPIOA
 
-#define LED_INFO_POWER_Pin 					GPIO_PIN_1
-#define LED_INFO_POWER_GPIO_Port 			GPIOA
+#define LED_KEY_POWER_Pin 					GPIO_PIN_1
+#define LED_KEY_POWER_GPIO_Port 			GPIOA
+
+
+
+#define LED_KEY_TIM_Pin 					GPIO_PIN_0
+#define LED_KEY_TIM_GPIO_Port 			GPIOA
 
 //void communication TX2,RX2
 #define VOICE_TX2_Pin 						GPIO_PIN_2

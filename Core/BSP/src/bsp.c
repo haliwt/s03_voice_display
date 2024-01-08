@@ -119,6 +119,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 
 	 case 0:
 		//if(pro_t.ack_power_on_sig ==1){
+		   
             pro_t.key_power_be_pressed_flag =0;
 			pro_t.ack_power_on_sig=0; 
 			Lcd_PowerOn_Fun();
@@ -130,6 +131,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 	 break;
 
 	 case 1:  //display works time + "temperature value " + "humidity value"
+	     KEY_POWER_ON_LED();
 	     pro_t.key_power_be_pressed_flag =0;
 //         pro_t.long_key_flag =0;
 //	      if(pro_t.gTimer_pro_ms > 20){ //200ms
@@ -164,7 +166,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 	
 
 	 case 2: //set timer times pro
-    
+       KEY_POWER_ON_LED();
 	 if(pro_t.gTimer_pro_disp_ms > 3 && voice_enable_flag==0){ //40ms
 			pro_t.gTimer_pro_disp_ms=0;
 			DisplayPanel_Ref_Handler();
@@ -177,7 +179,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
 	 break;
 
 	 case 3:
-      
+       KEY_POWER_ON_LED();
 	  if(pro_t.set_timer_flag==1){ //
 		  pro_t.set_timer_flag++;
              
@@ -189,6 +191,7 @@ static void DispPocess_Command_Handler(uint8_t flag_key)
       break;
 
 	 case 4:
+	 	 KEY_POWER_ON_LED();
 	   if(wifi_state() ==1){
 		
 		  SendData_Set_Command(WIFI_CONNECT_SUCCESS);
@@ -320,8 +323,7 @@ void power_off_fan_run(void)
 	
 	if(fan_runContinue == 1 && power_off_first_flag!=0){
 	if(pro_t.gTimer_pro_fan < 61){
-		LED_MODEL_OFF();
-		POWER_ON_LED();
+		LCD_Backlight_On();
 		LCD_Display_Wind_Icon_Handler();
 	}
 	else {
@@ -683,6 +685,7 @@ void Power_Key_Detected(void)
             pro_t.long_key_flag =0;
             pro_t.run_process_step=0;
 			SendData_PowerOnOff(1);
+			KEY_POWER_ON_LED();
 		    Power_On_Fun();
 			LCD_Backlight_On();
 		
@@ -695,6 +698,7 @@ void Power_Key_Detected(void)
 			   pro_t.gKey_command_tag = power_off_fan_pro;
 			   pro_t.gPower_On = power_off;   
 	           SendData_PowerOnOff(0);
+			   KEY_POWER_OFF_LED();
 	           Power_Off_Fun();
 			   LCD_Backlight_Off();
 		    

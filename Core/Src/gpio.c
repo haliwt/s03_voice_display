@@ -44,7 +44,7 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_INFO_MODE_Pin|LED_INFO_POWER_Pin|TM1723_STB_Pin|TM1723_SCLK_Pin
+  HAL_GPIO_WritePin(GPIOA, LED_KEY_TIM_Pin|LED_KEY_POWER_Pin|TM1723_STB_Pin|TM1723_SCLK_Pin
                           |TM1723_DIO_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -52,7 +52,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PAPin PAPin PAPin PAPin
                            PAPin */
-  GPIO_InitStruct.Pin = LED_INFO_MODE_Pin|LED_INFO_POWER_Pin|TM1723_STB_Pin|TM1723_SCLK_Pin
+  GPIO_InitStruct.Pin = LED_KEY_TIM_Pin|LED_KEY_POWER_Pin|TM1723_STB_Pin|TM1723_SCLK_Pin
                           |TM1723_DIO_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;

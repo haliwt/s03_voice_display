@@ -76,17 +76,17 @@ const uint8_t lcdNumber1_Low[]={0x0A,0x0A,0x06,0x0E,0x0E,0x0C,0x0C,0x0A,0x0E,0x0
 
 const unsigned char segNumber_Low[]={
  
-         seg_b+seg_c,        		      // char "0"  0x00
-		 seg_b+seg_c,                      // char "1"  0x01
-		 seg_b+seg_g,              		  // char "2"  0x02
-		 seg_b+seg_g+seg_c,               // char "3"  0x03
-		 seg_b+seg_g+seg_c,               // char "4"  0x04
-		 seg_g+seg_c,              		// char "5"  0x05
-		 seg_g+seg_c,              // char "6"  0x06
+         seg_b+seg_c,        		      	// char "0"  0x00
+		 seg_b+seg_c,                      	// char "1"  0x01
+		 seg_b+seg_g,              		  	// char "2"  0x02
+		 seg_b+seg_g+seg_c,               	// char "3"  0x03
+		 seg_b+seg_g+seg_c,               	// char "4"  0x04
+		 seg_g+seg_c,              			// char "5"  0x05
+		 seg_g+seg_c,              			// char "6"  0x06
 		 seg_b+seg_c,                    	// char "7"  0x07
 		 seg_b+seg_g+seg_c,  		        // char "8"  0x08
-		 seg_b+seg_g+seg_c,        		// char "9"  0x09
-	     0                                      // char "NLL"  0x16
+		 seg_b+seg_g+seg_c,        			// char "9"  0x09
+	     0                                  // char "NLL"  0x0A
 
 
 
@@ -104,7 +104,7 @@ const unsigned char segNumber_High[]={
 		 seg_a,                    		 // char "7"  0x07
 		 seg_a+seg_f+seg_e+seg_d,  		 // char "8"  0x08
 		 seg_a+seg_f+seg_d,        		 // char "9"  0x09
-         0                               // char "NLL"  0x16
+         0                               // char "NLL"  0x0A
 
 
 
@@ -158,6 +158,7 @@ static void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat);
 ******************************************************/
 void LCD_Backlight_On(void)
 {
+    
 	LCD_BACK_LIGHT_ON()	;
 
 }
